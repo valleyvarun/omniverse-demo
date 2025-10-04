@@ -1,0 +1,602 @@
+
+/* =============================================================================
+   OMNIVERSE DEMO APPLICATION STYLES
+   =============================================================================
+   This CSS file contains all the styling for the Omniverse demo application.
+   The design mimics a desktop application with a fixed header and window controls.
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   GLOBAL BODY STYLES
+   -----------------------------------------------------------------------------
+   Sets up the main page layout and appearance */
+/* -----------------------------------------------------------------------------
+   GLOBAL BODY STYLES
+   -----------------------------------------------------------------------------
+   Sets up the main page layout and appearance - MOVED TO BOTTOM AFTER COMMAND LINE SECTION */
+
+/* -----------------------------------------------------------------------------
+   BLACK TOP BAR
+   -----------------------------------------------------------------------------
+   Thin black bar above the header for additional visual separation */
+.black {
+    background-color: #000000;        /* Pure black color */
+    position: fixed;                  /* Fixed positioning to stay at top */
+    top: 0;                          /* Position at very top of viewport */
+    left: 0;                         /* Position at very left of viewport */
+    width: 100%;                     /* Span the full width of the browser window */
+    height: 3px;                     /* Thin 3px height */
+    z-index: 1001;                   /* Higher z-index than header to stay above it */
+}
+
+/* -----------------------------------------------------------------------------
+   MAIN HEADER BAR
+   -----------------------------------------------------------------------------
+   Creates a fixed header bar at the top of the application, similar to desktop apps */
+header {
+    background-color: #1e1e1e;        /* Darker grey than body (creates visual hierarchy) */
+    position: fixed;                  /* Keeps header at top of screen when scrolling */
+    top: 3px;                        /* Position below the black bar (3px from top) */
+    left: 0;                         /* Position at very left of viewport */
+    width: 100%;                     /* Span the full width of the browser window */
+    height: 35px;                    /* Fixed height for consistent appearance */
+    display: flex;                   /* Use flexbox for easy alignment of child elements */
+    align-items: center;             /* Vertically center all items in the header */
+    justify-content: flex-start;     /* Align items to the left, we'll position user account manually */
+    padding: 0 0 0 20px;            /* Left padding for logo/brand, no right padding (controls go to edge) */
+    box-sizing: border-box;          /* Include padding in width calculation */
+    z-index: 1000;                   /* High z-index ensures header stays above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth and separation */
+}
+
+/* -----------------------------------------------------------------------------
+   HEADER LEFT SECTION (LOGO + BRAND)
+   -----------------------------------------------------------------------------
+   Container for the logo and application name on the left side of header */
+.header-left {
+    display: flex;                   /* Flexbox layout for logo and text */
+    align-items: center;             /* Vertically center logo and brand text */
+}
+
+/* -----------------------------------------------------------------------------
+   MENU BAR (SECOND HEADER)
+   -----------------------------------------------------------------------------
+   Fixed menu bar below the main header with navigation options */
+.menu-bar {
+    background-color: #2a2a2a;        /* Slightly lighter than main header for distinction */
+    position: fixed;                  /* Fixed positioning like the main header */
+    top: 38px;                       /* Position below main header (3px black + 35px header) */
+    left: 0;                         /* Position at very left of viewport */
+    width: 100%;                     /* Span the full width of the browser window */
+    height: 30px;                    /* Menu bar height */
+    z-index: 999;                    /* Lower than main header but above content */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for separation */
+}
+
+.menu-list {
+    list-style: none;                /* Remove bullet points */
+    margin: 0;                       /* Remove default margins */
+    padding: 0;                      /* Remove default padding */
+    display: flex;                   /* Horizontal layout for menu items */
+    height: 100%;                    /* Full height of menu bar */
+}
+
+.menu-list li {
+    display: flex;                   /* Flexbox for centering menu items */
+    align-items: center;             /* Vertically center menu text */
+}
+
+.menu-item {
+    color: #ffffff;                  /* White text color */
+    text-decoration: none;           /* Remove underline from links */
+    padding: 0 15px;                 /* Horizontal padding for clickable area */
+    font-size: 12px;                 /* Small font size for menu items */
+    height: 100%;                    /* Full height for larger click area */
+    display: flex;                   /* Flexbox for centering text */
+    align-items: center;             /* Vertically center text */
+    transition: background-color 0.2s ease; /* Smooth hover transition */
+}
+
+.menu-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+/* -----------------------------------------------------------------------------
+   FUNCTION DISPLAY HEADER
+   -----------------------------------------------------------------------------
+   Header that shows executed functions in light grey bubbles */
+.function-display {
+    position: fixed;                 /* Fixed positioning below menu bar */
+    top: 68px;                      /* Position below black bar (3px) + header (35px) + menu (30px) */
+    left: 0;                        /* Full width from left */
+    right: 0;                       /* Full width to right */
+    height: 50px;                   /* Height for exactly 2 lines of text */
+    background-color: #1a1a1a;      /* Darker background for function display */
+    border-bottom: 1px solid #333;  /* Subtle border at bottom */
+    padding: 8px 15px 8px 50px;     /* Padding with extra left space for toggle button */
+    box-sizing: border-box;         /* Include padding in height */
+    z-index: 998;                   /* Below headers but above content */
+    overflow-y: auto;               /* Enable vertical scrolling for history */
+    overflow-x: hidden;             /* Hide horizontal overflow */
+    display: flex;                  /* Flexbox for proper scrolling */
+    flex-direction: column;         /* Column direction for stacking */
+    transition: height 0.3s ease;   /* Smooth height transition */
+}
+
+.function-display.expanded {
+    height: 200px;                  /* Expanded height for about 10 lines */
+}
+
+.history-toggle-btn {
+    position: fixed;                /* Fixed positioning relative to viewport */
+    left: 8px;                      /* Position on the left side */
+    top: 93px;                      /* Center in collapsed history: 68px + 25px */
+    transform: translateY(-50%);    /* Perfect vertical centering */
+    width: 30px;                    /* Button width */
+    height: 30px;                   /* Button height */
+    background-color: #404040;      /* Dark grey background */
+    border: 1px solid #555555;      /* Subtle border */
+    border-radius: 4px;             /* Slightly rounded corners */
+    color: #ffffff;                 /* White arrow color */
+    font-size: 12px;                /* Arrow size */
+    cursor: pointer;                /* Hand cursor on hover */
+    display: flex;                  /* Flexbox for centering arrow */
+    align-items: center;            /* Center arrow vertically */
+    justify-content: center;        /* Center arrow horizontally */
+    transition: background-color 0.2s ease, top 0.3s ease; /* Smooth transitions */
+    z-index: 999;                   /* Above function bubbles */
+    pointer-events: auto;           /* Ensure button receives click events */
+}
+
+.history-toggle-btn:hover {
+    background-color: #505050;      /* Lighter grey on hover */
+}
+
+.history-toggle-btn span {
+    transition: transform 0.2s ease; /* Smooth arrow rotation */
+}
+
+.function-bubbles {
+    display: flex;                  /* Vertical layout for command entries */
+    flex-direction: column;         /* Stack items vertically */
+    gap: 8px;                       /* Space between command history entries */
+    min-height: 100%;               /* Minimum height to fill container */
+    padding-bottom: 0px;            /* No bottom padding for minimal buffer space */
+    overflow-y: visible;            /* Allow content to overflow and be scrollable */
+}
+
+.command-history-entry {
+    display: flex;                  /* Vertical layout for lines within an entry */
+    flex-direction: column;         /* Stack lines vertically */
+    gap: 4px;                       /* Gap between bubble and lines */
+    border-bottom: 1px solid #333;  /* Subtle separator between entries */
+    padding-bottom: 2px;            /* Reduced padding below each entry */
+    margin-bottom: 2px;             /* Reduced margin below each entry */
+}
+
+.command-history-entry:last-child {
+    border-bottom: none;            /* Remove border from last entry */
+    margin-bottom: 0;               /* Remove margin from last entry */
+    padding-bottom: 0;              /* Remove padding from last entry */
+}
+
+.command-bubble {
+    background-color: #404040;      /* Light grey background for command bubbles */
+    color: #ffffff;                 /* White text */
+    padding: 4px 12px;              /* Padding inside bubbles */
+    border-radius: 12px;            /* Rounded bubble shape */
+    font-size: 12px;                /* Small font size */
+    white-space: nowrap;            /* Prevent text wrapping */
+    width: fit-content;             /* Size to content */
+    align-self: flex-start;         /* Align bubble to the left */
+}
+
+.function-line {
+    font-size: 11px;                /* Slightly smaller font for prompt/result lines */
+    color: #cccccc;                 /* Lighter grey text for prompts */
+    line-height: 1.2;               /* Compact line height */
+    margin: 0;                      /* No margins */
+    padding: 1px 0;                 /* Small vertical padding */
+    margin-left: 8px;               /* Indent prompt lines slightly */
+}
+
+.function-bubble {
+    background-color: #404040;      /* Light grey background for bubbles */
+    color: #ffffff;                 /* White text */
+    padding: 4px 12px;              /* Padding inside bubbles */
+    border-radius: 12px;            /* Rounded bubble shape */
+    font-size: 12px;                /* Small font size */
+    white-space: nowrap;            /* Prevent text wrapping */
+    min-width: fit-content;         /* Size to content */
+}
+
+.command-entry {
+    display: flex;                  /* Flexbox for command and prompt layout */
+    flex-direction: column;         /* Stack command and prompt vertically */
+    gap: 4px;                       /* Small gap between command and prompt */
+}
+
+.command-bubble {
+    background-color: #404040;      /* Light grey background for command bubbles */
+    color: #ffffff;                 /* White text */
+    padding: 4px 12px;              /* Padding inside bubbles */
+    border-radius: 12px;            /* Rounded bubble shape */
+    font-size: 12px;                /* Small font size */
+    white-space: nowrap;            /* Prevent text wrapping */
+    width: fit-content;             /* Size to content */
+}
+
+.command-prompt {
+    font-size: 11px;                /* Smaller font for prompt text */
+    color: #cccccc;                 /* Lighter grey color */
+    margin-left: 8px;               /* Indent prompt slightly */
+}
+
+.prompt-line {
+    margin: 1px 0;                  /* Small margin between prompt lines */
+}
+
+/* -----------------------------------------------------------------------------
+   COMMAND LINE INTERFACE
+   -----------------------------------------------------------------------------
+   Black command line with 'Command:' label and input field */
+.command-line-container {
+    position: fixed;                /* Fixed positioning below function display */
+    top: 118px;                     /* Position below function display (68px + 50px) */
+    left: 0;                        /* Full width from left */
+    right: 0;                       /* Full width to right */
+    height: 35px;                   /* Height for command line */
+    background-color: #000000;      /* Pure black background */
+    display: flex;                  /* Flexbox for label and input */
+    align-items: center;            /* Center content vertically */
+    padding: 0 15px;                /* Horizontal padding */
+    box-sizing: border-box;         /* Include padding in height */
+    z-index: 997;                   /* Below function display but above content */
+    transition: top 0.3s ease;      /* Smooth position transition */
+}
+
+.command-line-container.expanded {
+    top: 268px;                     /* Position when function display is expanded (68px + 200px) */
+}
+
+.command-label {
+    color: #ffffff;                 /* White text for 'Command:' */
+    font-size: 12px;                /* Medium font size */
+    margin-right: 10px;             /* Space between label and input */
+    white-space: nowrap;            /* Prevent label from wrapping */
+}
+
+.command-input {
+    flex: 1;                        /* Take remaining space */
+    background: transparent;        /* Transparent background */
+    border: none;                   /* No border */
+    color: #ffffff;                 /* White text */
+    font-size: 14px;                /* Match label font size */
+    font-family: 'Courier New', monospace; /* Monospace font for command line feel */
+    outline: none;                  /* Remove focus outline */
+    padding: 0;                     /* No padding */
+}
+
+.command-input::placeholder {
+    color: #666666;                 /* Dark grey placeholder text */
+}
+
+/* Update body padding to account for new fixed elements */
+body {
+    background-color: #2c2c2c;        /* Dark grey background for the main content area */
+    margin: 0;                        /* Remove default browser margins */
+    padding: 0;                       /* Remove default browser padding */
+    padding-top: 153px;               /* Add top padding: black(3) + header(35) + menu(30) + function(50) + command(35) */
+    font-family: Arial, sans-serif;   /* Set default font for the entire application */
+    color: #ffffff;                   /* White text color for good contrast against dark background */
+    transition: padding-top 0.3s ease; /* Smooth padding transition when history expands */
+}
+
+body.expanded {
+    padding-top: 303px;               /* Space when function display is expanded (68px + 200px + 35px) */
+}
+
+/* -----------------------------------------------------------------------------
+   OMNIVERSE LOGO
+   -----------------------------------------------------------------------------
+   Styling for the Omniverse logo image in the header */
+.logo {
+    width: 26px;                     /* Fixed width for consistent logo size */
+    height: 26px;                    /* Fixed height for consistent logo size */
+    margin-right: 10px;              /* Space between logo and brand text */
+    object-fit: contain;             /* Scale logo to fit within dimensions while maintaining aspect ratio */
+}
+
+/* -----------------------------------------------------------------------------
+   BRAND TEXT ("omniverse")
+   -----------------------------------------------------------------------------
+   Styling for the application name text next to the logo */
+.brand-text {
+    font-size: 15px;                 /* Medium size text for brand name */
+    font-weight: thin;             /* Regular font weight (not bold) */
+    color: #ffffff;                  /* White text color for visibility on dark header */
+    margin: 0;                       /* Remove default heading margins */
+}
+
+/* -----------------------------------------------------------------------------
+   USER ACCOUNT SECTION
+   -----------------------------------------------------------------------------
+   User icon and account dropdown in the header */
+.user-account {
+    display: flex;                   /* Flexbox layout for user icon and dropdown */
+    align-items: center;             /* Vertically center user elements */
+    position: absolute;              /* Absolute positioning for precise placement */
+    right: 158px;                    /* Position from right edge (138px for 3 buttons + 20px margin) */
+    margin-right: 0;                 /* Remove margin since we're using absolute positioning */
+}
+
+.user-icon {
+    width: 20px;                     /* User icon size */
+    height: 20px;                    /* User icon size */
+    margin-right: 8px;               /* Space between icon and dropdown */
+    border-radius: 50%;              /* Round user icon */
+}
+
+.account-dropdown {
+    position: relative;              /* For dropdown menu positioning */
+}
+
+.account-selector {
+    background-color: #404040;       /* Light grey background */
+    color: #ffffff;                  /* White text */
+    padding: 4px 8px;                /* Padding for comfortable clicking */
+    font-size: 12px;                 /* Small font size */
+    border-radius: 3px;              /* Slightly rounded corners */
+    cursor: pointer;                 /* Pointer cursor to indicate clickable */
+    display: flex;                   /* Flexbox for text and arrow */
+    align-items: center;             /* Center align items */
+    user-select: none;               /* Prevent text selection */
+}
+
+.account-selector:hover {
+    background-color: #505050;       /* Slightly lighter on hover */
+}
+
+.selected-email {
+    margin-right: 6px;               /* Space between email and arrow */
+}
+
+.dropdown-arrow {
+    font-size: 10px;                 /* Small arrow size */
+    transition: transform 0.2s ease; /* Smooth rotation transition */
+}
+
+.dropdown-menu {
+    position: absolute;              /* Absolute positioning relative to account-dropdown */
+    top: 100%;                       /* Position below the selector */
+    right: 0;                        /* Align with right edge of selector */
+    background-color: #2a2a2a;       /* Dark background for dropdown */
+    border: 1px solid #555555;       /* Subtle border */
+    border-radius: 4px;              /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+    min-width: 200px;                /* Minimum width for dropdown */
+    max-width: 350px;                /* Maximum width to prevent excessive growth */
+    width: max-content;              /* Width adjusts to content but respects max-width */
+    z-index: 1002;                   /* High z-index to appear above everything */
+    display: none;                   /* Hidden by default */
+}
+
+.dropdown-menu.show {
+    display: block;                  /* Show when .show class is added */
+}
+
+.dropdown-item {
+    padding: 8px 12px;               /* Padding for dropdown items */
+    font-size: 12px;                 /* Small font size */
+    color: #ffffff;                  /* White text */
+    cursor: pointer;                 /* Pointer cursor */
+    border-bottom: 1px solid #404040; /* Subtle separator between items */
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;             /* Remove border from last item */
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+.account-item {
+    font-weight: normal;             /* Normal font weight for email addresses */
+}
+
+.action-item {
+    font-weight: bold;               /* Bold font weight for action items */
+    color: #cccccc;                  /* Slightly dimmer color for actions */
+}
+
+.dropdown-divider {
+    height: 1px;                     /* Thin divider line */
+    background-color: #555555;       /* Grey divider color */
+    margin: 4px 0;                   /* Vertical spacing around divider */
+}
+
+/* -----------------------------------------------------------------------------
+   WINDOW CONTROLS CONTAINER
+   -----------------------------------------------------------------------------
+   Container for the three window control buttons on the right side of header */
+.window-controls {
+    display: flex;                   /* Flexbox layout for control buttons */
+    height: 100%;                    /* Full height of header for larger click area */
+    position: absolute;              /* Absolute positioning to place at right edge */
+    right: 0;                        /* Position at the very right edge */
+    font-weight: bold;
+}
+
+/* -----------------------------------------------------------------------------
+   INDIVIDUAL WINDOW CONTROL BUTTONS
+   -----------------------------------------------------------------------------
+   Base styling for minimize, maximize/restore, and close buttons */
+.control-btn {
+    width: 46px;                     /* Standard Windows control button width */
+    height: 100%;                    /* Full header height for easy clicking */
+    border: none;                    /* No border for clean appearance */
+    background: transparent;         /* Transparent background by default */
+    color: #ffffff;                  /* White icon color */
+    font-size: 18px;                 /* Larger font size for better visibility */
+    cursor: pointer;                 /* Hand cursor on hover to indicate clickable */
+    display: flex;                   /* Flexbox for centering the icon */
+    align-items: center;             /* Vertically center the icon */
+    justify-content: center;         /* Horizontally center the icon */
+    transition: background-color 0.2s ease; /* Smooth color transition on hover */
+}
+
+/* -----------------------------------------------------------------------------
+   WINDOW CONTROL BUTTON HOVER EFFECTS
+   -----------------------------------------------------------------------------
+   Different hover colors for each type of control button */
+
+/* General hover effect for all control buttons */
+.control-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light grey hover effect */
+}
+
+/* Minimize button hover effect */
+.minimize-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light grey hover effect */
+}
+
+/* Maximize/Restore button hover effect */
+.maximize-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light grey hover effect */
+}
+
+/* Close button hover effect (distinctive red color) */
+.close-btn:hover {
+    background-color: #e81123;       /* Windows-standard red color for close button */
+}
+
+/* Control individual button icon sizes */
+.minimize-btn {
+    font-size: 17px;    /* Adjust this value for minimize button */
+}
+
+.maximize-btn {
+    font-size: 17px;    /* Adjust this value for maximize/restore button */
+    transform: translateY(-2px); /* Move the restore icon up slightly for better alignment */
+}
+
+.close-btn {
+    font-size: 19px;    /* Adjust this value for close button */
+    transform: translateY(-1.5px); /* Move the restore icon up slightly for better alignment */
+
+}
+
+/* -----------------------------------------------------------------------------
+   WINDOW CONTROL BUTTON ICONS
+   -----------------------------------------------------------------------------
+   Styling for the actual icon characters (−, ⧉, ×) inside the buttons */
+.control-btn span {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Windows-standard font for authentic look */
+    font-weight: bold;               /* Bold font weight for more prominent icons */
+    line-height: 1;                  /* Tight line height to prevent vertical spacing issues */
+}
+
+/* -----------------------------------------------------------------------------
+   ADD ACCOUNT FORM STYLES
+   -----------------------------------------------------------------------------
+   Styling for the expanded add account form in the dropdown */
+.add-account-form {
+    padding: 15px;                   /* Increased padding for larger form area */
+    background-color: #2a2a2a;       /* Slightly lighter background for form area */
+    border-radius: 4px;              /* Rounded corners */
+    margin: 4px 0;                   /* Vertical spacing */
+    min-height: 120px;               /* Minimum height to contain form elements properly */
+}
+
+.form-email {
+    color: #ffffff;                  /* White text for email */
+    font-weight: bold;               /* Bold email text */
+    font-size: 15px;                 /* Larger font for prominence */
+    margin-bottom: 8px;              /* Space below email */
+    text-align: center;              /* Center the email */
+}
+
+.form-title {
+    color: #cccccc;                  /* Light grey text for subtitle */
+    font-weight: normal;             /* Normal font weight */
+    margin-bottom: 12px;             /* Increased space below title */
+    font-size: 11px;                 /* Smaller font size */
+    text-align: center;              /* Center the title */
+}
+
+.form-message {
+    color: #cccccc;                  /* Light grey for message */
+    font-size: 11px;                 /* Smaller font for message */
+    margin-bottom: 15px;             /* Increased space below message */
+    line-height: 1.3;                /* Better line spacing */
+}
+
+.form-input {
+    width: 100%;                     /* Full width inputs */
+    padding: 8px 10px;               /* Increased inner padding */
+    margin-bottom: 12px;             /* Increased space between inputs */
+    background-color: #1a1a1a;       /* Dark input background */
+    border: 1px solid #555555;       /* Grey border */
+    border-radius: 3px;              /* Slightly rounded corners */
+    color: #ffffff;                  /* White text */
+    font-size: 12px;                 /* Readable font size */
+    box-sizing: border-box;          /* Include padding in width */
+}
+
+.form-input:focus {
+    outline: none;                   /* Remove default outline */
+    border-color: #0078d4;           /* Blue border on focus */
+    background-color: #202020;       /* Slightly lighter background on focus */
+}
+
+.form-input::placeholder {
+    color: #888888;                  /* Grey placeholder text */
+}
+
+.code-inputs {
+    display: flex;                   /* Horizontal layout for code inputs */
+    gap: 8px;                        /* Increased space between code boxes */
+    margin-bottom: 15px;             /* Increased space below code inputs */
+    justify-content: center;         /* Center the code inputs */
+}
+
+.code-input {
+    width: 32px;                     /* Slightly larger code input boxes */
+    height: 32px;                    /* Slightly larger code input boxes */
+    text-align: center;              /* Center the text/number */
+    background-color: #1a1a1a;       /* Dark input background */
+    border: 1px solid #555555;       /* Grey border */
+    border-radius: 3px;              /* Slightly rounded corners */
+    color: #ffffff;                  /* White text */
+    font-size: 14px;                 /* Larger font for code */
+    font-weight: bold;               /* Bold code text */
+    box-sizing: border-box;          /* Include padding in dimensions */
+}
+
+.code-input:focus {
+    outline: none;                   /* Remove default outline */
+    border-color: #0078d4;           /* Blue border on focus */
+    background-color: #202020;       /* Slightly lighter background on focus */
+}
+
+.form-next-btn {
+    background-color: #0078d4;       /* Blue button background */
+    color: #ffffff;                  /* White text */
+    border: none;                    /* No border */
+    padding: 8px 15px;               /* Button padding */
+    border-radius: 3px;              /* Rounded corners */
+    cursor: pointer;                 /* Hand cursor */
+    font-size: 12px;                 /* Button font size */
+    font-weight: bold;               /* Bold button text */
+    margin-top: 8px;                 /* Space above button */
+    display: block;                  /* Block element for proper positioning */
+}
+
+.form-next-btn:hover {
+    background-color: #106ebe;       /* Darker blue on hover */
+}
+
+.form-next-btn:active {
+    background-color: #005a9e;       /* Even darker blue when clicked */
+}

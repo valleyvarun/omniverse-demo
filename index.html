@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- ============================================================================
+     OMNIVERSE DEMO APPLICATION - HTML STRUCTURE
+     ============================================================================
+     This HTML file contains the complete structure for the Omniverse demo app.
+     The layout mimics a desktop application with multiple fixed headers and
+     interactive elements.
+     ============================================================================ -->
+
+<head>
+    <!-- Document metadata and external resources -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omniverse Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ========================================================================
+         TOP BLACK BAR (3px height)
+         ========================================================================
+         Thin black decorative bar at the very top of the application window.
+         Provides visual separation and mimics desktop application styling.
+         ======================================================================== -->
+    <div class="black">
+        <!-- Empty div - styling handled in CSS -->
+    </div>
+
+    <!-- ========================================================================
+         MAIN HEADER BAR (35px height)
+         ========================================================================
+         Primary header containing logo, app name, user account, and window controls.
+         Fixed positioning ensures it stays visible when scrolling.
+         Contains three main sections: left (branding), center (user), right (controls)
+         ======================================================================== -->
+    <header>
+        <!-- LEFT SECTION: Logo and Application Name -->
+        <div class="header-left">
+            <img src="logo/omniverse-logo.png" alt="Omniverse Logo" class="logo">
+            <h1 class="brand-text">omniverse</h1>
+        </div>
+        
+        <!-- CENTER SECTION: User Account Management -->
+        <div class="user-account">
+            <!-- User profile icon -->
+            <img src="logo/user-icon1.png" alt="User Icon" class="user-icon">
+            
+            <!-- Account dropdown container -->
+            <div class="account-dropdown">
+                <!-- Clickable selector showing current user -->
+                <div class="account-selector" onclick="toggleDropdown()">
+                    <span class="selected-email">valleyvarun@gmail.com</span>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                
+                <!-- Hidden dropdown menu (shown/hidden via JavaScript) -->
+                <div class="dropdown-menu" id="accountDropdown">
+                    <!-- Available user accounts -->
+                    <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
+                    <div class="dropdown-item account-item">vas2154@columbia.edu</div>
+                    <div class="dropdown-item account-item">2020barc020@spab.ac.in</div>
+                    
+                    <!-- Visual separator -->
+                    <div class="dropdown-divider"></div>
+                    
+                    <!-- Account management actions -->
+                    <div class="dropdown-item action-item">Add Account</div>
+                    <div class="dropdown-item action-item">Log Out of Account</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- RIGHT SECTION: Window Control Buttons -->
+        <div class="window-controls">
+            <!-- Minimize button -->
+            <button class="control-btn minimize-btn" title="Minimize">
+                <span>−</span>
+            </button>
+            
+            <!-- Maximize/Restore button -->
+            <button class="control-btn maximize-btn" title="Restore Down">
+                <span>□</span>
+            </button>
+            
+            <!-- Close button -->
+            <button class="control-btn close-btn" title="Close">
+                <span>×</span>
+            </button>
+        </div>
+    </header>
+    
+    <!-- ========================================================================
+         NAVIGATION MENU BAR (30px height)
+         ========================================================================
+         Secondary header with main navigation options.
+         Fixed positioning below the main header.
+         Contains horizontal menu items for different application sections.
+         ======================================================================== -->
+    <nav class="menu-bar">
+        <ul class="menu-list">
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Apps</a></li>
+            <li><a href="#" class="menu-item">Window</a></li>
+            <li><a href="#" class="menu-item">Settings</a></li>
+            <li><a href="#" class="menu-item">Help</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========================================================================
+         FUNCTION DISPLAY HEADER (40px height)
+         ========================================================================
+         Shows executed functions as light grey bubbles.
+         Fixed positioning below the menu bar.
+         Automatically populated when commands are executed via JavaScript.
+         Supports horizontal scrolling for multiple function bubbles.
+         ======================================================================== -->
+    <div class="function-display">
+        <button class="history-toggle-btn" id="historyToggleBtn" onclick="toggleHistorySize()" title="Expand/Collapse History">
+            <span>▼</span>
+        </button>
+        <div class="function-bubbles" id="functionBubbles">
+            <!-- Function bubbles are dynamically added here by JavaScript -->
+            <!-- Example: <div class="function-bubble">someFunction()</div> -->
+        </div>
+    </div>
+
+    <!-- ========================================================================
+         COMMAND LINE INTERFACE (35px height)
+         ========================================================================
+         Interactive command input area with black background.
+         Fixed positioning below the function display.
+         Captures global keyboard input for seamless command entry.
+         Commands are executed on Enter key press.
+         ======================================================================== -->
+    <div class="command-line-container">
+        <!-- Command label -->
+        <span class="command-label">Command:</span>
+        
+        <!-- Command input field -->
+        <input type="text" 
+               class="command-input" 
+               id="commandInput" 
+               placeholder="Type your command..." 
+               autocomplete="off">
+    </div>
+
+    <!-- ========================================================================
+         MAIN CONTENT AREA
+         ========================================================================
+         The remaining space below all fixed headers.
+         Content will be added here for the main application interface.
+         Body has padding-top to account for all fixed elements above.
+         ======================================================================== -->
+    
+    <!-- Future content will go here -->
+
+    <!-- ========================================================================
+         JAVASCRIPT INCLUSION
+         ========================================================================
+         External JavaScript file containing all interactive functionality:
+         - User account dropdown behavior
+         - Command line input handling
+         - Function bubble management
+         - Global keyboard event listeners
+         ======================================================================== -->
+    <script src="script.js"></script>
+</body>
+</html>
