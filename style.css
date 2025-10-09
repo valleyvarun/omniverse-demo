@@ -43,10 +43,9 @@ header {
     display: flex;                   /* Use flexbox for easy alignment of child elements */
     align-items: center;             /* Vertically center all items in the header */
     justify-content: flex-start;     /* Align items to the left, we'll position user account manually */
-    padding: 0 0 0 20px;            /* Left padding for logo/brand, no right padding (controls go to edge) */
+    padding: 0 0 0 10px;            /* Reduced left padding to move logo/text more to the left */
     box-sizing: border-box;          /* Include padding in width calculation */
     z-index: 1000;                   /* High z-index ensures header stays above other content */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth and separation */
 }
 
 /* -----------------------------------------------------------------------------
@@ -111,7 +110,7 @@ header {
     left: 0;                        /* Full width from left */
     right: 0;                       /* Full width to right */
     height: 50px;                   /* Height for exactly 2 lines of text */
-    background-color: #1a1a1a;      /* Darker background for function display */
+    background-color: #000000;      /* Black background for function display */
     border-bottom: 1px solid #333;  /* Subtle border at bottom */
     padding: 8px 15px 8px 50px;     /* Padding with extra left space for toggle button */
     box-sizing: border-box;         /* Include padding in height */
@@ -130,15 +129,15 @@ header {
 .history-toggle-btn {
     position: fixed;                /* Fixed positioning relative to viewport */
     left: 8px;                      /* Position on the left side */
-    top: 93px;                      /* Center in collapsed history: 68px + 25px */
-    transform: translateY(-50%);    /* Perfect vertical centering */
+    top: 78px;                      /* Top button position (68px + 10px) */
+    transform: none;                /* Remove centering transform */
     width: 30px;                    /* Button width */
-    height: 30px;                   /* Button height */
+    height: 15px;                   /* Half the original height */
     background-color: #404040;      /* Dark grey background */
     border: 1px solid #555555;      /* Subtle border */
     border-radius: 4px;             /* Slightly rounded corners */
     color: #ffffff;                 /* White arrow color */
-    font-size: 12px;                /* Arrow size */
+    font-size: 10px;                /* Smaller arrow size */
     cursor: pointer;                /* Hand cursor on hover */
     display: flex;                  /* Flexbox for centering arrow */
     align-items: center;            /* Center arrow vertically */
@@ -148,12 +147,76 @@ header {
     pointer-events: auto;           /* Ensure button receives click events */
 }
 
+.history-collapse-btn {
+    position: fixed;                /* Fixed positioning relative to viewport */
+    left: 8px;                      /* Position on the left side (same as toggle) */
+    top: 95px;                      /* Bottom button position (78px + 15px + 2px gap) */
+    transform: none;                /* Remove centering transform */
+    width: 30px;                    /* Button width */
+    height: 15px;                   /* Half the original height */
+    background-color: #404040;      /* Dark grey background */
+    border: 1px solid #555555;      /* Subtle border */
+    border-radius: 4px;             /* Slightly rounded corners */
+    color: #ffffff;                 /* White minus color */
+    font-size: 10px;                /* Smaller minus size */
+    font-weight: bold;              /* Bold minus symbol */
+    cursor: pointer;                /* Hand cursor on hover */
+    display: flex;                  /* Flexbox for centering minus */
+    align-items: center;            /* Center minus vertically */
+    justify-content: center;        /* Center minus horizontally */
+    transition: background-color 0.2s ease, top 0.3s ease; /* Smooth transitions */
+    z-index: 999;                   /* Above function bubbles */
+    pointer-events: auto;           /* Ensure button receives click events */
+}
+
 .history-toggle-btn:hover {
+    background-color: #505050;      /* Lighter grey on hover */
+}
+
+.history-collapse-btn:hover {
     background-color: #505050;      /* Lighter grey on hover */
 }
 
 .history-toggle-btn span {
     transition: transform 0.2s ease; /* Smooth arrow rotation */
+}
+
+/* Window dropdown styles */
+.menu-item-with-dropdown {
+    position: relative;             /* For dropdown positioning */
+}
+
+.window-dropdown {
+    position: absolute;             /* Absolute positioning */
+    top: 100%;                      /* Below the menu item */
+    left: 0;                        /* Align with left edge */
+    background-color: #2a2a2a;      /* Dark background */
+    border: 1px solid #555555;      /* Border */
+    border-radius: 4px;             /* Rounded corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow */
+    min-width: 180px;               /* Minimum width */
+    z-index: 1003;                  /* Above everything */
+    display: none;                  /* Hidden by default */
+}
+
+.window-dropdown.show {
+    display: block;                 /* Show when active */
+}
+
+.window-dropdown-item {
+    padding: 8px 12px;              /* Padding */
+    font-size: 12px;                /* Font size */
+    color: #ffffff;                 /* White text */
+    cursor: pointer;                /* Pointer cursor */
+    border-bottom: 1px solid #404040; /* Separator */
+}
+
+.window-dropdown-item:last-child {
+    border-bottom: none;            /* Remove border from last item */
+}
+
+.window-dropdown-item:hover {
+    background-color: #404040;      /* Hover effect */
 }
 
 .function-bubbles {
@@ -257,6 +320,28 @@ header {
 
 .command-line-container.expanded {
     top: 268px;                     /* Position when function display is expanded (68px + 200px) */
+    z-index: 998;                   /* Ensure it stays above other content */
+}
+
+.show-history-btn {
+    background-color: #404040;      /* Dark grey background */
+    border: 1px solid #555555;      /* Subtle border */
+    border-radius: 4px;             /* Slightly rounded corners */
+    color: #ffffff;                 /* White arrow color */
+    font-size: 12px;                /* Arrow size */
+    cursor: pointer;                /* Hand cursor on hover */
+    display: flex;                  /* Flexbox for centering arrow */
+    align-items: center;            /* Center arrow vertically */
+    justify-content: center;        /* Center arrow horizontally */
+    width: 25px;                    /* Button width */
+    height: 20px;                   /* Button height */
+    margin-right: 8px;              /* Space between button and "Command:" label */
+    transition: background-color 0.2s ease; /* Smooth hover transition */
+    flex-shrink: 0;                 /* Prevent button from shrinking */
+}
+
+.show-history-btn:hover {
+    background-color: #505050;      /* Lighter grey on hover */
 }
 
 .command-label {
@@ -287,13 +372,37 @@ body {
     margin: 0;                        /* Remove default browser margins */
     padding: 0;                       /* Remove default browser padding */
     padding-top: 153px;               /* Add top padding: black(3) + header(35) + menu(30) + function(50) + command(35) */
+    padding-bottom: 25px;             /* Add bottom padding for footer (25px) */
     font-family: Arial, sans-serif;   /* Set default font for the entire application */
     color: #ffffff;                   /* White text color for good contrast against dark background */
     transition: padding-top 0.3s ease; /* Smooth padding transition when history expands */
+    height: 100vh;                    /* Full viewport height */
+    overflow: hidden;                 /* Prevent scrolling */
+    box-sizing: border-box;           /* Include padding in height calculation */
 }
 
 body.expanded {
     padding-top: 303px;               /* Space when function display is expanded (68px + 200px + 35px) */
+    overflow: hidden;                 /* Prevent scrolling even when expanded */
+}
+
+/* -----------------------------------------------------------------------------
+   FOOTER BAR
+   -----------------------------------------------------------------------------
+   Fixed footer bar at the bottom with same styling as main header */
+.footer-bar {
+    background-color: #1e1e1e;        /* Same color as main header */
+    position: fixed;                  /* Fixed positioning at bottom */
+    bottom: 0;                        /* Position at very bottom of viewport */
+    left: 0;                         /* Position at very left of viewport */
+    width: 100%;                     /* Span the full width of the browser window */
+    height: 25px;                    /* Reduced height from 35px to 25px */
+    display: flex;                   /* Use flexbox for easy alignment of child elements */
+    align-items: center;             /* Vertically center all items in the footer */
+    justify-content: center;         /* Center content horizontally */
+    padding: 0 15px;                 /* Horizontal padding */
+    box-sizing: border-box;          /* Include padding in width calculation */
+    z-index: 1000;                   /* High z-index ensures footer stays above other content */
 }
 
 /* -----------------------------------------------------------------------------
@@ -599,4 +708,160 @@ body.expanded {
 
 .form-next-btn:active {
     background-color: #005a9e;       /* Even darker blue when clicked */
+}
+
+/* -----------------------------------------------------------------------------
+   MAIN CONTENT AREA
+   -----------------------------------------------------------------------------
+   Main content area between command line and footer */
+.main-content {
+    background-color: #00ff00;       /* Bright green background for visibility */
+    position: fixed;                 /* Fixed positioning */
+    top: 153px;                      /* Below all headers and command line */
+    left: 0;                         /* Full width from left */
+    right: 0;                        /* Full width to right */
+    bottom: 25px;                    /* Above footer */
+    padding: 0;                      /* No padding to allow iframe to fill completely */
+    box-sizing: border-box;          /* Include padding in dimensions */
+    overflow: hidden;                /* Prevent scrolling */
+    z-index: 1;                      /* Below headers but above background */
+}
+
+/* Iframe styling to fill the main content area */
+.main-content iframe {
+    width: 100%;                     /* Full width of container */
+    height: 100%;                    /* Full height of container */
+    border: none;                    /* Remove default iframe border */
+    background-color: transparent;   /* Transparent background */
+    display: block;                  /* Block display to remove any gaps */
+}
+
+/* When history is expanded, adjust main content position */
+body.expanded .main-content {
+    top: 303px;                      /* Adjust for expanded history */
+}
+
+/* -----------------------------------------------------------------------------
+   HOME PAGE CONTENT
+   -----------------------------------------------------------------------------
+   Main content area styling for the home page with logo grid */
+.home-content {
+    max-width: 1200px;               /* Maximum width for large screens */
+    margin: 0 auto;                  /* Center the content */
+    padding: 20px;                   /* Reduced padding around the content */
+    height: calc(100vh - 178px);     /* Exact height: viewport - headers - footer */
+    overflow: hidden;                /* Prevent scrolling within content */
+    display: flex;                   /* Flexbox for centering */
+    align-items: center;             /* Center content vertically */
+    justify-content: center;         /* Center content horizontally */
+}
+
+.logo-grid {
+    display: flex;                   /* Flexbox for grid layout */
+    flex-direction: column;          /* Stack rows vertically */
+    gap: 20px;                       /* Reduced space between rows */
+    align-items: center;             /* Center the grid */
+    width: 100%;                     /* Full width */
+    height: 100%;                    /* Full height of container */
+    justify-content: center;         /* Center vertically */
+}
+
+.logo-row {
+    display: flex;                   /* Flexbox for horizontal layout */
+    gap: 30px;                       /* Reduced space between logo items */
+    justify-content: center;         /* Center the items in each row */
+    flex-wrap: wrap;                 /* Allow wrapping on smaller screens */
+}
+
+.logo-item {
+    display: flex;                   /* Flexbox for vertical layout */
+    flex-direction: column;          /* Stack logo, name, and description */
+    align-items: center;             /* Center align all content */
+    text-align: center;              /* Center text alignment */
+    background-color: #333333;       /* Dark background for each item */
+    border-radius: 12px;             /* Rounded corners */
+    padding: 20px 15px;              /* Reduced padding inside each item */
+    width: 240px;                    /* Reduced width for better fit */
+    height: 160px;                   /* Fixed height instead of min-height */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effects */
+    cursor: pointer;                 /* Pointer cursor to indicate clickable */
+    border: 1px solid #404040;       /* Subtle border */
+    flex-shrink: 0;                  /* Prevent shrinking */
+}
+
+.logo-item:hover {
+    transform: translateY(-5px);     /* Slight lift effect on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4); /* Enhanced shadow on hover */
+    background-color: #3a3a3a;       /* Slightly lighter background on hover */
+}
+
+.app-logo {
+    margin-bottom: 10px;             /* Reduced space below the logo */
+    display: flex;                   /* Flexbox for centering */
+    align-items: center;             /* Center vertically */
+    justify-content: center;         /* Center horizontally */
+    width: 60px;                     /* Reduced width for logo container */
+    height: 60px;                    /* Reduced height for logo container */
+    background-color: #404040;       /* Background for logo area */
+    border-radius: 8px;              /* Smaller rounded logo container */
+    margin: 0 auto 10px auto;        /* Center the logo container */
+}
+
+.app-icon {
+    width: 40px;                     /* Reduced logo icon size */
+    height: 40px;                    /* Reduced logo icon size */
+    object-fit: contain;             /* Scale to fit without distortion */
+    filter: brightness(1.1);        /* Slightly brighten the icons */
+}
+
+.app-name {
+    font-size: 16px;                 /* Reduced font for app names */
+    font-weight: bold;               /* Bold app names */
+    color: #ffffff;                  /* White text */
+    margin-bottom: 6px;              /* Reduced space below app name */
+    line-height: 1.1;                /* Tighter line height */
+}
+
+.app-description {
+    font-size: 11px;                 /* Smaller font for descriptions */
+    color: #cccccc;                  /* Light grey text */
+    line-height: 1.3;                /* Good line spacing for readability */
+    max-width: 200px;                /* Reduced text width for better fit */
+    overflow: hidden;                /* Hide overflow text */
+    display: -webkit-box;            /* Enable text clamping */
+    -webkit-line-clamp: 3;           /* Limit to 3 lines */
+    line-clamp: 3;                   /* Standard property for compatibility */
+    -webkit-box-orient: vertical;    /* Vertical orientation for clamping */
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+    .logo-row {
+        flex-direction: column;      /* Stack items vertically on small screens */
+        gap: 20px;                   /* Reduced gap for mobile */
+    }
+    
+    .logo-item {
+        width: 100%;                 /* Full width on mobile */
+        max-width: 300px;            /* Maximum width to prevent too wide items */
+    }
+    
+    .home-content {
+        padding: 20px 15px;          /* Reduced padding on mobile */
+    }
+}
+
+@media (max-width: 480px) {
+    .app-name {
+        font-size: 16px;             /* Smaller font on very small screens */
+    }
+    
+    .app-description {
+        font-size: 12px;             /* Smaller description text */
+    }
+    
+    .logo-item {
+        padding: 20px 15px;          /* Reduced padding on very small screens */
+        min-height: 180px;           /* Reduced minimum height */
+    }
 }

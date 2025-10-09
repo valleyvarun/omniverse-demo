@@ -102,7 +102,7 @@ function initializeCommandLine() {
     
     // Global keydown listener to handle all keyboard interactions
     document.addEventListener('keydown', function(event) {
-        // Don't interfere with typing in dropdowns or other inputs
+        // Don't interfere with typing in dropdowns or other inputs (except commandInput)
         if (event.target.tagName === 'INPUT' && event.target !== commandInput) {
             return;
         }
@@ -114,30 +114,116 @@ function initializeCommandLine() {
             handleConfirmationState(event);
         }
     });
+    
+    // Also capture keydown events from iframe content
+    const iframe = document.getElementById('contentFrame');
+    if (iframe) {
+        iframe.addEventListener('load', function() {
+            try {
+                // Access iframe document (only works if same origin)
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                
+                // Add keydown listener to iframe document
+                iframeDoc.addEventListener('keydown', function(event) {
+                    // Don't interfere with typing in iframe inputs
+                    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                        return;
+                    }
+                    
+                    // Redirect all other keyboard input to main command line
+                    if (currentState === 'INPUT') {
+                        handleInputState(event, commandInput);
+                    } else if (currentState === 'CONFIRMATION') {
+                        handleConfirmationState(event);
+                    }
+                });
+                
+                // Prevent iframe from capturing focus when clicked
+                iframeDoc.addEventListener('click', function() {
+                    // Always return focus to command input after any click in iframe
+                    setTimeout(() => {
+                        commandInput.focus();
+                    }, 10);
+                });
+                
+            } catch (e) {
+                console.log('Cannot access iframe content (cross-origin)');
+            }
+        });
+    }
+    
+    // Global click listener to always return focus to command input
+    document.addEventListener('click', function(event) {
+        // Don't interfere with dropdown interactions
+        if (event.target.closest('.dropdown-menu') || 
+            event.target.closest('.account-dropdown') ||
+            event.target.closest('.window-dropdown')) {
+            return;
+        }
+        
+        // Always focus command input after any click
+        setTimeout(() => {
+            commandInput.focus();
+        }, 10);
+    });
 }
 
 /**
  * Handle keyboard input in INPUT state
  */
 function handleInputState(event, commandInput) {
-    // Regular typing - focus command input
+    // Regular typing - always redirect to command input
     if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete') {
+        // Always focus command input and handle the keystroke
+        event.preventDefault(); // Prevent default behavior
+        
         if (document.activeElement !== commandInput) {
             commandInput.focus();
-            // For regular typing, prevent the default and manually add the character
-            if (event.key.length === 1) {
-                event.preventDefault();
-                commandInput.value += event.key;
+        }
+        
+        // Handle the keystroke manually
+        if (event.key.length === 1) {
+            // Add character to command input
+            const cursorPos = commandInput.selectionStart;
+            const currentValue = commandInput.value;
+            commandInput.value = currentValue.slice(0, cursorPos) + event.key + currentValue.slice(cursorPos);
+            commandInput.setSelectionRange(cursorPos + 1, cursorPos + 1);
+        } else if (event.key === 'Backspace') {
+            // Handle backspace
+            const cursorPos = commandInput.selectionStart;
+            if (cursorPos > 0) {
+                const currentValue = commandInput.value;
+                commandInput.value = currentValue.slice(0, cursorPos - 1) + currentValue.slice(cursorPos);
+                commandInput.setSelectionRange(cursorPos - 1, cursorPos - 1);
+            }
+        } else if (event.key === 'Delete') {
+            // Handle delete
+            const cursorPos = commandInput.selectionStart;
+            const currentValue = commandInput.value;
+            if (cursorPos < currentValue.length) {
+                commandInput.value = currentValue.slice(0, cursorPos) + currentValue.slice(cursorPos + 1);
+                commandInput.setSelectionRange(cursorPos, cursorPos);
             }
         }
     }
     
     // Handle Enter key to execute command
-    if (event.key === 'Enter' && document.activeElement === commandInput) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
         const command = commandInput.value.trim();
         if (command) {
             executeCommand(command);
             commandInput.value = '';
+        }
+        commandInput.focus();
+    }
+    
+    // Handle arrow keys for command input navigation
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight' || 
+        event.key === 'Home' || event.key === 'End') {
+        if (document.activeElement !== commandInput) {
+            event.preventDefault();
+            commandInput.focus();
         }
     }
 }
@@ -406,6 +492,7 @@ function toggleHistorySize() {
     const commandLine = document.querySelector('.command-line-container');
     const body = document.body;
     const toggleBtn = document.getElementById('historyToggleBtn');
+    const collapseBtn = document.getElementById('historyCollapseBtn');
     const commandInput = document.getElementById('commandInput');
     
     // Toggle the expanded class on all elements
@@ -416,12 +503,14 @@ function toggleHistorySize() {
     // Update button arrow direction and position
     if (functionDisplay.classList.contains('expanded')) {
         toggleBtn.innerHTML = '▲'; // Up arrow when expanded
-        // Center in expanded history: 68px + 100px = 168px
-        toggleBtn.style.top = '168px';
+        // Position buttons in expanded history (starting at 68px + 150px/2 - button heights)
+        toggleBtn.style.top = '133px'; // Top button in expanded state
+        collapseBtn.style.top = '150px'; // Bottom button in expanded state
     } else {
         toggleBtn.innerHTML = '▼'; // Down arrow when collapsed
-        // Center in collapsed history: 68px + 25px = 93px
-        toggleBtn.style.top = '93px';
+        // Position buttons in collapsed history
+        toggleBtn.style.top = '78px'; // Top button in collapsed state
+        collapseBtn.style.top = '95px'; // Bottom button in collapsed state
     }
     
     // Restore focus to command input immediately after toggle
@@ -431,6 +520,98 @@ function toggleHistorySize() {
     setTimeout(() => {
         adjustScrollPosition();
     }, 300); // Wait for transition to complete
+}
+
+/**
+ * Collapse the history display completely
+ */
+function collapseHistory() {
+    const functionDisplay = document.querySelector('.function-display');
+    const commandLine = document.querySelector('.command-line-container');
+    const body = document.body;
+    const toggleBtn = document.getElementById('historyToggleBtn');
+    const collapseBtn = document.getElementById('historyCollapseBtn');
+    const showHistoryBtn = document.getElementById('showHistoryBtn');
+    
+    // Remove any expanded classes first
+    functionDisplay.classList.remove('expanded');
+    commandLine.classList.remove('expanded');
+    body.classList.remove('expanded');
+    
+    // Hide the history display
+    functionDisplay.style.display = 'none';
+    
+    // Adjust command line position to move up
+    commandLine.style.top = '68px'; // Position right below menu bar
+    
+    // Adjust body padding
+    body.style.paddingTop = '103px'; // 68px (headers) + 35px (command line)
+    
+    // Hide history control buttons since history is collapsed
+    toggleBtn.style.display = 'none';
+    collapseBtn.style.display = 'none';
+    
+    // Show the show-history button in command line
+    showHistoryBtn.style.display = 'flex';
+}
+
+/**
+ * Show the history display (restore to default state)
+ */
+function showHistory() {
+    const functionDisplay = document.querySelector('.function-display');
+    const commandLine = document.querySelector('.command-line-container');
+    const body = document.body;
+    const toggleBtn = document.getElementById('historyToggleBtn');
+    const collapseBtn = document.getElementById('historyCollapseBtn');
+    const showHistoryBtn = document.getElementById('showHistoryBtn');
+    
+    // Show the history display
+    functionDisplay.style.display = 'flex';
+    
+    // Reset to default collapsed state
+    functionDisplay.classList.remove('expanded');
+    commandLine.classList.remove('expanded');
+    body.classList.remove('expanded');
+    
+    // Reset command line position (remove any inline styles to use CSS defaults)
+    commandLine.style.top = '';
+    
+    // Reset body padding (remove any inline styles to use CSS defaults)
+    body.style.paddingTop = '';
+    
+    // Show and reset toggle button to collapsed state
+    toggleBtn.style.display = 'flex';
+    toggleBtn.innerHTML = '▼';
+    toggleBtn.style.top = '78px'; // Top button in collapsed state
+    
+    // Show and reset collapse button position
+    collapseBtn.style.display = 'flex';
+    collapseBtn.style.top = '95px'; // Bottom button in collapsed state
+    
+    // Hide the show-history button since history is now visible
+    showHistoryBtn.style.display = 'none';
+    
+    // Close window dropdown
+    document.getElementById('windowDropdown').classList.remove('show');
+}
+
+/**
+ * Toggle Window dropdown menu
+ */
+function toggleWindowDropdown() {
+    const dropdown = document.getElementById('windowDropdown');
+    dropdown.classList.toggle('show');
+    
+    // Close dropdown when clicking outside
+    setTimeout(() => {
+        document.addEventListener('click', function closeWindowDropdown(event) {
+            if (!event.target.closest('.menu-item-with-dropdown')) {
+                dropdown.classList.remove('show');
+                document.removeEventListener('click', closeWindowDropdown);
+            }
+        });
+    }, 0);
 }
 
 // -----------------------------------------------------------------------------

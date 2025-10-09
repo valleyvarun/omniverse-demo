@@ -102,8 +102,14 @@
             <li><a href="#" class="menu-item">Home</a></li>
             <li><a href="#" class="menu-item">File</a></li>
             <li><a href="#" class="menu-item">Apps</a></li>
-            <li><a href="#" class="menu-item">Window</a></li>
+            <li class="menu-item-with-dropdown">
+                <a href="#" class="menu-item" onclick="toggleWindowDropdown()">Window</a>
+                <div class="window-dropdown" id="windowDropdown">
+                    <div class="window-dropdown-item" onclick="showHistory()">Command Line History</div>
+                </div>
+            </li>
             <li><a href="#" class="menu-item">Settings</a></li>
+            <li><a href="#" class="menu-item">Learn</a></li>
             <li><a href="#" class="menu-item">Help</a></li>
         </ul>
     </nav>
@@ -120,6 +126,9 @@
         <button class="history-toggle-btn" id="historyToggleBtn" onclick="toggleHistorySize()" title="Expand/Collapse History">
             <span>▼</span>
         </button>
+        <button class="history-collapse-btn" id="historyCollapseBtn" onclick="collapseHistory()" title="Hide History">
+            <span>−</span>
+        </button>
         <div class="function-bubbles" id="functionBubbles">
             <!-- Function bubbles are dynamically added here by JavaScript -->
             <!-- Example: <div class="function-bubble">someFunction()</div> -->
@@ -135,6 +144,11 @@
          Commands are executed on Enter key press.
          ======================================================================== -->
     <div class="command-line-container">
+        <!-- Show history button (appears when history is collapsed) -->
+        <button class="show-history-btn" id="showHistoryBtn" onclick="showHistory()" title="Show History" style="display: none;">
+            <span>▼</span>
+        </button>
+        
         <!-- Command label -->
         <span class="command-label">Command:</span>
         
@@ -154,7 +168,28 @@
          Body has padding-top to account for all fixed elements above.
          ======================================================================== -->
     
-    <!-- Future content will go here -->
+    <main class="main-content">
+        <!-- Iframe for loading external HTML content -->
+        <iframe id="contentFrame" 
+                src="pages/home.html" 
+                title="Main Content"
+                frameborder="0"
+                scrolling="no">
+            <!-- Fallback content for browsers that don't support iframe -->
+            <p>Your browser does not support iframes. Please upgrade to a modern browser.</p>
+        </iframe>
+    </main>
+
+    <!-- ========================================================================
+         FOOTER BAR (35px height)
+         ========================================================================
+         Footer bar at the bottom of the page with same styling as main header.
+         Fixed positioning ensures it stays at bottom regardless of screen size.
+         Same color (#1e1e1e) and height (35px) as the command line interface.
+         ======================================================================== -->
+    <footer class="footer-bar">
+        <!-- Footer content can be added here -->
+    </footer>
 
     <!-- ========================================================================
          JAVASCRIPT INCLUSION
