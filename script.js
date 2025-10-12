@@ -3,6 +3,34 @@
 // =============================================================================
 // This file contains all the interactive functionality for the Omniverse demo
 
+// Global state for keyboard capture control
+window.chatbotActive = false;
+
+/**
+ * Completely disable global keyboard capture
+ */
+function disableGlobalKeyboard() {
+    console.log('🚫 DISABLING GLOBAL KEYBOARD CAPTURE');
+    if (window.globalKeyboardListener) {
+        document.removeEventListener('keydown', window.globalKeyboardListener, false);
+    }
+    window.chatbotActive = true;
+}
+
+/**
+ * Re-enable global keyboard capture
+ */
+function enableGlobalKeyboard() {
+    console.log('✅ ENABLING GLOBAL KEYBOARD CAPTURE');
+    if (window.globalKeyboardListener) {
+        // Remove any existing listener first
+        document.removeEventListener('keydown', window.globalKeyboardListener, false);
+        // Add it back
+        document.addEventListener('keydown', window.globalKeyboardListener, false);
+    }
+    window.chatbotActive = false;
+}
+
 // -----------------------------------------------------------------------------
 // USER ACCOUNT DROPDOWN FUNCTIONALITY
 // -----------------------------------------------------------------------------
@@ -79,6 +107,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize command line functionality
     initializeCommandLine();
+
+    // Chatbot focus routing: clicking inside chatbot panel should focus its input
+    const chatbotContainer = document.getElementById('chatbotContainer');
+    if (chatbotContainer) {
+        chatbotContainer.addEventListener('click', function(event) {
+            // Don't steal focus when interacting with controls inside chatbot
+            if (event.target.closest('select, button, input, textarea')) {
+                return;
+            }
+            focusAgentChatInput();
+        });
+    }
 });
 
 // -----------------------------------------------------------------------------
@@ -100,10 +140,35 @@ function initializeCommandLine() {
     // Focus on command input when page loads
     commandInput.focus();
     
-    // Global keydown listener to handle all keyboard interactions
-    document.addEventListener('keydown', function(event) {
+    // Store the global keyboard listener so we can disable it
+    window.globalKeyboardListener = function(event) {
+        // COMPLETE OVERRIDE: If chatbot is active, do nothing at all
+        if (window.chatbotActive) {
+            return;
+        }
+        
+        // Don't interfere with chatbot input when it's focused
+        if (window.chatbotState && window.chatbotState.inputFocused) {
+            console.log('Blocked global capture - chatbot focused');
+            return;
+        }
+        
         // Don't interfere with typing in dropdowns or other inputs (except commandInput)
         if (event.target.tagName === 'INPUT' && event.target !== commandInput) {
+            return;
+        }
+        
+        // Don't interfere if user is typing in the chatbot area
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        if (chatbotContainer && chatbotContainer.contains(event.target)) {
+            console.log('Blocked global capture - event target in chatbot');
+            return;
+        }
+        
+        // Additional check - if the active element is the chat input
+        const chatInput = document.getElementById('chatInput');
+        if (document.activeElement === chatInput) {
+            console.log('Blocked global capture - chat input is active element');
             return;
         }
         
@@ -113,7 +178,10 @@ function initializeCommandLine() {
         } else if (currentState === 'CONFIRMATION') {
             handleConfirmationState(event);
         }
-    });
+    };
+    
+    // Add the global keyboard listener
+    document.addEventListener('keydown', window.globalKeyboardListener, false);
     
     // Also capture keydown events from iframe content
     const iframe = document.getElementById('contentFrame');
@@ -125,8 +193,19 @@ function initializeCommandLine() {
                 
                 // Add keydown listener to iframe document
                 iframeDoc.addEventListener('keydown', function(event) {
+                    // Don't interfere with chatbot input when it's focused
+                    if (window.chatbotState && window.chatbotState.inputFocused) {
+                        return;
+                    }
+                    
                     // Don't interfere with typing in iframe inputs
                     if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                        return;
+                    }
+                    
+                    // Don't interfere if user is typing in the chatbot area
+                    const chatbotContainer = document.getElementById('chatbotContainer');
+                    if (chatbotContainer && chatbotContainer.contains(event.target)) {
                         return;
                     }
                     
@@ -140,6 +219,12 @@ function initializeCommandLine() {
                 
                 // Prevent iframe from capturing focus when clicked
                 iframeDoc.addEventListener('click', function() {
+                    // Explicitly re-enable global keyboard routing to command line
+                    try {
+                        blurAgentChatInput();
+                        enableGlobalKeyboard();
+                        window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                    } catch(_) {}
                     // Always return focus to command input after any click in iframe
                     setTimeout(() => {
                         commandInput.focus();
@@ -152,7 +237,7 @@ function initializeCommandLine() {
         });
     }
     
-    // Global click listener to always return focus to command input
+    // Global click listener to return focus to command input
     document.addEventListener('click', function(event) {
         // Don't interfere with dropdown interactions
         if (event.target.closest('.dropdown-menu') || 
@@ -160,8 +245,19 @@ function initializeCommandLine() {
             event.target.closest('.window-dropdown')) {
             return;
         }
+        // Don't steal focus if clicking inside the chatbot container
+        if (event.target.closest('#chatbotContainer')) {
+            return;
+        }
         
-        // Always focus command input after any click
+        // Explicitly blur chatbot input and re-enable global keyboard capture
+        blurAgentChatInput();
+        try {
+            enableGlobalKeyboard();
+            window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+        } catch(_) {}
+
+        // Always focus command input after any click outside chatbot
         setTimeout(() => {
             commandInput.focus();
         }, 10);
@@ -172,6 +268,35 @@ function initializeCommandLine() {
  * Handle keyboard input in INPUT state
  */
 function handleInputState(event, commandInput) {
+    // ABSOLUTE OVERRIDE: If chatbot is active, never interfere
+    if (window.chatbotActive) {
+        console.log('handleInputState blocked - chatbot is active');
+        return;
+    }
+    
+    // Don't interfere with chatbot input when it's focused or active
+    if (window.chatbotState && window.chatbotState.inputFocused) {
+        console.log('handleInputState blocked - chatbot input focused');
+        return;
+    }
+    
+    // Don't interfere if user is typing in the chatbot area
+    const chatbotContainer = document.getElementById('chatbotContainer');
+    if (chatbotContainer && chatbotContainer.contains(event.target)) {
+        console.log('handleInputState blocked - event target in chatbot');
+        return;
+    }
+    
+    // Don't interfere if the active element is the chat input
+    const chatInput = document.getElementById('chatInput');
+    if (document.activeElement === chatInput) {
+        console.log('handleInputState blocked - chat input is active element');
+        return;
+    }
+    
+    // Only proceed if we're absolutely sure we should handle this
+    console.log('handleInputState proceeding - commandInput will handle event');
+    
     // Regular typing - always redirect to command input
     if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete') {
         // Always focus command input and handle the keystroke
@@ -538,14 +663,10 @@ function collapseHistory() {
     commandLine.classList.remove('expanded');
     body.classList.remove('expanded');
     
-    // Hide the history display
-    functionDisplay.style.display = 'none';
+    // Hide the history display using a CSS class (removes it from flow)
+    functionDisplay.classList.add('collapsed');
     
-    // Adjust command line position to move up
-    commandLine.style.top = '68px'; // Position right below menu bar
-    
-    // Adjust body padding
-    body.style.paddingTop = '103px'; // 68px (headers) + 35px (command line)
+    // In in-flow layout, no manual positioning or body padding is needed
     
     // Hide history control buttons since history is collapsed
     toggleBtn.style.display = 'none';
@@ -566,8 +687,8 @@ function showHistory() {
     const collapseBtn = document.getElementById('historyCollapseBtn');
     const showHistoryBtn = document.getElementById('showHistoryBtn');
     
-    // Show the history display
-    functionDisplay.style.display = 'flex';
+    // Show the history display via CSS class toggle
+    functionDisplay.classList.remove('collapsed');
     
     // Reset to default collapsed state
     functionDisplay.classList.remove('expanded');
@@ -869,4 +990,39 @@ function resetDropdownToNormal() {
             }
         });
     });
+}
+
+// -----------------------------------------------------------------------------
+// CHATBOT INPUT FOCUS HELPER
+// -----------------------------------------------------------------------------
+function focusAgentChatInput() {
+    const iframe = document.getElementById('agentFrame');
+    if (!iframe) return false;
+    try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const input = doc.getElementById('chatInput');
+        if (input) {
+            input.focus();
+            return true;
+        }
+    } catch (e) {
+        console.log('Unable to focus agent chat input:', e);
+    }
+    return false;
+}
+
+function blurAgentChatInput() {
+    const iframe = document.getElementById('agentFrame');
+    if (!iframe) return false;
+    try {
+        const doc = iframe.contentDocument || iframe.contentWindow.document;
+        const input = doc.getElementById('chatInput');
+        if (input && doc.activeElement === input) {
+            input.blur();
+            return true;
+        }
+    } catch (e) {
+        console.log('Unable to blur agent chat input:', e);
+    }
+    return false;
 }

@@ -28,6 +28,10 @@
 # -----------------------------------------------------------------------------
 # PHOTOSHOP FILES
 # -----------------------------------------------------------------------------
+# Ignore any directories named "psd" (and everything inside)
+psd/
+**/psd/
+
 # Ignore all Photoshop document files
 *.psd
 *.psb

@@ -4,8 +4,6 @@
      OMNIVERSE DEMO APPLICATION - HTML STRUCTURE
      ============================================================================
      This HTML file contains the complete structure for the Omniverse demo app.
-     The layout mimics a desktop application with multiple fixed headers and
-     interactive elements.
      ============================================================================ -->
 
 <head>
@@ -19,9 +17,6 @@
 <body>
     <!-- ========================================================================
          TOP BLACK BAR (3px height)
-         ========================================================================
-         Thin black decorative bar at the very top of the application window.
-         Provides visual separation and mimics desktop application styling.
          ======================================================================== -->
     <div class="black">
         <!-- Empty div - styling handled in CSS -->
@@ -115,70 +110,97 @@
     </nav>
 
     <!-- ========================================================================
-         FUNCTION DISPLAY HEADER (40px height)
+         MAIN LAYOUT CONTAINER
          ========================================================================
-         Shows executed functions as light grey bubbles.
-         Fixed positioning below the menu bar.
-         Automatically populated when commands are executed via JavaScript.
-         Supports horizontal scrolling for multiple function bubbles.
+         Container that holds workspace, resize handle, and chatbot side by side
          ======================================================================== -->
-    <div class="function-display">
-        <button class="history-toggle-btn" id="historyToggleBtn" onclick="toggleHistorySize()" title="Expand/Collapse History">
-            <span>▼</span>
-        </button>
-        <button class="history-collapse-btn" id="historyCollapseBtn" onclick="collapseHistory()" title="Hide History">
-            <span>−</span>
-        </button>
-        <div class="function-bubbles" id="functionBubbles">
-            <!-- Function bubbles are dynamically added here by JavaScript -->
-            <!-- Example: <div class="function-bubble">someFunction()</div> -->
+    <div class="main-layout">
+        <!-- ====================================================================
+             MAIN WORKSPACE CONTAINER
+             ====================================================================
+             Groups the command history, command line, and main content together
+             ==================================================================== -->
+        <div class="workspace-container">
+        <!-- ====================================================================
+             FUNCTION DISPLAY HEADER (40px height)
+             ====================================================================
+             Shows executed functions as light grey bubbles.
+             Fixed positioning below the menu bar.
+             Automatically populated when commands are executed via JavaScript.
+             Supports horizontal scrolling for multiple function bubbles.
+             ==================================================================== -->
+        <div class="function-display">
+            <button class="history-toggle-btn" id="historyToggleBtn" onclick="toggleHistorySize()" title="Expand/Collapse History">
+                <span>▼</span>
+            </button>
+            <button class="history-collapse-btn" id="historyCollapseBtn" onclick="collapseHistory()" title="Hide History">
+                <span>−</span>
+            </button>
+            <div class="function-bubbles" id="functionBubbles">
+                <!-- Function bubbles are dynamically added here by JavaScript -->
+                <!-- Example: <div class="function-bubble">someFunction()</div> -->
+            </div>
+        </div>
+
+        <!-- ====================================================================
+             COMMAND LINE INTERFACE (35px height)
+             ====================================================================
+             Interactive command input area with black background.
+             Fixed positioning below the function display.
+             Captures global keyboard input for seamless command entry.
+             Commands are executed on Enter key press.
+             ==================================================================== -->
+        <div class="command-line-container">
+            <!-- Show history button (appears when history is collapsed) -->
+            <button class="show-history-btn" id="showHistoryBtn" onclick="showHistory()" title="Show History" style="display: none;">
+                <span>▼</span>
+            </button>
+            
+            <!-- Command label -->
+            <span class="command-label">Command:</span>
+            
+            <!-- Command input field -->
+            <input type="text" 
+                   class="command-input" 
+                   id="commandInput" 
+                   placeholder="Type your command..." 
+                   autocomplete="off">
+        </div>
+
+        <!-- ====================================================================
+             MAIN CONTENT AREA
+             ====================================================================
+             The remaining space below all fixed headers.
+             Content will be added here for the main application interface.
+             Body has padding-top to account for all fixed elements above.
+             ==================================================================== -->
+        <main class="main-content">
+            <!-- Iframe for loading external HTML content -->
+            <iframe id="contentFrame" 
+                    src="pages/home.html" 
+                    title="Main Content"
+                    frameborder="0"
+                    scrolling="no">
+                <!-- Fallback content for browsers that don't support iframe -->
+                <p>Your browser does not support iframes. Please upgrade to a modern browser.</p>
+            </iframe>
+        </main>
+        </div>
+
+        <div class="chatbot-resize-handle">
+
+        </div>
+
+        <div class="chatbot-container" id="chatbotContainer">
+            <iframe 
+                id="agentFrame"
+                src="agent/agent.html"
+                title="Chatbot"
+                frameborder="0"
+                style="width: 100%; height: 100%; display: block; background: #1a1a1a;">
+            </iframe>
         </div>
     </div>
-
-    <!-- ========================================================================
-         COMMAND LINE INTERFACE (35px height)
-         ========================================================================
-         Interactive command input area with black background.
-         Fixed positioning below the function display.
-         Captures global keyboard input for seamless command entry.
-         Commands are executed on Enter key press.
-         ======================================================================== -->
-    <div class="command-line-container">
-        <!-- Show history button (appears when history is collapsed) -->
-        <button class="show-history-btn" id="showHistoryBtn" onclick="showHistory()" title="Show History" style="display: none;">
-            <span>▼</span>
-        </button>
-        
-        <!-- Command label -->
-        <span class="command-label">Command:</span>
-        
-        <!-- Command input field -->
-        <input type="text" 
-               class="command-input" 
-               id="commandInput" 
-               placeholder="Type your command..." 
-               autocomplete="off">
-    </div>
-
-    <!-- ========================================================================
-         MAIN CONTENT AREA
-         ========================================================================
-         The remaining space below all fixed headers.
-         Content will be added here for the main application interface.
-         Body has padding-top to account for all fixed elements above.
-         ======================================================================== -->
-    
-    <main class="main-content">
-        <!-- Iframe for loading external HTML content -->
-        <iframe id="contentFrame" 
-                src="pages/home.html" 
-                title="Main Content"
-                frameborder="0"
-                scrolling="no">
-            <!-- Fallback content for browsers that don't support iframe -->
-            <p>Your browser does not support iframes. Please upgrade to a modern browser.</p>
-        </iframe>
-    </main>
 
     <!-- ========================================================================
          FOOTER BAR (35px height)
@@ -201,5 +223,6 @@
          - Global keyboard event listeners
          ======================================================================== -->
     <script src="script.js"></script>
+    <script src="agent/agent-resize.js"></script>
 </body>
 </html>

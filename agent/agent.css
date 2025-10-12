@@ -1,0 +1,264 @@
+/* ==================================================================== */
+/* THEME TOKENS                                                          */
+/* Color variables used across the agent iframe UI                       */
+/* ==================================================================== */
+:root {
+	--agent-bg: #1a1a1a;
+	--agent-surface: #222;
+	--agent-border: #333;
+	--agent-text: #f0f0f0;
+	--agent-muted: #b0b0b0;
+	--agent-accent: #4a90e2;
+}
+
+/* ==================================================================== */
+/* GLOBAL RESET                                                         */
+/* Ensure padding/border are included in width/height calculations      */
+/* ==================================================================== */
+*, *::before, *::after {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+}
+
+/* Frame baseline and typography */
+body {
+	margin: 0;
+	background: var(--agent-bg);
+	color: var(--agent-text);
+	font-family: Arial, sans-serif;
+	overflow-x: hidden; /* Prevent horizontal scroll in iframe */
+}
+
+/* ==================================================================== */
+/* ROOT LAYOUT                                                           */
+/* Three-row grid: header | chat | input                                */
+/* ==================================================================== */
+.agent-root {
+	height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr auto; /* header, chat, input */
+	overflow-x: hidden; /* No horizontal scroll */
+}
+
+.agent-header {
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 12px;
+	background: var(--agent-surface);
+	border-bottom: 1px solid var(--agent-border);
+}
+
+.agent-title {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.agent-status {
+	font-size: 12px;
+	color: var(--agent-muted);
+}
+
+/* Scrollable transcript area */
+.agent-chat {
+	overflow: auto;
+	padding: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	overflow-x: hidden; /* Constrain horizontally */
+}
+
+/* Separator between message pairs: dashed grey line with a small bookmark icon */
+.chat-separator {
+	position: relative;
+	width: 100%;
+	margin: 10px 0;                     /* Spacing above/below */
+	height: 14px;                        /* Reserve space for the left motif */
+}
+
+.chat-separator::after {
+	content: "";
+	position: absolute;
+	left: 5%;                            /* Start the dashed line at 5% inset */
+	right: 0;                            /* Extend to the far right */
+	bottom: 0;                           /* Sit on the bottom edge */
+	border-bottom: 1px dashed #666;      /* Dashed line */
+}
+
+.chat-separator .bookmark {
+	position: absolute;
+	left: 0;                             /* At the left end of the line */
+	bottom: -3px;                        /* Nudge slightly below the dashed line */
+	color: #666;                         /* Use currentColor for SVG stroke */
+	line-height: 0;                      /* No extra vertical space */
+	pointer-events: none;                /* Decorative only */
+}
+
+/* Message bubbles */
+/* Base message block; Bot will be plain text; User will be styled bubble */
+.msg {
+	max-width: 80%;
+	line-height: 1.3;
+	font-size: 12px;                /* Smaller chatting text */
+}
+
+/* User message bubble with dark green background */
+.msg.user {
+	align-self: flex-end;
+	background: #365f12;            /* Dark yellowish-green bubble */
+	color: #f0f0f0;                 /* Light text */
+	border: 1px solid #2a4a0e;      /* Matching darker border */
+	border-radius: 10px;            /* Rounded bubble corners */
+	padding: 8px 10px;              /* Inner padding */
+	position: relative;             /* Enable attached label positioning */
+	margin-top: 16px;               /* Provide room for attached label above */
+}
+
+/* Small username label at the top of the user bubble */
+.msg.user .msg-username {
+	position: absolute;             /* Attach to top edge */
+	top: -12px;                     /* Slightly higher than before */
+	right: -1px;                    /* Align to bubble outer border (1px) */
+	left: auto;                     /* Allow pill to grow leftwards */
+	display: inline-block;          /* Size to content */
+	padding: 1px 8px;               /* Thin pill padding */
+	font-size: 11px;                /* Requested size */
+	font-weight: 600;               /* Semi-bold */
+	line-height: 1.2;               /* Compact line height */
+	color: #C3F2C1;                 /* Light label text */
+	background: #365f12;            /* Same dark yellowish-green as bubble */
+	border: 1px solid #2a4a0e;      /* Matching darker border */
+	border-radius: 9999px;          /* Full pill radius */
+	z-index: 1;                     /* Ensure on top of bubble border */
+	white-space: nowrap;            /* Prevent wrapping; expand to the left */
+}
+
+/* The actual message body content inside the bubble */
+.msg.user .msg-body {
+	white-space: pre-wrap;          /* Preserve line breaks */
+}
+
+/* Bot messages: plain text without bubble chrome */
+.msg.bot {
+	align-self: flex-start;         /* Left align in column */
+	width: 95%;                     /* Cap width at 95% */
+	max-width: 95%;                 /* Ensure no overflow beyond 95% */
+	background: transparent;        /* No bubble */
+	color: var(--agent-text);
+	padding: 0;                     /* No bubble padding */
+	white-space: pre-wrap;          /* Preserve line breaks for step-like text */
+}
+
+/* ==================================================================== */
+/* INPUT AREA (UNIFIED RECTANGLE)                                        */
+/* Bottom bar with three stacked rows (attach | input | mode+send)       */
+/* ==================================================================== */
+.agent-input {
+	/* Unified rectangle spanning full width of chatbot */
+	background: var(--agent-surface); /* Lighter unified background */
+	border-top: 1px solid var(--agent-border);
+	border-left: 1px solid var(--agent-border);
+	border-right: 1px solid var(--agent-border);
+	border-bottom: 1px solid var(--agent-border);
+	overflow-x: hidden;               /* Constrain horizontally */
+	padding: 0;                       /* Inner padding handled by rows */
+	margin: 12px 12px 12px;           /* Add buffer above; inset left, right, bottom */
+	border-radius: 8px;               /* Slightly rounded corners */
+}
+
+/* When the textarea (or any child) is focused/active, use NVIDIA green border */
+.agent-input:focus-within {
+	border-color: #76B900;
+}
+
+/* Form layout: three rows (top attach, middle textarea, bottom mode/send) */
+/* Form grid with three rows */
+#agentForm {
+	display: grid;                    /* Grid layout container */
+	grid-template-rows: auto auto auto; /* Three rows, all auto height */
+	gap: 0;                           /* No internal gaps to avoid offsets */
+	padding: 0;                       /* No internal padding to avoid offsets */
+	position: relative;               /* Establish containing block for absolute button (if needed) */
+	width: 100%;                      /* Ensure no overflow */
+	background: transparent;          /* Use parent unified background */
+	border: none;                     /* No inner border */
+	border-radius: 0;                 /* No inner radius */
+}
+
+/* Rows inside the unified input block */
+.input-row { display: flex; align-items: center; padding: 4px 10px; }
+.input-row.top { justify-content: flex-start; }
+.input-row.middle { align-items: stretch; padding-top: 2px; padding-bottom: 2px; }
+.input-row.bottom { justify-content: space-between; gap: 6px; }
+
+/* Auto-growing textarea similar to Copilot */
+.input-row.middle #chatInput {
+	width: 100%;                      /* Fill grid column */
+	max-width: 100%;                  /* Prevent overflow */
+	min-height: 30px;                 /* Slightly smaller single-line base height */
+	max-height: 160px;                /* Cap height (about 6-8 lines) */
+	resize: none;                     /* Disable manual resize */
+	overflow-y: hidden;               /* No scrollbar by default; JS enables when needed */
+	background: transparent;          /* Inherit unified background */
+	color: var(--agent-text);         /* Text color */
+	border: none;                     /* No inner border */
+	border-radius: 6px;               /* Minor rounding for caret padding feel */
+	padding: 8px 0;                   /* Slightly reduced vertical padding */
+	outline: none;                    /* Remove blue outline */
+	line-height: 1.35;                /* Comfortable line height */
+	font-family: inherit;             /* Match UI font */
+	box-sizing: border-box;           /* Include padding in width */
+}
+
+#chatInput::placeholder { color: #777; } /* Muted placeholder */
+
+/* Send button (bottom-right) */
+#sendBtn {
+	background: transparent;          /* Transparent background */
+	color: #76B900;                   /* NVIDIA green arrow */
+	border: none;                     /* No border */
+	padding: 4px 6px;                 /* Tight padding to align with row */
+	cursor: pointer;                  /* Pointer cursor */
+	font-size: 20px;                  /* Slightly larger arrow */
+	line-height: 1;                   /* Tight vertical alignment */
+	display: inline-flex;             /* Center glyph */
+	align-items: center;              /* Center vertically */
+	justify-content: center;          /* Center horizontally */
+}
+
+#sendBtn:hover { color: #89d000; }  /* Slightly brighter on hover */
+
+#sendBtn:focus-visible {
+	outline: 2px solid rgba(118, 185, 0, 0.6); /* Accessible focus ring in green */
+	outline-offset: 2px;
+}
+
+/* Attachment button (top-left) */
+#addRefBtn {
+	background: transparent;
+	color: #76B900;                   /* NVIDIA green */
+	border: none;                     /* No inner border to avoid separation */
+	border-radius: 6px;
+	padding: 4px 6px;                 /* Slightly larger tap target */
+	cursor: pointer;
+	font-size: 14px;                  /* Fallback if text used */
+}
+#addRefBtn:hover { color: #89d000; }
+
+/* Normalize SVG icon size inside the button */
+#addRefBtn svg { display: block; width: 20px; height: 20px; }
+
+/* Mode select (bottom-left) */
+#chatMode {
+	background: transparent;          /* Blend with unified rectangle */
+	color: var(--agent-muted);        /* Lighter grey for label text */
+	border: none;                     /* No inner border */
+	border-radius: 6px;
+	padding: 4px 6px;                 /* Match row padding */
+	font-size: 12px;                  /* Slightly smaller label */
+}

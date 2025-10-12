@@ -1,0 +1,99 @@
+<!DOCTYPE html> <!-- Document type declaration (HTML5) -->
+
+<!-- ===================================================================== -->
+<!-- AGENT (CHATBOT IFRAME)                                               -->
+<!-- Structure: Header (top), Chat list (middle), Input (bottom)          -->
+<!-- Purpose: Self-contained UI for the chatbot inside the parent panel   -->
+<!-- ===================================================================== -->
+<html lang="en"> <!-- Root HTML element with language set to English -->
+
+<head> <!-- Head section: metadata, title, and CSS links -->
+	<meta charset="UTF-8" /> <!-- Character encoding set to UTF-8 -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Responsive viewport for mobile -->
+	<title>Agent</title> <!-- Page title shown in browser tab -->
+	<link rel="stylesheet" href="agent.css" /> <!-- Link to the chatbot iframe stylesheet -->
+</head> <!-- End head section -->
+
+
+<body> <!-- Body contains all visible UI elements -->
+
+	<!-- ================================================================= -->
+	<!-- SECTION: ROOT LAYOUT WRAPPER                                      -->
+	<!-- Grid with header (top), chat (middle), input (bottom)             -->
+	<!-- ================================================================= -->
+	<div class="agent-root"> <!-- Root container for the agent UI grid -->
+
+		<!-- ============================================================= -->
+		<!-- SECTION: HEADER (TOP BAR)                                   -->
+		<!-- Title on the left; dynamic connection/status on the right    -->
+		<!-- ============================================================= -->
+		<header class="agent-header"> <!-- Header bar containing status only -->
+			<div class="agent-status" id="agentStatus">Online</div> <!-- Dynamic status (updated by JS) -->
+		</header> <!-- End header -->
+
+
+		<!-- ============================================================= -->
+		<!-- SECTION: CHAT SCROLL AREA                                    -->
+		<!-- New messages are appended here; container scrolls vertically  -->
+		<!-- Uses aria-live to announce updates for accessibility          -->
+		<!-- ============================================================= -->
+		<main class="agent-chat" id="agentChat" aria-live="polite" aria-relevant="additions"> <!-- Scrollable message list -->
+			<!-- Messages will be appended here --> <!-- Placeholder comment for dynamic messages -->
+		</main> <!-- End chat area -->
+
+
+		<!-- ============================================================= -->
+		<!-- SECTION: INPUT (BOTTOM BAR)                                  -->
+		<!-- Text input plus Send button; handled via agent.js submit      -->
+		<!-- ============================================================= -->
+		<footer class="agent-input"> <!-- Footer containing the input form -->
+			<form id="agentForm" autocomplete="off"> <!-- Chat form (prevents page reload on submit via JS) -->
+				<!-- Top row: reference attachment button -->
+				<div class="input-row top">
+					<button type="button" id="addRefBtn" title="Add reference" aria-label="Add reference">
+						<!-- Inline SVG file icon using currentColor (NVIDIA green via CSS) -->
+						<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+							<path fill="currentColor" d="M6 2h8l4 4v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm8 1.5V8h4.5L14 3.5z"/>
+						</svg>
+					</button>
+					<input type="file" id="refFileInput" multiple style="display:none" />
+				</div>
+
+				<!-- Middle row: main input (auto-growing upward) -->
+				<div class="input-row middle">
+					<textarea id="chatInput" rows="1" placeholder="Type a message..." aria-label="Chat input"></textarea>
+				</div>
+
+				<!-- Bottom row: mode dropdown (left) and send button (right) -->
+				<div class="input-row bottom">
+					<select id="chatMode" aria-label="Chat mode">
+						<option value="agent" selected>Agent</option>
+						<option value="ask">ask</option>
+					</select>
+					<button type="submit" id="sendBtn" title="Send" aria-label="Send">➤</button>
+				</div>
+			</form> <!-- End form -->
+		</footer> <!-- End input footer -->
+
+	</div> <!-- End root layout wrapper -->
+
+
+	<!-- ================================================================= -->
+	<!-- SCRIPTS                                                           -->
+	<!-- agent.js: message append, echo bot, focus handling                -->
+	<!-- Inline script: notify parent about focus state                    -->
+	<!-- ================================================================= -->
+	<script src="agent.js"></script> <!-- Load chatbot behavior script -->
+	<script> <!-- Inline script for parent<->iframe focus state integration -->
+		// Communicate focus state to parent if needed (helps route global keyboard events) //
+		window.addEventListener('focusin', () => { // When any element in iframe gains focus
+			try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: document.activeElement?.id === 'chatInput' }; } catch(_) {} // Flag true only if chat input is focused
+		}); // End focusin listener
+		window.addEventListener('focusout', () => { // When focus leaves elements in iframe
+			try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: false }; } catch(_) {} // Reset focus flag to false
+		}); // End focusout listener
+	</script> <!-- End inline integration script -->
+
+</body> <!-- End body -->
+
+</html> <!-- End HTML document -->

@@ -20,33 +20,36 @@ body {
     overflow: hidden;                /* Prevent scrolling */
     display: flex;                   /* Flexbox for two sections */
     flex-direction: column;          /* Stack sections vertically */
+    justify-content: center;         /* Center content vertically */
+    align-items: center;             /* Center content horizontally */
+    gap: 32px;                       /* Space between top and bottom rows */
 }
 
 /* -----------------------------------------------------------------------------
    TOP SECTION (First Half)
    ----------------------------------------------------------------------------- */
 .top-section {
-    height: 50%;                     /* Exactly half the viewport height */
+    /* Content-sized row centered within the page */
     width: 100%;                     /* Full width */
-    background-color: #333333;       /* Slightly lighter background */
-    border-bottom: 2px solid #404040; /* Subtle separator line */
+    background-color: transparent;   /* Transparent background */
     display: flex;                   /* Flexbox for centering content */
     align-items: center;             /* Center vertically */
     justify-content: center;         /* Center horizontally */
-    padding: 20px;                   /* Some padding around content */
+    padding: 0 20px;                 /* Horizontal padding only */
+    transform: translateY(-30px);    /* Nudge the top row slightly upwards */
 }
 
 /* -----------------------------------------------------------------------------
    BOTTOM SECTION (Second Half)
    ----------------------------------------------------------------------------- */
 .bottom-section {
-    height: 50%;                     /* Exactly half the viewport height */
+    /* Content-sized row centered within the page */
     width: 100%;                     /* Full width */
-    background-color: #2a2a2a;       /* Slightly different shade */
+    background-color: transparent;   /* Transparent background */
     display: flex;                   /* Flexbox for centering content */
     align-items: center;             /* Center vertically */
     justify-content: center;         /* Center horizontally */
-    padding: 20px;                   /* Some padding around content */
+    padding: 0 20px;                 /* Horizontal padding only */
 }
 
 /* -----------------------------------------------------------------------------
@@ -54,11 +57,11 @@ body {
    ----------------------------------------------------------------------------- */
 .icon-container {
     display: flex;                   /* Flexbox for horizontal layout */
-    gap: 40px;                       /* Space between icons */
+    gap: 80px;                       /* Increased space between icons */
     align-items: center;             /* Center icons vertically */
     justify-content: center;         /* Center icons horizontally */
     width: 100%;                     /* Full width of parent */
-    max-width: 600px;                /* Maximum width to prevent spreading too wide */
+    max-width: 800px;                /* Increased maximum width for more spread */
 }
 
 /* -----------------------------------------------------------------------------
@@ -71,7 +74,7 @@ body {
     text-align: center;              /* Center text */
     cursor: pointer;                 /* Pointer cursor for clickable items */
     transition: transform 0.3s ease, opacity 0.3s ease; /* Smooth hover effects */
-    min-width: 120px;                /* Minimum width for consistency */
+    min-width: 160px;                /* Increased minimum width for consistency */
 }
 
 .icon-item:hover {
@@ -83,29 +86,28 @@ body {
    ICON LOGO CONTAINER
    ----------------------------------------------------------------------------- */
 .icon-logo {
-    width: 80px;                     /* Fixed width for logo container */
-    height: 80px;                    /* Fixed height for logo container */
-    background-color: #404040;       /* Dark background for logo area */
+    width: 140px;                    /* Significantly increased width for logo container */
+    height: 140px;                   /* Significantly increased height for logo container */
+    background-color: transparent;   /* Remove dark grey background */
     border-radius: 12px;             /* Rounded corners */
     display: flex;                   /* Flexbox for centering logo */
     align-items: center;             /* Center logo vertically */
     justify-content: center;         /* Center logo horizontally */
-    margin-bottom: 12px;             /* Space below logo */
-    border: 2px solid #555555;       /* Subtle border */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+    margin-bottom: 15px;             /* Increased space below logo */
+    border: none;                    /* Remove border */
+    transition: transform 0.3s ease; /* Smooth transitions */
 }
 
 .icon-item:hover .icon-logo {
-    background-color: #505050;       /* Lighter background on hover */
-    border-color: #666666;           /* Lighter border on hover */
+    transform: scale(1.05);          /* Slight scale effect on hover */
 }
 
 /* -----------------------------------------------------------------------------
    ICON IMAGES
    ----------------------------------------------------------------------------- */
 .icon-image {
-    width: 50px;                     /* Icon size */
-    height: 50px;                    /* Icon size */
+    width: 100px;                    /* Significantly increased icon size */
+    height: 100px;                   /* Significantly increased icon size */
     object-fit: contain;             /* Scale to fit without distortion */
     filter: brightness(1.1);        /* Slightly brighten icons */
 }
@@ -130,6 +132,7 @@ body {
         gap: 20px;                   /* Reduced gap on smaller screens */
         flex-wrap: wrap;             /* Allow wrapping if needed */
     }
+    .top-section { transform: translateY(-10px); }
     
     .icon-logo {
         width: 60px;                 /* Smaller logos on mobile */
@@ -151,6 +154,7 @@ body {
         flex-direction: column;      /* Stack icons vertically on very small screens */
         gap: 15px;                   /* Reduced gap */
     }
+    .top-section { transform: translateY(-8px); }
     
     .top-section,
     .bottom-section {
