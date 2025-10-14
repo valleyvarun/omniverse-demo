@@ -93,7 +93,7 @@ body {
     display: flex;                   /* Flexbox for centering logo */
     align-items: center;             /* Center logo vertically */
     justify-content: center;         /* Center logo horizontally */
-    margin-bottom: 15px;             /* Increased space below logo */
+    margin-bottom: 6px;              /* Bring text closer to the logo */
     border: none;                    /* Remove border */
     transition: transform 0.3s ease; /* Smooth transitions */
 }
@@ -116,8 +116,8 @@ body {
    ICON NAMES
    ----------------------------------------------------------------------------- */
 .icon-name {
-    font-size: 14px;                 /* Font size for icon names */
-    font-weight: bold;               /* Bold text */
+    font-size: 14px;                 /* Slightly larger font size for icon names */
+    font-weight: normal;             /* Regular weight (not bold) */
     color: #ffffff;                  /* White text */
     line-height: 1.2;                /* Tight line height */
     max-width: 100px;                /* Limit text width */
@@ -137,6 +137,7 @@ body {
     .icon-logo {
         width: 60px;                 /* Smaller logos on mobile */
         height: 60px;                /* Smaller logos on mobile */
+        margin-bottom: 4px;          /* Slightly tighter spacing on mobile */
     }
     
     .icon-image {
@@ -145,7 +146,7 @@ body {
     }
     
     .icon-name {
-        font-size: 12px;             /* Smaller text on mobile */
+        font-size: 13px;             /* Slightly larger text on mobile */
     }
 }
 
