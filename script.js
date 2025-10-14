@@ -119,6 +119,30 @@ document.addEventListener('DOMContentLoaded', function() {
             focusAgentChatInput();
         });
     }
+
+    // ---------------------------------------------------------------------------
+    // HEADER BRAND RELOAD: clicking the Omniverse logo or text reloads the app
+    // ---------------------------------------------------------------------------
+    const headerLogo = document.querySelector('.header-left .logo');
+    const headerBrandText = document.querySelector('.header-left .brand-text');
+    [headerLogo, headerBrandText].forEach(el => {
+        if (!el) return;
+        // Improve accessibility: make them focusable and button-like
+        if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+        el.setAttribute('role', 'button');
+        // Click to reload
+        el.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.reload();
+        });
+        // Enter/Space to reload when focused
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                window.location.reload();
+            }
+        });
+    });
 });
 
 // -----------------------------------------------------------------------------

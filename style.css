@@ -57,6 +57,12 @@ header {
     align-items: center;             /* Vertically center logo and brand text */
 }
 
+/* Make logo and brand text clearly clickable */
+.header-left .logo,
+.header-left .brand-text {
+    cursor: pointer;
+}
+
 /* -----------------------------------------------------------------------------
    MENU BAR (SECOND HEADER)
    -----------------------------------------------------------------------------
