@@ -149,8 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // ---------------------------------------------------------------------------
     const pmContainer = document.querySelector('.project-manager-container');
     const pmHandle = document.getElementById('projectResizeHandle');
+    // Track last expanded width across collapse/reopen cycles (initialized conservatively)
+    let lastExpandedPMWidth = 160;
     if (pmContainer && pmHandle) {
         const MIN_W = 150; // updated min width
+        lastExpandedPMWidth = pmContainer.getBoundingClientRect().width || 160;
         let dragging = false;
         let startX = 0;
         let startWidth = 0;
@@ -164,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const viewportMax = Math.round(window.innerWidth * 0.20); // 20vw
             const target = Math.max(MIN_W, Math.min(viewportMax, Math.round(startWidth + dx)));
             pmContainer.style.width = target + 'px';
+            lastExpandedPMWidth = target; // remember last width while resizing
             rafPending = false;
         };
 
@@ -193,6 +197,10 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         pmHandle.addEventListener('mousedown', (e) => {
+            if (document.body.classList.contains('explorer-collapsed')) {
+                // Ignore drag when collapsed; only allow reopen via button
+                return;
+            }
             e.preventDefault();
             dragging = true;
             startX = e.clientX;
@@ -218,6 +226,40 @@ document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('mouseleave', endDrag, true);
         });
     }
+
+    // Reopen buttons
+    const reopenExplorerBtn = document.getElementById('reopenExplorerBtn');
+    if (reopenExplorerBtn) {
+        reopenExplorerBtn.addEventListener('click', () => {
+            document.body.classList.remove('explorer-collapsed');
+            // restore previous width (clamped to constraints)
+            const viewportMax = Math.round(window.innerWidth * 0.20);
+            const target = Math.max(150, Math.min(viewportMax, Math.round(lastExpandedPMWidth || 160)));
+            if (pmContainer) pmContainer.style.width = target + 'px';
+        });
+    }
+
+    const reopenAgentBtn = document.getElementById('reopenAgentBtn');
+    if (reopenAgentBtn) {
+        reopenAgentBtn.addEventListener('click', () => {
+            document.body.classList.remove('agent-collapsed');
+        });
+    }
+
+    // Listen to collapse requests from iframes
+    window.addEventListener('message', (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'pm:collapse') {
+            // store last width, collapse explorer
+            try {
+                lastExpandedPMWidth = pmContainer?.getBoundingClientRect()?.width || lastExpandedPMWidth;
+            } catch(_) {}
+            document.body.classList.add('explorer-collapsed');
+        }
+        if (data.type === 'agent:collapse') {
+            document.body.classList.add('agent-collapsed');
+        }
+    });
 });
 
 // -----------------------------------------------------------------------------

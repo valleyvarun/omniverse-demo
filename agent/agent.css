@@ -48,7 +48,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 16px; /* slightly more left offset */
+	padding: 0 8px 0 16px; /* leave room for collapse button on right */
 	background: var(--agent-surface);
 	border-bottom: 1px solid var(--agent-border);
 }
@@ -62,6 +62,25 @@ body {
 	font-size: 11px; /* slightly smaller */
 	color: var(--agent-muted);
 }
+
+/* Collapse button in header */
+.agent-collapse-btn {
+	background: transparent;
+	color: var(--agent-muted);
+	border: 1px solid var(--agent-border);
+	border-radius: 4px;
+	width: 18px;
+	height: 18px;
+	font-size: 14px;
+	cursor: pointer;
+	display: inline-flex;            /* Perfect centering */
+	align-items: center;
+	justify-content: center;
+	line-height: 1;                 /* Remove baseline bias */
+	padding: 0;                     /* Exact box sizing */
+}
+
+.agent-collapse-btn:hover { background: rgba(255,255,255,0.06); }
 
 /* Scrollable transcript area */
 .agent-chat {

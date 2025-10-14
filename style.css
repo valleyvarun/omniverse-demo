@@ -763,12 +763,81 @@ body {
     flex: 0 0 6px;                   /* Fixed width */
     transition: background-color 0.2s ease;
     /* No borders here; separators come from adjacent panels for consistency */
+    position: relative;              /* For center reopen button */
+    z-index: 2;                      /* Sit above adjacent iframes for clickability */
 }
 
 .project-resize-handle:hover,
 .project-resize-handle.dragging {
     background-color: #4a90e2;      /* Blue when active */
 }
+
+/* Reopen buttons inside handles (hidden by default, show in collapsed state) */
+.project-resize-handle .reopen-btn,
+.chatbot-resize-handle .reopen-btn {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;                     /* Square button */
+    height: 20px;
+    border-radius: 4px;              /* Square with slight radius */
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #ccc;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;            /* Perfect centering */
+    align-items: center;
+    justify-content: center;
+    line-height: 1;                 /* Remove baseline bias */
+    pointer-events: none;            /* Do not block dragging unless collapsed */
+}
+
+.project-resize-handle .reopen-btn svg,
+.chatbot-resize-handle .reopen-btn svg { display: block; width: 12px; height: 12px; }
+
+.reopen-left { left: 50%; }
+.reopen-right { left: 50%; }
+
+.reopen-btn:hover { background: #3a3a3a; }
+
+/* Collapsed states */
+.explorer-collapsed .project-manager-container { display: none; }
+.explorer-collapsed #projectResizeHandle .reopen-btn { display: block !important; pointer-events: auto; }
+.explorer-collapsed #projectResizeHandle {
+    width: 12px;                    /* Narrower collapsed rectangle */
+    flex: 0 0 12px;
+    display: flex;                   /* Center child horizontally & vertically */
+    align-items: center;
+    justify-content: center;
+}
+.explorer-collapsed #projectResizeHandle .reopen-btn {
+    position: static;
+    transform: none;
+    margin: 0;                      /* No extra offsets */
+    width: 9px;                     /* Half the width */
+    height: 36px;                   /* Double the height */
+}
+.explorer-collapsed #projectResizeHandle .reopen-btn svg { width: 8px; height: 20px; }
+
+.agent-collapsed .chatbot-container { display: none; }
+.agent-collapsed #chatResizeHandle .reopen-btn { display: block !important; pointer-events: auto; }
+.agent-collapsed #chatResizeHandle {
+    width: 12px;                    /* Narrower collapsed rectangle */
+    flex: 0 0 12px;
+    display: flex;                   /* Center child horizontally & vertically */
+    align-items: center;
+    justify-content: center;
+}
+.agent-collapsed #chatResizeHandle .reopen-btn {
+    position: static;
+    transform: none;
+    margin: 0;                      /* No extra offsets */
+    width: 9px;                     /* Half the width */
+    height: 36px;                   /* Double the height */
+}
+.agent-collapsed #chatResizeHandle .reopen-btn svg { width: 8px; height: 20px; }
 
 /* When history is expanded, adjust main content position */
 /* Removed absolute positioning adjustments; main content flows naturally */
@@ -931,6 +1000,8 @@ body {
     transition: background-color 0.2s ease;
     flex-shrink: 0;                  /* Don't shrink */
     /* Keep separator on chatbot container (2px) to match Explorer side */
+    position: relative;              /* For center reopen button */
+    z-index: 2;                      /* Sit above adjacent iframes for clickability */
 }
 
 .chatbot-resize-handle:hover {

@@ -22,14 +22,35 @@ body {
 .pm-header {
     background: var(--pm-surface);
     border-bottom: 1px solid var(--pm-border);
-        height: 30px;               /* Match reduced agent header height */
-    display: flex;              /* Center text vertically */
-    align-items: center;        /* Center text vertically */
-        padding: 0 16px;            /* Slightly more left offset to align with 'Command' */
-        font-size: 11px;            /* Slightly smaller */
+    height: 30px;               /* Match reduced agent header height */
+    display: flex;              /* Layout for title and button */
+    align-items: center;        /* Center content vertically */
+    justify-content: space-between; /* Space between title and collapse button */
+    padding: 0 8px 0 16px;      /* Left 16px; right 8px to fit button */
+    font-size: 11px;            /* Slightly smaller */
     font-weight: normal;        /* Not bold */
     color: #cccccc;             /* Light grey text */
 }
+
+.pm-title { pointer-events: none; }
+
+.pm-collapse-btn {
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid var(--pm-border);
+    border-radius: 4px;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;            /* Perfect centering */
+    align-items: center;
+    justify-content: center;
+    line-height: 1;                 /* Remove font baseline bias */
+    padding: 0;                     /* Ensure exact box size */
+}
+
+.pm-collapse-btn:hover { background: rgba(255,255,255,0.06); }
 
 .pm-body {
     flex: 1;

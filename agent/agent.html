@@ -29,6 +29,7 @@
 		<!-- ============================================================= -->
 		<header class="agent-header"> <!-- Header bar containing status only -->
 			<div class="agent-status" id="agentStatus">Agent</div> <!-- Static label -->
+			<button id="agentCollapseBtn" class="agent-collapse-btn" type="button" title="Collapse" aria-label="Collapse">−</button>
 		</header> <!-- End header -->
 
 
@@ -92,6 +93,14 @@
 		window.addEventListener('focusout', () => { // When focus leaves elements in iframe
 			try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: false }; } catch(_) {} // Reset focus flag to false
 		}); // End focusout listener
+
+		// Collapse button -> notify parent
+		window.addEventListener('DOMContentLoaded', () => {
+			const btn = document.getElementById('agentCollapseBtn');
+			if (btn) btn.addEventListener('click', () => {
+				try { parent.postMessage({ type: 'agent:collapse' }, '*'); } catch(_) {}
+			});
+		});
 	</script> <!-- End inline integration script -->
 
 </body> <!-- End body -->

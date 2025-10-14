@@ -54,6 +54,10 @@ function initializeChatbotResize() {
  * Start the resize operation
  */
 function startResize(e) {
+    // If agent is collapsed, ignore resize so the reopen button remains clickable
+    if (document.body && document.body.classList && document.body.classList.contains('agent-collapsed')) {
+        return;
+    }
     console.log('🖱️ Starting resize - isDragging was:', isDragging);
     
     // Prevent default behavior
