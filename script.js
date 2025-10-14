@@ -143,6 +143,81 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // ---------------------------------------------------------------------------
+    // PROJECT MANAGER RESIZE HANDLE (drag to adjust left sidebar width)
+    // ---------------------------------------------------------------------------
+    const pmContainer = document.querySelector('.project-manager-container');
+    const pmHandle = document.getElementById('projectResizeHandle');
+    if (pmContainer && pmHandle) {
+        const MIN_W = 150; // updated min width
+        let dragging = false;
+        let startX = 0;
+        let startWidth = 0;
+        let lastX = 0;
+        let rafPending = false;
+        let overlay = null;
+
+        const applyWidth = () => {
+            if (!dragging) return;
+            const dx = lastX - startX;
+            const viewportMax = Math.round(window.innerWidth * 0.20); // 20vw
+            const target = Math.max(MIN_W, Math.min(viewportMax, Math.round(startWidth + dx)));
+            pmContainer.style.width = target + 'px';
+            rafPending = false;
+        };
+
+        const onMove = (e) => {
+            if (!dragging) return;
+            lastX = e.clientX;
+            if (!rafPending) {
+                rafPending = true;
+                requestAnimationFrame(applyWidth);
+            }
+        };
+
+        const endDrag = () => {
+            if (!dragging) return;
+            dragging = false;
+            pmHandle.classList.remove('dragging');
+            // Clean listeners
+            window.removeEventListener('mousemove', onMove, true);
+            window.removeEventListener('mouseup', endDrag, true);
+            window.removeEventListener('mouseleave', endDrag, true);
+            // Remove overlay
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            overlay = null;
+            // Restore selection
+            document.body.style.userSelect = '';
+            document.body.style.cursor = '';
+        };
+
+        pmHandle.addEventListener('mousedown', (e) => {
+            e.preventDefault();
+            dragging = true;
+            startX = e.clientX;
+            startWidth = pmContainer.getBoundingClientRect().width;
+            lastX = startX;
+            pmHandle.classList.add('dragging');
+            // Create full-screen overlay to capture events over iframes
+            overlay = document.createElement('div');
+            Object.assign(overlay.style, {
+                position: 'fixed',
+                inset: '0',
+                zIndex: '2000',
+                background: 'transparent',
+                cursor: 'col-resize'
+            });
+            document.body.appendChild(overlay);
+            // Prevent text selection during drag
+            document.body.style.userSelect = 'none';
+            document.body.style.cursor = 'col-resize';
+            // Listen at window level and in capture to win over iframes/others
+            window.addEventListener('mousemove', onMove, true);
+            window.addEventListener('mouseup', endDrag, true);
+            window.addEventListener('mouseleave', endDrag, true);
+        });
+    }
 });
 
 // -----------------------------------------------------------------------------

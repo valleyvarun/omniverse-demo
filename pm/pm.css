@@ -1,0 +1,60 @@
+/* Project Manager (pm) iframe styles */
+:root {
+    --pm-bg: #1a1a1a;         /* Match agent body background */
+    --pm-surface: #2a2a2a;    /* Surface for header */
+    --pm-border: #444;        /* Borders */
+    --pm-text: #ffffff;       /* Primary text */
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--pm-bg);
+    color: var(--pm-text);
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.pm-header {
+    background: var(--pm-surface);
+    border-bottom: 1px solid var(--pm-border);
+        height: 30px;               /* Match reduced agent header height */
+    display: flex;              /* Center text vertically */
+    align-items: center;        /* Center text vertically */
+        padding: 0 16px;            /* Slightly more left offset to align with 'Command' */
+        font-size: 11px;            /* Slightly smaller */
+    font-weight: normal;        /* Not bold */
+    color: #cccccc;             /* Light grey text */
+}
+
+.pm-body {
+    flex: 1;
+    overflow: auto;
+    background: transparent;
+    display: flex;                 /* Enable centering */
+    align-items: center;           /* Vertical center */
+    justify-content: center;       /* Horizontal center */
+}
+
+/* Simple top toolbar inside Explorer body */
+/* Removed toolbar; using full-body centering */
+
+.pm-btn {
+    background: #365f12;       /* Chatbot dark green */
+    color: #ffffff;            /* White text */
+    border: 1px solid #2a4a0e; /* Matching darker border from chatbot */
+    border-radius: 6px;        /* Slightly rounder corners */
+    padding: 8px 10px;         /* Slightly narrower width */
+    font-size: 12px;           /* Slightly larger for tap target */
+    cursor: pointer;           /* Pointer on hover */
+    font-weight: normal;       /* Normal (not bold) */
+    font-style: normal;        /* Ensure not italic */
+}
+
+.pm-btn:hover {
+    background: #3f6a16;       /* Slightly lighter dark green on hover */
+}

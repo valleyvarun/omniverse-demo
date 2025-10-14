@@ -160,13 +160,13 @@
 	input.addEventListener('focus', () => {
 		try { if (parent && typeof parent.disableGlobalKeyboard === 'function') parent.disableGlobalKeyboard(); } catch(_) {}
 		try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: true }; } catch(_) {}
-		status.textContent = 'Typing…';
+		status.textContent = 'Agent';
 	});
 
 	input.addEventListener('blur', () => {
 		try { if (parent && typeof parent.enableGlobalKeyboard === 'function') parent.enableGlobalKeyboard(); } catch(_) {}
 		try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: false }; } catch(_) {}
-		status.textContent = 'Online';
+		status.textContent = 'Agent';
 	});
 
 	// ===============================================================

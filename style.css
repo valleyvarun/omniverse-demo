@@ -725,6 +725,7 @@ body {
     padding: 0;                      /* No padding to allow iframe to fill completely */
     box-sizing: border-box;          /* Include padding in dimensions */
     overflow: hidden;                /* Prevent scrolling */
+    display: flex;                   /* Row layout to include sidebar + content */
 }
 
 /* Iframe styling to fill the main content area completely */
@@ -734,6 +735,39 @@ body {
     border: none;                    /* Remove default iframe border */
     background-color: transparent;   /* Transparent background */
     display: block;                  /* Block display to remove any gaps */
+}
+
+/* Project Manager Sidebar */
+.project-manager-container {
+    width: 160px;                    /* Initial sidebar width */
+    flex: 0 0 auto;                  /* Allow width to be controlled via inline style */
+    background: red;                 /* Temporary red background */
+    /* Mirror agent's 2px separator: create gap between Explorer and handle */
+    border-right: 2px solid #333;    /* Separator line matching agent side */
+    min-width: 150px;                /* Updated minimum */
+    max-width: 20vw;                 /* Responsive maximum based on viewport width */
+}
+
+/* Content Pane next to the sidebar */
+.content-pane {
+    flex: 1;                         /* Take remaining space */
+    min-width: 0;                    /* Allow flex item to shrink content width */
+    overflow: hidden;                /* No scrollbars here; let iframe manage its own */
+}
+
+/* Vertical resize handle between sidebar and content */
+.project-resize-handle {
+    width: 6px;                      /* Slightly smaller handle */
+    cursor: col-resize;              /* Column resize cursor */
+    background-color: #666;          /* Visible grey */
+    flex: 0 0 6px;                   /* Fixed width */
+    transition: background-color 0.2s ease;
+    /* No borders here; separators come from adjacent panels for consistency */
+}
+
+.project-resize-handle:hover,
+.project-resize-handle.dragging {
+    background-color: #4a90e2;      /* Blue when active */
 }
 
 /* When history is expanded, adjust main content position */
@@ -891,11 +925,12 @@ body {
    CHATBOT RESIZE HANDLE
    ----------------------------------------------------------------------------- */
 .chatbot-resize-handle {
-    width: 8px;                      /* Slightly narrower handle */
+    width: 6px;                      /* Slightly smaller handle */
     background-color: #666666;      /* Gray background for visibility */
     cursor: col-resize;              /* Resize cursor */
     transition: background-color 0.2s ease;
     flex-shrink: 0;                  /* Don't shrink */
+    /* Keep separator on chatbot container (2px) to match Explorer side */
 }
 
 .chatbot-resize-handle:hover {
@@ -914,4 +949,13 @@ body {
     min-width: 300px;                /* Prevent too-thin panel */
     max-width: 50vw;                 /* Prevent too-wide panel */
     overflow: hidden;                /* Prevent internal overflow from creating side scroll */
+}
+
+/* Ensure the PM iframe fills the sidebar */
+.project-manager-container iframe#pmFrame {
+    width: 100%;
+    height: 100%;
+    display: block;
+    background: transparent;
+    border: none;
 }
