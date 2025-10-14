@@ -22,6 +22,14 @@ let boundStopResize = null;
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
     initializeChatbotResize();
+    // If the parent toggles panels and posts a message into the iframe (optional), we can stop drags
+    try {
+        window.addEventListener('message', (ev) => {
+            if (ev.data && ev.data.type === 'agent:pre-collapse') {
+                try { forceStopResize(); } catch(_) {}
+            }
+        });
+    } catch(_) {}
 });
 
 /**

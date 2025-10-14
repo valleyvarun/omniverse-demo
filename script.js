@@ -160,6 +160,8 @@ document.addEventListener('DOMContentLoaded', function() {
         let lastX = 0;
         let rafPending = false;
         let overlay = null;
+        let overlayMouseUpHandler = null;
+        let safetyTimer = null;
 
         const applyWidth = () => {
             if (!dragging) return;
@@ -188,49 +190,154 @@ document.addEventListener('DOMContentLoaded', function() {
             window.removeEventListener('mousemove', onMove, true);
             window.removeEventListener('mouseup', endDrag, true);
             window.removeEventListener('mouseleave', endDrag, true);
+            window.removeEventListener('blur', endDrag, true);
+            document.removeEventListener('visibilitychange', endDrag, true);
             // Remove overlay
-            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            if (overlay) {
+                try { overlay.removeEventListener('mouseup', overlayMouseUpHandler, true); } catch(_) {}
+                if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            }
             overlay = null;
+            if (safetyTimer) {
+                clearTimeout(safetyTimer);
+                safetyTimer = null;
+            }
             // Restore selection
             document.body.style.userSelect = '';
             document.body.style.cursor = '';
         };
 
-        pmHandle.addEventListener('mousedown', (e) => {
-            if (document.body.classList.contains('explorer-collapsed')) {
-                // Ignore drag when collapsed; only allow reopen via button
-                return;
-            }
-            e.preventDefault();
-            dragging = true;
-            startX = e.clientX;
-            startWidth = pmContainer.getBoundingClientRect().width;
-            lastX = startX;
-            pmHandle.classList.add('dragging');
-            // Create full-screen overlay to capture events over iframes
-            overlay = document.createElement('div');
-            Object.assign(overlay.style, {
-                position: 'fixed',
-                inset: '0',
-                zIndex: '2000',
-                background: 'transparent',
-                cursor: 'col-resize'
+        // Expose a safe cleanup so other parts (collapse/reopen) can end drags immediately
+        window.__pmEndExplorerDrag = () => {
+            try { endDrag(); } catch(_) {}
+        };
+
+        const usePointerEvents = 'onpointerdown' in window;
+
+        if (usePointerEvents) {
+            let pointerId = null;
+            const onPointerDown = (e) => {
+                if (document.body.classList.contains('explorer-collapsed')) {
+                    // If collapsed, treat pointerdown as a reopen click passthrough
+                    const reopen = document.getElementById('reopenExplorerBtn');
+                    if (reopen) reopen.click();
+                    return;
+                }
+                e.preventDefault();
+                dragging = true;
+                pointerId = e.pointerId;
+                pmHandle.setPointerCapture(pointerId);
+                startX = e.clientX;
+                startWidth = pmContainer.getBoundingClientRect().width;
+                lastX = startX;
+                pmHandle.classList.add('dragging');
+                document.body.style.userSelect = 'none';
+                document.body.style.cursor = 'col-resize';
+                // Create overlay to guard against iframe focus/selection during drag
+                overlay = document.createElement('div');
+                Object.assign(overlay.style, {
+                    position: 'fixed',
+                    inset: '0',
+                    zIndex: '3000',
+                    background: 'transparent',
+                    cursor: 'col-resize'
+                });
+                document.body.appendChild(overlay);
+                overlayMouseUpHandler = (ev) => { ev.preventDefault(); onPointerUp(); };
+                overlay.addEventListener('mouseup', overlayMouseUpHandler, true);
+                // Safety timer to ensure cleanup if pointerup is lost
+                safetyTimer = setTimeout(() => { if (dragging) onPointerUp(); }, 10000);
+                // End drag if window loses focus or page visibility changes
+                window.addEventListener('blur', endDrag, true);
+                document.addEventListener('visibilitychange', endDrag, true);
+            };
+            const onPointerMove = (e) => {
+                if (!dragging) return;
+                lastX = e.clientX;
+                if (!rafPending) {
+                    rafPending = true;
+                    requestAnimationFrame(applyWidth);
+                }
+            };
+            const onPointerUp = () => {
+                if (!dragging) return;
+                dragging = false;
+                try { if (pointerId != null) pmHandle.releasePointerCapture(pointerId); } catch(_) {}
+                pmHandle.classList.remove('dragging');
+                document.body.style.userSelect = '';
+                document.body.style.cursor = '';
+                if (overlay) {
+                    try { overlay.removeEventListener('mouseup', overlayMouseUpHandler, true); } catch(_) {}
+                    if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+                }
+                overlay = null;
+                if (safetyTimer) {
+                    clearTimeout(safetyTimer);
+                    safetyTimer = null;
+                }
+                window.removeEventListener('blur', endDrag, true);
+                document.removeEventListener('visibilitychange', endDrag, true);
+            };
+            pmHandle.addEventListener('pointerdown', onPointerDown);
+            pmHandle.addEventListener('pointermove', onPointerMove);
+            pmHandle.addEventListener('pointerup', onPointerUp);
+            pmHandle.addEventListener('lostpointercapture', onPointerUp);
+            pmHandle.addEventListener('pointercancel', onPointerUp);
+            // Prevent native drag or context menu from interfering
+            pmHandle.addEventListener('dragstart', (e) => e.preventDefault());
+            pmHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+        } else {
+            // Mouse fallback
+            pmHandle.addEventListener('mousedown', (e) => {
+                if (document.body.classList.contains('explorer-collapsed')) {
+                    // If collapsed, reopen instead of starting drag
+                    const reopen = document.getElementById('reopenExplorerBtn');
+                    if (reopen) reopen.click();
+                    return;
+                }
+                e.preventDefault();
+                dragging = true;
+                startX = e.clientX;
+                startWidth = pmContainer.getBoundingClientRect().width;
+                lastX = startX;
+                pmHandle.classList.add('dragging');
+                // Create full-screen overlay to capture events over iframes
+                overlay = document.createElement('div');
+                Object.assign(overlay.style, {
+                    position: 'fixed',
+                    inset: '0',
+                    zIndex: '3000',
+                    background: 'transparent',
+                    cursor: 'col-resize'
+                });
+                document.body.appendChild(overlay);
+                // Also add a mouseup on the overlay itself (some browsers route to target first)
+                overlayMouseUpHandler = (ev) => { ev.preventDefault(); endDrag(); };
+                overlay.addEventListener('mouseup', overlayMouseUpHandler, true);
+                // Prevent text selection during drag
+                document.body.style.userSelect = 'none';
+                document.body.style.cursor = 'col-resize';
+                // Listen at window level and in capture to win over iframes/others
+                window.addEventListener('mousemove', onMove, true);
+                window.addEventListener('mouseup', endDrag, true);
+                window.addEventListener('mouseleave', endDrag, true);
+                window.addEventListener('blur', endDrag, true);
+                document.addEventListener('visibilitychange', endDrag, true);
+                // Safety timeout to auto-clean if somehow mouseup is lost
+                safetyTimer = setTimeout(() => {
+                    if (dragging) endDrag();
+                }, 10000); // 10s safety
             });
-            document.body.appendChild(overlay);
-            // Prevent text selection during drag
-            document.body.style.userSelect = 'none';
-            document.body.style.cursor = 'col-resize';
-            // Listen at window level and in capture to win over iframes/others
-            window.addEventListener('mousemove', onMove, true);
-            window.addEventListener('mouseup', endDrag, true);
-            window.addEventListener('mouseleave', endDrag, true);
-        });
+            pmHandle.addEventListener('contextmenu', (e) => e.preventDefault());
+        }
     }
 
     // Reopen buttons
     const reopenExplorerBtn = document.getElementById('reopenExplorerBtn');
     if (reopenExplorerBtn) {
         reopenExplorerBtn.addEventListener('click', () => {
+            // Ensure any stale drag state is cleared before reopening
+            try { window.__pmEndExplorerDrag && window.__pmEndExplorerDrag(); } catch(_) {}
             document.body.classList.remove('explorer-collapsed');
             // restore previous width (clamped to constraints)
             const viewportMax = Math.round(window.innerWidth * 0.20);
@@ -254,9 +361,13 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 lastExpandedPMWidth = pmContainer?.getBoundingClientRect()?.width || lastExpandedPMWidth;
             } catch(_) {}
+            // Force-stop any ongoing drag to avoid stuck overlays or capture
+            try { window.__pmEndExplorerDrag && window.__pmEndExplorerDrag(); } catch(_) {}
             document.body.classList.add('explorer-collapsed');
         }
         if (data.type === 'agent:collapse') {
+            // Force-stop agent drag if active (function from agent-resize.js)
+            try { if (typeof forceStopResize === 'function') forceStopResize(); } catch(_) {}
             document.body.classList.add('agent-collapsed');
         }
     });
@@ -375,6 +486,76 @@ function initializeCommandLine() {
             } catch (e) {
                 console.log('Cannot access iframe content (cross-origin)');
             }
+        });
+    }
+
+    // Ensure Explorer (pm iframe) never traps typing: route to command line
+    const pmFrame = document.getElementById('pmFrame');
+    if (pmFrame) {
+        // Helper to bind routing into the PM iframe, works even if it already loaded
+        const bindPmRouting = () => {
+            try {
+                const pmDoc = pmFrame.contentDocument || pmFrame.contentWindow?.document;
+                if (!pmDoc) return false;
+                // Avoid duplicate bindings for the same document
+                if (pmDoc.__omniversePmRoutingBound) return true;
+                pmDoc.__omniversePmRoutingBound = true;
+
+                // Route ALL keystrokes in Explorer to command line (even inside inputs)
+                pmDoc.addEventListener('keydown', function(event) {
+                    // If chatbot input is focused, don't override
+                    if (window.chatbotState && window.chatbotState.inputFocused) return;
+                    // Prevent Explorer from consuming the keystroke
+                    event.preventDefault();
+                    event.stopPropagation();
+                    if (currentState === 'INPUT') {
+                        handleInputState(event, commandInput);
+                    } else if (currentState === 'CONFIRMATION') {
+                        handleConfirmationState(event);
+                    }
+                }, true); // capture to intercept early
+
+                // Clicking anywhere in Explorer should focus command input
+                pmDoc.addEventListener('click', function() {
+                    try {
+                        blurAgentChatInput();
+                        enableGlobalKeyboard();
+                        window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                    } catch(_) {}
+                    setTimeout(() => { commandInput.focus(); }, 10);
+                }, true);
+
+                return true;
+            } catch (e) {
+                console.log('Cannot access PM iframe content (cross-origin)');
+                return false;
+            }
+        };
+
+        // Try immediate bind in case iframe already loaded
+        let bound = bindPmRouting();
+        // Bind on load for normal cases
+        pmFrame.addEventListener('load', () => {
+            setTimeout(() => { bindPmRouting(); }, 0);
+        });
+        // If not bound yet (e.g., load fired before we attached), poll briefly
+        if (!bound) {
+            let tries = 0;
+            const iv = setInterval(() => {
+                if (bindPmRouting() || ++tries > 20) {
+                    clearInterval(iv);
+                }
+            }, 100);
+        }
+
+        // If the iframe element itself gains focus (e.g., click), shift focus to command input
+        pmFrame.addEventListener('focus', () => {
+            try {
+                blurAgentChatInput();
+                enableGlobalKeyboard();
+                window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+            } catch(_) {}
+            setTimeout(() => { commandInput.focus(); }, 10);
         });
     }
     

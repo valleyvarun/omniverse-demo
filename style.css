@@ -741,7 +741,7 @@ body {
 .project-manager-container {
     width: 160px;                    /* Initial sidebar width */
     flex: 0 0 auto;                  /* Allow width to be controlled via inline style */
-    background: red;                 /* Temporary red background */
+    background: transparent;         /* Replaced red background with transparent */
     /* Mirror agent's 2px separator: create gap between Explorer and handle */
     border-right: 2px solid #333;    /* Separator line matching agent side */
     min-width: 150px;                /* Updated minimum */
@@ -764,7 +764,8 @@ body {
     transition: background-color 0.2s ease;
     /* No borders here; separators come from adjacent panels for consistency */
     position: relative;              /* For center reopen button */
-    z-index: 2;                      /* Sit above adjacent iframes for clickability */
+    z-index: 1500;                   /* Sit above adjacent iframes for clickability */
+    touch-action: none;              /* Prevent touch gestures from stealing pointer events */
 }
 
 .project-resize-handle:hover,
@@ -1002,6 +1003,7 @@ body {
     /* Keep separator on chatbot container (2px) to match Explorer side */
     position: relative;              /* For center reopen button */
     z-index: 2;                      /* Sit above adjacent iframes for clickability */
+    touch-action: none;              /* Prevent touch gestures from stealing pointer events */
 }
 
 .chatbot-resize-handle:hover {
