@@ -18,13 +18,14 @@ Below are the key background colors used across the UI. Each row lists: 1) Name,
 | Explorer sidebar | `.project-manager-container` | `transparent` | `style.css` |
 | Explorer header | `.pm-header` | `#222222` | `pm/pm.css` |
 | Explorer header border | `.pm-header` | `1px solid #444` (border) | `pm/pm.css` |
-| Explorer button (Open Project) | `.pm-btn` | `#365f12` | `pm/pm.css` |
+| Explorer button (Open Project) | `.pm-btn` | `#2c2c2c` (border `#76B900`) | `pm/pm.css` |
 | Explorer-resize handle | `.project-resize-handle` | `#666666` | `style.css` |
 | Content modal overlay (backdrop) | `.content-modal-overlay.show` | `rgba(0,0,0,0.35)` | `style.css` |
 | Content modal box | `.content-modal` | `#222222` | `style.css` |
 | Agent panel container | `.chatbot-container` | `green` (visibility aid) | `style.css` |
 | Agent header | `.agent-header` | `#222222` | `agent/agent.css` |
-| Agent chat background | `.agent-root` body | `#1a1a1a` | `agent/agent.css` |
+| Agent body (chat area) | `.agent-root` body | `#1a1a1a` | `agent/agent.css` |
+| Explorer body | `pm/pm.css body` | `#1a1a1a` | `pm/pm.css` |
 | Agent input block | `.agent-input` | `var(--agent-surface)` (`#222222`) | `agent/agent.css` |
 | Popup header | `.popup-header` | `#222222` | `pages/popup.css` |
 | Popup body | `.popup-body` | `#1a1a1a` | `pages/popup.css` |

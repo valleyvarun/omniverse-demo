@@ -495,6 +495,13 @@ function initializeCommandLine() {
                     if (!modalOverlay) return;
                     modalOverlay.classList.remove('show');
                     modalOverlay.setAttribute('aria-hidden', 'true');
+                    // After closing, ensure typing goes to the Command line
+                    try {
+                        blurAgentChatInput();
+                        enableGlobalKeyboard();
+                        window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                    } catch(_) {}
+                    setTimeout(() => { commandInput.focus(); }, 10);
                 };
                 // Open on any home .icon-item click
                 try {

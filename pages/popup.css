@@ -54,4 +54,28 @@
 .popup-body {
 	background: var(--agent-bg);     /* subtle contrast like agent body */
 	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.popup-options {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.popup-option {
+	background: #365f12;             /* Match agent user-bubble green tone */
+	color: #ffffff;
+	border: 1px solid #2a4a0e;
+	border-radius: 6px;
+	padding: 10px 14px;
+	font-size: 13px;
+	cursor: pointer;
+	min-width: 260px;
+}
+
+.popup-option:hover {
+	background: #3f6a16;
 }

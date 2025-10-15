@@ -65,17 +65,17 @@ body {
 /* Removed toolbar; using full-body centering */
 
 .pm-btn {
-    background: #365f12;       /* Chatbot dark green */
-    color: #ffffff;            /* White text */
-    border: 1px solid #2a4a0e; /* Matching darker border from chatbot */
-    border-radius: 6px;        /* Slightly rounder corners */
-    padding: 8px 10px;         /* Slightly narrower width */
-    font-size: 12px;           /* Slightly larger for tap target */
-    cursor: pointer;           /* Pointer on hover */
-    font-weight: normal;       /* Normal (not bold) */
-    font-style: normal;        /* Ensure not italic */
+    background: #1a1a1a;           /* Match App body */
+    color: #76B900;                /* NVIDIA green text */
+    border: 1px solid #76B900;     /* NVIDIA green border */
+    border-radius: 6px;            /* Slightly rounder corners */
+    padding: 8px 10px;             /* Slightly narrower width */
+    font-size: 12px;               /* Slightly larger for tap target */
+    cursor: pointer;               /* Pointer on hover */
+    font-weight: normal;           /* Normal (not bold) */
+    font-style: normal;            /* Ensure not italic */
 }
 
 .pm-btn:hover {
-    background: #3f6a16;       /* Slightly lighter dark green on hover */
+    background: #333333;           /* Slightly lighter dark grey on hover */
 }

@@ -129,9 +129,9 @@ body {
 /* User message bubble with dark green background */
 .msg.user {
 	align-self: flex-end;
-	background: #365f12;            /* Dark yellowish-green bubble */
+	background: #1a1a1a;            /* Requested background */
 	color: #f0f0f0;                 /* Light text */
-	border: 1px solid #2a4a0e;      /* Matching darker border */
+	border: 1px solid #76B900;      /* NVIDIA green border */
 	border-radius: 10px;            /* Rounded bubble corners */
 	padding: 8px 10px;              /* Inner padding */
 	position: relative;             /* Enable attached label positioning */
@@ -150,8 +150,8 @@ body {
 	font-weight: 600;               /* Semi-bold */
 	line-height: 1.2;               /* Compact line height */
 	color: #C3F2C1;                 /* Light label text */
-	background: #365f12;            /* Same dark yellowish-green as bubble */
-	border: 1px solid #2a4a0e;      /* Matching darker border */
+	background: #1a1a1a;            /* Match bubble background */
+	border: 1px solid #76B900;      /* NVIDIA green border */
 	border-radius: 9999px;          /* Full pill radius */
 	z-index: 1;                     /* Ensure on top of bubble border */
 	white-space: nowrap;            /* Prevent wrapping; expand to the left */
