@@ -482,6 +482,47 @@ function initializeCommandLine() {
                         commandInput.focus();
                     }, 10);
                 });
+
+                // Centered modal overlay logic for home icons
+                const modalOverlay = document.getElementById('contentModalOverlay');
+                const popupFrame = document.getElementById('popupFrame');
+                const showModal = () => {
+                    if (!modalOverlay) return;
+                    modalOverlay.classList.add('show');
+                    modalOverlay.setAttribute('aria-hidden', 'false');
+                };
+                const hideModal = () => {
+                    if (!modalOverlay) return;
+                    modalOverlay.classList.remove('show');
+                    modalOverlay.setAttribute('aria-hidden', 'true');
+                };
+                // Open on any home .icon-item click
+                try {
+                    iframeDoc.querySelectorAll('.icon-item').forEach(el => {
+                        el.style.cursor = 'pointer';
+                        el.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            // Extract the name shown in the icon (fallback to alt text)
+                            const name = el.querySelector('.icon-name')?.textContent?.trim() ||
+                                         el.querySelector('img.icon-image')?.alt || 'Item';
+                            showModal();
+                            // Pass the title into the popup iframe
+                            try {
+                                const popupWin = popupFrame?.contentWindow;
+                                popupWin?.postMessage({ type: 'popup:init', title: name }, '*');
+                            } catch(_) {}
+                        });
+                    });
+                } catch(_) {}
+                    // Note: Do not close on backdrop click or on Escape.
+                    // The only way to close is via the popup iframe cross button (popup:close message).
+
+                // Listen for popup close requests from the iframe
+                window.addEventListener('message', (ev) => {
+                    if (ev.data && ev.data.type === 'popup:close') {
+                        hideModal();
+                    }
+                });
                 
             } catch (e) {
                 console.log('Cannot access iframe content (cross-origin)');

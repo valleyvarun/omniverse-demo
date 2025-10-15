@@ -206,6 +206,13 @@
                     <!-- Fallback content for browsers that don't support iframe -->
                     <p>Your browser does not support iframes. Please upgrade to a modern browser.</p>
                 </iframe>
+
+                <!-- Centered modal overlay that sits above the content iframe -->
+                <div id="contentModalOverlay" class="content-modal-overlay" aria-hidden="true">
+                    <div class="content-modal" role="dialog" aria-modal="true" aria-label="Content Modal">
+                        <iframe id="popupFrame" src="pages/popup.html" title="Popup" frameborder="0" style="width:100%;height:100%;display:block;background:transparent;border:none;"></iframe>
+                    </div>
+                </div>
             </section>
         </main>
         </div>

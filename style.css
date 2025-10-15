@@ -753,6 +753,35 @@ body {
     flex: 1;                         /* Take remaining space */
     min-width: 0;                    /* Allow flex item to shrink content width */
     overflow: hidden;                /* No scrollbars here; let iframe manage its own */
+    position: relative;              /* For absolutely positioned overlay */
+}
+
+/* Overlay above the content iframe */
+.content-modal-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;                   /* Hidden by default */
+    align-items: center;             /* Center modal vertically */
+    justify-content: center;         /* Center modal horizontally */
+    z-index: 5;                      /* Above iframe within content pane */
+    pointer-events: none;            /* Don’t block clicks when hidden */
+}
+
+.content-modal-overlay.show {
+    display: flex;                   /* Show and center */
+    pointer-events: auto;            /* Capture clicks when visible */
+    background: rgba(0,0,0,0.35);    /* Dim backdrop */
+}
+
+.content-modal {
+    width: 40vw;                     /* Requested width */
+    aspect-ratio: 16 / 10;           /* Maintain 16:10 ratio */
+    background: #222;                /* Visible rectangle placeholder */
+    border: 1px solid #76B900;       /* Match Agent chat input border thickness */
+    border-radius: 8px;              /* Nice corners */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Keep depth without extra green ring */
+    overflow: hidden;                /* Clip inner iframe to rounded corners */
+    background-clip: padding-box;    /* Prevent background bleeding into border */
 }
 
 /* Vertical resize handle between sidebar and content */

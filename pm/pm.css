@@ -1,7 +1,7 @@
 /* Project Manager (pm) iframe styles */
 :root {
     --pm-bg: #1a1a1a;         /* Match agent body background */
-    --pm-surface: #2a2a2a;    /* Surface for header */
+    --pm-surface: #222222;    /* Surface for header (match agent) */
     --pm-border: #444;        /* Borders */
     --pm-text: #ffffff;       /* Primary text */
 }
