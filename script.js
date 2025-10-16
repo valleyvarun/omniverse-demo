@@ -370,6 +370,21 @@ document.addEventListener('DOMContentLoaded', function() {
             try { if (typeof forceStopResize === 'function') forceStopResize(); } catch(_) {}
             document.body.classList.add('agent-collapsed');
         }
+
+        // Open popup on explicit request from an iframe (e.g., PM 'Open Project Folder')
+        if (data.type === 'popup:open') {
+            try {
+                const modalOverlay = document.getElementById('contentModalOverlay');
+                const popupFrame = document.getElementById('popupFrame');
+                if (modalOverlay && popupFrame?.contentWindow) {
+                    // Show modal overlay
+                    modalOverlay.classList.add('show');
+                    modalOverlay.setAttribute('aria-hidden', 'false');
+                    // Initialize popup with provided title
+                    popupFrame.contentWindow.postMessage({ type: 'popup:init', title: data.title || 'Popup' }, '*');
+                }
+            } catch(_) {}
+        }
     });
 });
 

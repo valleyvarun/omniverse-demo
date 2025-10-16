@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Folders</title>
+	<link rel="stylesheet" href="folders.css">
+	<style>html,body{height:100%;margin:0;padding:0;}</style>
+	<script defer src="folders.js"></script>
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+    
+</head>
+<body>
+	<!-- ================================
+	     MAIN CONTAINER - SPLIT LAYOUT
+	     ================================ -->
+	<div class="folders-root" id="foldersRoot">
+		
+		<!-- ================================
+		     LEFT PANE - NAVIGATION GROUPS
+		     ================================ -->
+		<section class="folders-pane left" id="foldersLeft" aria-label="Left pane">
+			<div class="folders-group">Volumes</div>
+			<div class="folders-group">System</div>
+			<div class="folders-group">Bookmarks</div>
+			<div class="folders-group">Recent</div>
+		</section>
+		
+		<!-- ================================
+		     RESIZE HANDLE
+		     ================================ -->
+		<div class="folders-resize" id="foldersHandle" role="separator" aria-orientation="vertical" aria-label="Resize"></div>
+		
+		<!-- ================================
+		     RIGHT PANE - MAIN CONTENT AREA
+		     ================================ -->
+		<section class="folders-pane right" id="foldersRight" aria-label="Right pane">
+			
+			<!-- HEADER: Controls and Navigation -->
+			<div class="folders-right-header">
+				
+				<!-- Navigation Buttons (Previous/Next/Parent/Refresh) -->
+				<div class="folders-header-item folders-header-nav">
+					<button class="folders-icon-btn" title="Previous folder" aria-label="Previous folder">◀</button>
+					<button class="folders-icon-btn" title="Next folder" aria-label="Next folder">▶</button>
+					<button class="folders-icon-btn" title="Parent folder" aria-label="Parent folder">⬆</button>
+					<button class="folders-icon-btn" title="Refresh" aria-label="Refresh">↻</button>
+				</div>
+				
+				<!-- Create Directory Button -->
+				<div class="folders-header-item">
+					<button class="folders-action-btn" id="createDirBtn" title="Create new directory" aria-label="Create new directory">
+						<span aria-hidden="true">📁</span>
+					</button>
+				</div>
+				
+				<!-- File Path Input -->
+				<div class="folders-header-item">
+					<input type="text" class="folders-path-input" value="O:\\" aria-label="File path" />
+				</div>
+				
+				<!-- Search Input -->
+				<div class="folders-header-item">
+					<input type="text" class="folders-search-input" placeholder="🔍 Search" aria-label="Search" />
+				</div>
+				
+				<!-- Display Mode Toggle (List/Thumbnails) -->
+				<div class="folders-header-item">
+					<div class="folders-display-toggle">
+						<button class="folders-display-btn is-list" title="Vertical list" aria-label="Vertical list">
+							<span aria-hidden="true">≡</span>
+						</button>
+						<button class="folders-display-btn is-thumb" title="Thumbnails" aria-label="Thumbnails">
+							<span aria-hidden="true">▦</span>
+						</button>
+					</div>
+				</div>
+				
+				<!-- Settings Button -->
+				<div class="folders-header-item">
+					<button class="folders-action-btn" id="settingsBtn" title="Settings" aria-label="Settings">
+						<span aria-hidden="true">⚙️</span>
+					</button>
+				</div>
+				
+			</div>
+			
+			<!-- BODY: File/Folder Listing Area -->
+			<div class="folders-right-body">
+				<div class="folders-item">📁 Assets</div>
+				<div class="folders-item">📁 Materials</div>
+				<div class="folders-item">📁 Scenes</div>
+				<div class="folders-item">📁 Textures</div>
+				<div class="folders-item">📁 Models</div>
+				<div class="folders-item">📁 Lighting</div>
+				<div class="folders-item">📁 Animation</div>
+				<div class="folders-item">📁 References</div>
+				<div class="folders-item">📁 Cache</div>
+				<div class="folders-item">📁 Exports</div>
+			</div>
+			
+			<!-- FOOTER: Status/Info Bar -->
+			<div class="folders-right-footer">Footer</div>
+			
+		</section>
+	</div>
+</body>
+</html>

@@ -1,3 +1,6 @@
+/* ================================
+   CSS VARIABLES & THEME TOKENS
+   ================================ */
 :root {
 	/* Mirror agent theme tokens */
 	--agent-bg: #1a1a1a;
@@ -7,6 +10,9 @@
 	--agent-muted: #b0b0b0;
 }
 
+/* ================================
+   BASE LAYOUT & SIZING
+   ================================ */
 /* Ensure the root fills the iframe viewport so grid rows can size correctly */
 html, body { height: 100%; }
 
@@ -21,6 +27,9 @@ html, body { height: 100%; }
 	overflow: hidden; /* no scroll in the popup */
 }
 
+/* ================================
+   POPUP HEADER SECTION
+   ================================ */
 .popup-header {
 	display: flex;
 	align-items: center;
@@ -72,6 +81,9 @@ html, body { height: 100%; }
 
 .popup-close:hover { background: rgba(255,255,255,0.06); }
 
+/* ================================
+   POPUP BODY SECTION
+   ================================ */
 .popup-body {
 	position: relative;      /* establish containing block for absolute hero */
 	background: #1a1a1a;     /* match agent/explorer body */
@@ -82,6 +94,9 @@ html, body { height: 100%; }
 	overflow: hidden;        /* no scroll in the popup body */
 }
 
+/* ================================
+   OMNIVERSE POPUP - HERO IMAGE
+   ================================ */
 /* Hero image styles */
 .popup-hero {
 	position: absolute;      /* sit behind options as a background */
@@ -92,13 +107,9 @@ html, body { height: 100%; }
 	display: block;
 }
 
-.popup-options {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
-	align-items: center;
-}
-
+/* ================================
+   OMNIVERSE POPUP - BUTTON OVERLAY
+   ================================ */
 /* Invisible square overlay that sits above the image */
 .popup-overlay-square {
 	position: absolute;
@@ -118,13 +129,24 @@ html, body { height: 100%; }
 /* Re-enable pointer events for buttons inside the overlay */
 .popup-overlay-square .popup-options { pointer-events: auto; }
 
+/* Button container with vertical spacing */
+.popup-options {
+	display: flex;
+	flex-direction: column;
+	gap: 40px;
+	align-items: center;
+}
+
+/* ================================
+   OMNIVERSE POPUP - BUTTONS
+   ================================ */
 .popup-option {
 	background: #1a1a1a;           /* Match PM button background */
 	color: #76B900;                /* NVIDIA green text */
 	border: 1px solid #76B900;     /* NVIDIA green border */
 	border-radius: 6px;            /* Slightly rounder corners */
 	padding: 8px 8px;             /* Match PM button padding */
-	font-size: 12px;               /* Match PM button font size */
+	font-size: 14px;               /* Increased from 12px for larger buttons */
 	cursor: pointer;               /* Pointer on hover */
 	font-weight: normal;           /* Normal (not bold) */
 	font-style: normal;            /* Ensure not italic */
