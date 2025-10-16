@@ -774,7 +774,7 @@ body {
 }
 
 .content-modal {
-    width: 40vw;                     /* Requested width */
+    width: 50vw;                     /* Increased width; aspect-ratio preserves height proportion */
     aspect-ratio: 16 / 10;           /* Maintain 16:10 ratio */
     background: #222;                /* Visible rectangle placeholder */
     border: 1px solid #76B900;       /* Match Agent chat input border thickness */

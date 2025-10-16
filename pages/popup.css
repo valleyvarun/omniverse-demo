@@ -7,14 +7,18 @@
 	--agent-muted: #b0b0b0;
 }
 
+/* Ensure the root fills the iframe viewport so grid rows can size correctly */
+html, body { height: 100%; }
+
 .popup-root {
 	width: 100%;
 	height: 100%;
 	display: grid;
-	grid-template-rows: 30px 1fr; /* match agent header height */
+	grid-template-rows: 30px minmax(0, 1fr); /* header + body that can shrink/scroll */
 	background: transparent; /* parent provides box */
 	font-family: Arial, sans-serif;
 	color: var(--agent-text);
+	overflow: hidden; /* no scroll in the popup */
 }
 
 .popup-header {
@@ -26,6 +30,23 @@
 	background: var(--agent-surface);
 	border-bottom: 1px solid var(--agent-border);
 }
+
+/* Left side of header: logo + title */
+.popup-left {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-width: 0; /* allow title to truncate if needed */
+}
+
+/* Small logo shown left of the title; hidden by default until set */
+.popup-logo {
+	height: 16px;
+	width: auto;
+	display: none;        /* hidden until JS enables */
+	object-fit: contain;
+}
+.popup-logo.visible { display: inline-block; }
 
 .popup-title {
 	font-size: 11px;                /* match agent-status size */
@@ -52,30 +73,64 @@
 .popup-close:hover { background: rgba(255,255,255,0.06); }
 
 .popup-body {
-	background: var(--agent-bg);     /* subtle contrast like agent body */
-	height: 100%;
+	position: relative;      /* establish containing block for absolute hero */
+	background: #1a1a1a;     /* match agent/explorer body */
 	display: flex;
+	flex-direction: column;  /* content stacks naturally if needed */
 	align-items: center;
 	justify-content: center;
+	overflow: hidden;        /* no scroll in the popup body */
+}
+
+/* Hero image styles */
+.popup-hero {
+	position: absolute;      /* sit behind options as a background */
+	inset: 0;                /* fill the body */
+	width: 100%;
+	height: 100%;
+	object-fit: cover;       /* cover the area without distortion */
+	display: block;
 }
 
 .popup-options {
 	display: flex;
 	flex-direction: column;
-	gap: 12px;
+	gap: 20px;
+	align-items: center;
 }
 
+/* Invisible square overlay that sits above the image */
+.popup-overlay-square {
+	position: absolute;
+	z-index: 1;               /* Above the hero image */
+	/* Left-aligned square, full height of body */
+	transform: none;
+	left: 0%;
+	height: 100%;
+	aspect-ratio: 1 / 1;      /* width equals height to form a square */
+	width: auto;              /* width derived from aspect-ratio */
+	display: flex;
+	align-items: center;      /* Center contents vertically */
+	justify-content: center;  /* Center contents horizontally */
+	pointer-events: none;     /* overlay itself is inert */
+}
+
+/* Re-enable pointer events for buttons inside the overlay */
+.popup-overlay-square .popup-options { pointer-events: auto; }
+
 .popup-option {
-	background: #365f12;             /* Match agent user-bubble green tone */
-	color: #ffffff;
-	border: 1px solid #2a4a0e;
-	border-radius: 6px;
-	padding: 10px 14px;
-	font-size: 13px;
-	cursor: pointer;
-	min-width: 260px;
+	background: #1a1a1a;           /* Match PM button background */
+	color: #76B900;                /* NVIDIA green text */
+	border: 1px solid #76B900;     /* NVIDIA green border */
+	border-radius: 6px;            /* Slightly rounder corners */
+	padding: 8px 8px;             /* Match PM button padding */
+	font-size: 12px;               /* Match PM button font size */
+	cursor: pointer;               /* Pointer on hover */
+	font-weight: normal;           /* Normal (not bold) */
+	font-style: normal;            /* Ensure not italic */
+	min-width: 200px;
 }
 
 .popup-option:hover {
-	background: #3f6a16;
+	background: #333333;           /* Match PM button hover */
 }
