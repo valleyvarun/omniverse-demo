@@ -145,7 +145,7 @@ html, body { height: 100%; }
 	color: #76B900;                /* NVIDIA green text */
 	border: 1px solid #76B900;     /* NVIDIA green border */
 	border-radius: 6px;            /* Slightly rounder corners */
-	padding: 8px 8px;             /* Match PM button padding */
+	padding: 10px 8px;             /* Match PM button padding */
 	font-size: 14px;               /* Increased from 12px for larger buttons */
 	cursor: pointer;               /* Pointer on hover */
 	font-weight: normal;           /* Normal (not bold) */

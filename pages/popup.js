@@ -38,7 +38,7 @@
 		// Hero image at the top
 		const hero = document.createElement('img');
 		hero.className = 'popup-hero';
-		hero.src = '../logo/omniverse-graphic1.png';
+		hero.src = '../logo/omniverse-graphic2.png';
 		hero.alt = 'Omniverse';
 		bodyEl.appendChild(hero);
 
@@ -53,7 +53,7 @@
 		const createBtn = document.createElement('button');
 		createBtn.className = 'popup-option';
 		createBtn.type = 'button';
-		createBtn.textContent = 'Create New Omniverse';
+		createBtn.innerHTML = '+ Create New Omniverse';
 		createBtn.addEventListener('click', () => {
 			// Placeholder: wire real action later
 			console.log('[Popup] Create New Omniverse clicked');
@@ -62,7 +62,7 @@
 		const openBtn = document.createElement('button');
 		openBtn.className = 'popup-option';
 		openBtn.type = 'button';
-		openBtn.textContent = 'Open Existing Omniverse';
+		openBtn.innerHTML = 'Open Existing Omniverse';
 		openBtn.addEventListener('click', () => {
 			// Placeholder: wire real action later
 			console.log('[Popup] Open Existing Omniverse clicked');
