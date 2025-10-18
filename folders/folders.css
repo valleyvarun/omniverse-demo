@@ -77,6 +77,8 @@ html, body { height: 100%; }
 	font-size: 12px;
 	line-height: 1;
 	margin: 0; /* ensure no extra spacing beyond gap */
+	width: 2vw;
+	min-width: 28px;
 }
 .folders-header-nav .folders-icon-btn + .folders-icon-btn { border-left: 0; } /* collapse inner borders */
 .folders-header-nav .folders-icon-btn:first-child { border-radius: 4px 0 0 4px; }
@@ -95,10 +97,13 @@ html, body { height: 100%; }
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 6px;
 	font-size: 12px;
 	margin: 0; /* ensure no extra spacing beyond container gap */
 	line-height: 1; /* match other header buttons' height */
+	width: 2.2vw;
+	min-width: 32px;
 }
 .folders-action-btn [aria-hidden="true"] { display: inline-block; line-height: 1; font-size: 12px; }
 .folders-action-btn .label { white-space: nowrap; }
@@ -117,10 +122,13 @@ html, body { height: 100%; }
 	cursor: pointer;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 6px;
 	font-size: 12px;
 	margin: 0; /* ensure no extra spacing beyond gap */
 	line-height: 1; /* normalize height with other buttons */
+	width: 3vw;
+	min-width: 20px;
 }
 .folders-display-toggle .folders-display-btn + .folders-display-btn { border-left: 0; } /* collapse inner borders */
 .folders-display-toggle .folders-display-btn:first-child { border-radius: 4px 0 0 4px; }
@@ -141,7 +149,7 @@ html, body { height: 100%; }
 	padding: 4px 6px;
 }
 .folders-search-input {
-	width: 17vw;
+	width: 15vw;
 	max-width: 100%;
 	background: rgba(255,255,255,0.1);
 	color: #fff;
@@ -179,7 +187,7 @@ html, body { height: 100%; }
 	border-bottom: none;
 }
 
-.folders-right-footer { background: red; padding: 8px 10px; }
+.folders-right-footer { background: purple; padding: 8px 10px; }
 
 /* ================================
    LEFT PANE - NAVIGATION GROUPS

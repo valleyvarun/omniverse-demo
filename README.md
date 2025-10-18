@@ -35,4 +35,42 @@ Below are the key background colors used across the UI. Each row lists: 1) Name,
 
 Notes:
 - Some areas use variables (e.g., `--agent-surface`) that currently resolve to `#222222`.
-- The Agent container’s green background in `style.css` is for visibility during development and may be updated.
+- The Agent container's green background in `style.css` is for visibility during development and may be updated.
+
+## Fonts and Typography
+
+Below are the fonts used across the UI. Each row lists: 1) Component/Area, 2) Font Family, 3) Font Size, 4) Font Weight, 5) Font Color, 6) Where defined.
+
+| Component/Area | Font Family | Font Size | Font Weight | Font Color | Defined In |
+|----------------|-------------|-----------|-------------|------------|------------|
+| Global default | `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` | - | - | `#f0f0f0` | `style.css` body |
+| Menu bar text | `system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif` | `13px` | `normal` | `#f0f0f0` | `style.css` |
+| Function display text | `'Courier New', Courier, monospace` | `12px` | `normal` | `#00ff00` | `style.css` |
+| Command line input | `'Courier New', Courier, monospace` | `13px` | `normal` | `#00ff00` | `style.css` |
+| Explorer header title | `Arial, sans-serif` | `11px` | `normal` | `var(--agent-muted)` (`#b0b0b0`) | `pm/pm.css` |
+| Explorer button text | `Arial, sans-serif` | `12px` | `normal` | `#76B900` | `pm/pm.css` |
+| Agent panel general | `Arial, sans-serif` | - | - | `var(--agent-text)` (`#f0f0f0`) | `agent/agent.css` |
+| Agent status text | `Arial, sans-serif` | `11px` | `normal` | `var(--agent-muted)` (`#b0b0b0`) | `agent/agent.css` |
+| Agent message text | `Arial, sans-serif` | `13px` | `normal` | `var(--agent-text)` (`#f0f0f0`) | `agent/agent.css` |
+| Agent input text | `Arial, sans-serif` | `13px` | `normal` | `var(--agent-text)` (`#f0f0f0`) | `agent/agent.css` |
+| Popup general | `Arial, sans-serif` | - | - | `var(--agent-text)` (`#f0f0f0`) | `pages/popup.css` |
+| Popup title | `Arial, sans-serif` | `11px` | `normal` | `var(--agent-muted)` (`#b0b0b0`) | `pages/popup.css` |
+| Popup close button | `Arial, sans-serif` | `14px` | `normal` | `var(--agent-muted)` (`#b0b0b0`) | `pages/popup.css` |
+| Popup option buttons | `Arial, sans-serif` | `14px` | `normal` | `#76B900` | `pages/popup.css` |
+| Home page general | `Arial, sans-serif` | - | - | `#f0f0f0` | `pages/home.css` |
+| Home icon labels | `Arial, sans-serif` | `12px` | `normal` | `#ccc` | `pages/home.css` |
+| Folders header controls | `Arial, sans-serif` | `12px` | `normal` | `#76B900` | `folders/folders.css` |
+| Folders navigation buttons | `Arial, sans-serif` | `12px` | `normal` | `#76B900` | `folders/folders.css` |
+| Folders input fields (path) | `Arial, sans-serif` | `12px` | `normal` | `#76B900` | `folders/folders.css` |
+| Folders input fields (search) | `Arial, sans-serif` | `12px` | `normal` | `#fff` | `folders/folders.css` |
+| Folders item list | `Arial, sans-serif` | `13px` | `normal` | `#ddd` | `folders/folders.css` |
+
+Font Usage Notes:
+- **System fonts** are used for the main app chrome (menu bar, command line) for OS consistency
+- **Monospace fonts** (Courier New) are used for command line and function display for code/terminal appearance
+- **Arial** is used consistently across all panels (Agent, Explorer, Popup, Folders) for UI consistency
+- Font sizes range from 11px (small UI text) to 14px (buttons/emphasis)
+- All text uses normal font weight - no bold styling is applied
+- **NVIDIA Green** (`#76B900`) is used for interactive elements and accent text
+- **Muted colors** (`#b0b0b0`, `#ccc`) are used for secondary/status text
+- **Bright green** (`#00ff00`) is used for terminal/command line text
