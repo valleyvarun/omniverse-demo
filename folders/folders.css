@@ -2,224 +2,229 @@
    CSS VARIABLES & BASE SETUP
    ================================ */
 :root {
-	--folders-bg: transparent;
-	--folders-pane-bg: rgba(0,0,0,0.15);
-	--folders-border: #333;
-	--folders-handle: #666;
-	--folders-handle-active: #4a90e2;
+	--folders-bg: transparent;              /* Main container background - invisible */
+	--folders-pane-bg: rgba(0,0,0,0.15);   /* Left/right pane background - dark transparent */
+	--folders-border: #333;                 /* Border color for panes - dark gray */
+	--folders-handle: #666;                 /* Resize handle normal color - medium gray */
+	--folders-handle-active: #4a90e2;      /* Resize handle when hovering/dragging - blue */
 }
 
-html, body { height: 100%; }
+html, body { 
+	height: 100%;                           /* Make webpage fill full browser height */
+	font-family: Arial, sans-serif;        /* Set font to Arial for all text */
+}
 
 /* ================================
    MAIN LAYOUT - ROOT GRID
    ================================ */
 .folders-root {
-	height: 100%;
-	display: grid;
-	grid-template-columns: 0.9fr 6px 4fr; /* slightly reduced left pane width */
-	background: var(--folders-bg);
-	overflow: hidden;
+	height: 100%;                           /* Container fills full height */
+	display: grid;                          /* Use CSS grid layout */
+	grid-template-columns: 0.9fr 6px 4fr;  /* 3 columns: narrow left, 6px handle, wide right */
+	background: var(--folders-bg);         /* Transparent background */
+	overflow: hidden;                       /* Hide any content that goes outside */
 }
 
 /* ================================
    PANE CONTAINERS & BORDERS
    ================================ */
 .folders-pane {
-	min-width: 0; /* allow shrink */
-	overflow: hidden;
-	background: var(--folders-pane-bg);
+	min-width: 0;                          /* Allow panes to shrink smaller than content */
+	overflow: hidden;                      /* Hide content that doesn't fit */
+	background: var(--folders-pane-bg);   /* Dark semi-transparent background */
 }
 
-.folders-pane.left { border-right: 1px solid var(--folders-border); }
-.folders-pane.right { border-left: 1px solid var(--folders-border); }
+.folders-pane.left { border-right: 1px solid var(--folders-border); }  /* Right border on left pane */
+.folders-pane.right { border-left: 1px solid var(--folders-border); }  /* Left border on right pane */
 .folders-pane.right {
-	display: grid;
-	grid-template-rows: auto 1fr auto; /* header, body (fills), footer */
+	display: grid;                         /* Right pane uses grid layout */
+	grid-template-rows: auto 1fr auto;    /* 3 rows: header, expanding body, footer */
 }
 
 /* ================================
    RIGHT PANE - HEADER SECTION
    ================================ */
 .folders-right-header {
-	background: #2c2c2c;
-	padding: 10px 8px;
-	display: flex;
-	gap: 6px;
-	flex-wrap: wrap;
-	align-items: center;
+	background: #2c2c2c;                   /* Dark gray header background */
+	padding: 10px 8px;                     /* Space inside header: 10px top/bottom, 8px left/right */
+	display: flex;                         /* Arrange items horizontally */
+	gap: 6px;                              /* 6px space between header items */
+	flex-wrap: wrap;                       /* Allow items to wrap to next line if needed */
+	align-items: center;                   /* Center items vertically */
 }
 .folders-header-item {
-	border: none;            /* remove wrapper border */
-	color: #fff;
-	padding: 0;              /* no space between buttons and parent */
-	border-radius: 4px;
-	font-size: 12px;
-	margin: 0;               /* no external margins around header item */
+	border: none;                          /* Remove any border around header item groups */
+	color: #fff;                           /* White text color */
+	padding: 0;                            /* No extra space inside header items */
+	border-radius: 4px;                    /* Rounded corners */
+	font-size: 12px;                       /* Text size */
+	margin: 0;                             /* No space outside header items */
 }
 
 /* ================================
    HEADER BUTTONS - NAVIGATION GROUP
    ================================ */
 .folders-header-nav {
-	display: flex;
-	gap: 0; /* no flex gap, rely on borders only */
-	align-items: center;
+	display: flex;                         /* Arrange nav buttons horizontally */
+	gap: 0;                                /* No space between buttons (borders touch) */
+	align-items: center;                   /* Center buttons vertically */
 }
 
 .folders-icon-btn {
-	background: transparent;
-	color: #76B900;
-	border: 1px solid #76B900;
-	border-radius: 0; /* reset; we'll round only the group ends */
-	padding: 4px 6px;
-	cursor: pointer;
-	font-size: 12px;
-	line-height: 1;
-	margin: 0; /* ensure no extra spacing beyond gap */
-	width: 2vw;
-	min-width: 28px;
+	background: transparent;               /* See-through button background */
+	color: #76B900;                        /* NVIDIA green text/icon color */
+	border: 1px solid #76B900;             /* NVIDIA green border around button */
+	border-radius: 0;                      /* Square corners (will be rounded at group ends) */
+	padding: 4px 6px;                      /* Space inside button: 4px top/bottom, 6px left/right */
+	cursor: pointer;                       /* Show hand cursor when hovering */
+	font-size: 12px;                       /* Icon/text size */
+	line-height: 1;                        /* Tight line spacing */
+	margin: 0;                             /* No space outside button */
+	width: 3vw;                            /* Button width = 2% of viewport width */
 }
-.folders-header-nav .folders-icon-btn + .folders-icon-btn { border-left: 0; } /* collapse inner borders */
-.folders-header-nav .folders-icon-btn:first-child { border-radius: 4px 0 0 4px; }
-.folders-header-nav .folders-icon-btn:last-child { border-radius: 0 4px 4px 0; }
-.folders-icon-btn:hover { background: rgba(255,255,255,0.12); }
+.folders-header-nav .folders-icon-btn + .folders-icon-btn { border-left: 0; }      /* Remove left border on buttons after first one */
+.folders-header-nav .folders-icon-btn:first-child { border-radius: 4px 0 0 4px; } /* Round left corners of first button */
+.folders-header-nav .folders-icon-btn:last-child { border-radius: 0 4px 4px 0; }  /* Round right corners of last button */
+.folders-icon-btn:hover { background: rgba(255,255,255,0.12); }                   /* Light background when hovering */
 
 /* ================================
    HEADER BUTTONS - CREATE DIRECTORY
    ================================ */
 .folders-action-btn {
-	background: transparent;
-	color: #76B900;
-	border: 1px solid #76B900;
-	border-radius: 4px;
-	padding: 4px 8px;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 6px;
-	font-size: 12px;
-	margin: 0; /* ensure no extra spacing beyond container gap */
-	line-height: 1; /* match other header buttons' height */
-	width: 2.2vw;
-	min-width: 32px;
+	background: transparent;               /* See-through button background */
+	color: #76B900;                        /* NVIDIA green text/icon color */
+	border: 1px solid #76B900;             /* NVIDIA green border around button */
+	border-radius: 4px;                    /* Rounded corners */
+	padding: 4px 8px;                      /* Space inside button: 4px top/bottom, 8px left/right */
+	cursor: pointer;                       /* Show hand cursor when hovering */
+	display: inline-flex;                  /* Flexible horizontal layout */
+	align-items: center;                   /* Center content vertically */
+	justify-content: center;               /* Center content horizontally */
+	gap: 6px;                              /* 6px space between icon and text */
+	font-size: 12px;                       /* Text size */
+	margin: 0;                             /* No space outside button */
+	line-height: 1;                        /* Tight line spacing */
+	width: 3vw;                          /* Button width = 2.2% of viewport width */
 }
-.folders-action-btn [aria-hidden="true"] { display: inline-block; line-height: 1; font-size: 12px; }
-.folders-action-btn .label { white-space: nowrap; }
-.folders-action-btn:hover { background: rgba(255,255,255,0.12); }
+.folders-action-btn [aria-hidden="true"] { display: inline-block; line-height: 1; font-size: 12px; } /* Style icons inside action buttons */
+.folders-action-btn .label { white-space: nowrap; }                                                  /* Prevent text from wrapping */
+.folders-action-btn:hover { background: rgba(255,255,255,0.12); }                                   /* Light background when hovering */
 
 /* ================================
    HEADER BUTTONS - DISPLAY MODE TOGGLE
    ================================ */
-.folders-display-toggle { display: flex; gap: 0; align-items: center; }
+.folders-display-toggle { display: flex; gap: 0; align-items: center; }                            /* Container for display mode buttons */
 .folders-display-btn {
-	background: transparent;
-	color: #76B900;
-	border: 1px solid #76B900;
-	border-radius: 0; /* reset; we'll round only the group ends */
-	padding: 4px 8px;
-	cursor: pointer;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 6px;
-	font-size: 12px;
-	margin: 0; /* ensure no extra spacing beyond gap */
-	line-height: 1; /* normalize height with other buttons */
-	width: 3vw;
-	min-width: 20px;
+	background: transparent;               /* See-through button background */
+	color: #76B900;                        /* NVIDIA green text/icon color */
+	border: 1px solid #76B900;             /* NVIDIA green border around button */
+	border-radius: 0;                      /* Square corners (will be rounded at group ends) */
+	padding: 4px 8px;                      /* Space inside button: 4px top/bottom, 8px left/right */
+	cursor: pointer;                       /* Show hand cursor when hovering */
+	display: inline-flex;                  /* Flexible horizontal layout */
+	align-items: center;                   /* Center content vertically */
+	justify-content: center;               /* Center content horizontally */
+	gap: 6px;                              /* 6px space between icon and text */
+	font-size: 12px;                       /* Text size */
+	margin: 0;                             /* No space outside button */
+	line-height: 1;                        /* Tight line spacing */
+	width: 3vw;                            /* Button width = 3% of viewport width */
 }
-.folders-display-toggle .folders-display-btn + .folders-display-btn { border-left: 0; } /* collapse inner borders */
-.folders-display-toggle .folders-display-btn:first-child { border-radius: 4px 0 0 4px; }
-.folders-display-toggle .folders-display-btn:last-child { border-radius: 0 4px 4px 0; }
-.folders-display-btn:hover { background: rgba(255,255,255,0.12); }
+.folders-display-toggle .folders-display-btn + .folders-display-btn { border-left: 0; }      /* Remove left border on second button */
+.folders-display-toggle .folders-display-btn:first-child { border-radius: 4px 0 0 4px; }    /* Round left corners of first button */
+.folders-display-toggle .folders-display-btn:last-child { border-radius: 0 4px 4px 0; }     /* Round right corners of last button */
+.folders-display-btn:hover { background: rgba(255,255,255,0.12); }                          /* Light background when hovering */
 
 /* ================================
    HEADER INPUTS - PATH & SEARCH
    ================================ */
 .folders-path-input {
-	width: 30vw;
-	max-width: 100%;
-	background: rgba(255,255,255,0.1);
-	color: #76B900;
-	border: 1px solid #76B900;
-	border-radius: 3px;
-	font-size: 12px;
-	padding: 4px 6px;
+	width: 30vw;                           /* Input width = 30% of viewport width */
+	max-width: 100%;                       /* Never wider than container */
+	background: rgba(255,255,255,0.1);    /* Light transparent background */
+	color: #76B900;                        /* NVIDIA green text color */
+	border: 1px solid #76B900;             /* NVIDIA green border */
+	border-radius: 3px;                    /* Slightly rounded corners */
+	font-size: 12px;                       /* Text size */
+	padding: 4px 6px;                      /* Space inside input: 4px top/bottom, 6px left/right */
 }
 .folders-search-input {
-	width: 15vw;
-	max-width: 100%;
-	background: rgba(255,255,255,0.1);
-	color: #fff;
-	border: 1px solid #76B900;
-	border-radius: 3px;
-	font-size: 12px;
-	padding: 4px 6px;
+	width: 15vw;                           /* Input width = 15% of viewport width */
+	max-width: 100%;                       /* Never wider than container */
+	background: rgba(255,255,255,0.1);    /* Light transparent background */
+	color: #fff;                           /* White text color */
+	border: 1px solid #76B900;             /* NVIDIA green border */
+	border-radius: 3px;                    /* Slightly rounded corners */
+	font-size: 12px;                       /* Text size */
+	padding: 4px 6px;                      /* Space inside input: 4px top/bottom, 6px left/right */
 }
 /* ================================
    RIGHT PANE - BODY & FOOTER
    ================================ */
 .folders-right-body { 
-	background: blue; 
-	padding: 10px; 
-	overflow: auto; 
+	background: blue;                      /* Blue background for visibility (temporary) */
+	padding: 10px;                         /* 10px space inside body area */
+	overflow: auto;                        /* Show scrollbars if content overflows */
 }
 
 .folders-item {
-	padding: 6px 10px;
-	color: #ddd;
-	font-size: 13px;
-	border-bottom: 1px solid rgba(255,255,255,0.1);
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	gap: 8px;
+	padding: 6px 10px;                     /* Space inside each folder item: 6px top/bottom, 10px left/right */
+	color: #ddd;                           /* Light gray text color */
+	font-size: 13px;                       /* Text size */
+	border-bottom: 1px solid rgba(255,255,255,0.1);  /* Faint white line below each item */
+	cursor: pointer;                       /* Show hand cursor when hovering */
+	display: flex;                         /* Horizontal layout for icon and text */
+	align-items: center;                   /* Center content vertically */
+	gap: 8px;                              /* 8px space between folder icon and name */
 }
 
 .folders-item:hover {
-	background: rgba(118, 185, 0, 0.1);
-	color: #76B900;
+	background: rgba(118, 185, 0, 0.1);   /* Light NVIDIA green background when hovering */
+	color: #76B900;                        /* NVIDIA green text when hovering */
 }
 
 .folders-item:last-child {
-	border-bottom: none;
+	border-bottom: none;                   /* No bottom border on last folder item */
 }
 
-.folders-right-footer { background: purple; padding: 8px 10px; }
+.folders-right-footer { 
+	background: purple;                    /* Purple background for visibility (temporary) */
+	padding: 8px 10px;                     /* Space inside footer: 8px top/bottom, 10px left/right */
+}
 
 /* ================================
    LEFT PANE - NAVIGATION GROUPS
    ================================ */
 /* Left pane container layout */
 .folders-pane.left {
-	display: flex;
-	flex-direction: column;
-	gap: 0;          /* no gaps between divs */
-	padding: 0;      /* remove container padding */
+	display: flex;                         /* Vertical stacking layout */
+	flex-direction: column;                /* Stack items vertically */
+	gap: 0;                                /* No space between navigation groups */
+	padding: 0;                            /* No space inside left pane container */
 }
 
 /* Individual navigation group styling */
 .folders-group {
-	width: 100%;
-	box-sizing: border-box; /* include border in width */
-	margin: 0;              /* no external margin */
-	padding: 0;             /* remove internal padding */
-	background: rgba(255,255,255,0.04);
-	border: 1px solid #444;
-	border-radius: 0;       /* no curved corners */
-	color: #ddd;
-	font-size: 12px;
+	width: 100%;                           /* Each group fills full width of left pane */
+	box-sizing: border-box;                /* Include borders in width calculation */
+	margin: 0;                             /* No space outside each group */
+	padding: 0;                            /* No space inside each group */
+	background: rgba(255,255,255,0.04);   /* Very faint white background */
+	border: 1px solid #444;                /* Dark gray border around each group */
+	border-radius: 0;                      /* Square corners */
+	color: #ddd;                           /* Light gray text color */
+	font-size: 12px;                       /* Text size */
 }
 
 /* ================================
    RESIZE HANDLE
    ================================ */
 .folders-resize {
-	width: 6px;
-	cursor: col-resize;
-	background: var(--folders-handle);
+	width: 6px;                            /* Handle width = 6 pixels */
+	cursor: col-resize;                    /* Show resize cursor when hovering */
+	background: var(--folders-handle);    /* Medium gray background color */
 }
 .folders-resize:hover,
-.folders-resize.dragging { background: var(--folders-handle-active); }
+.folders-resize.dragging { 
+	background: var(--folders-handle-active); /* Blue background when hovering or dragging */
+}
