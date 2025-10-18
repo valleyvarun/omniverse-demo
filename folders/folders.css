@@ -330,6 +330,8 @@ html, body {
 	flex-direction: column;                /* Stack items vertically */
 	gap: 0;                                /* No space between navigation groups */
 	padding: 0;                            /* No space inside left pane container */
+	overflow-y: auto;                      /* Add vertical scrolling when content overflows */
+	overflow-x: hidden;                    /* Hide horizontal scrollbar */
 }
 
 /* Individual navigation group styling */
