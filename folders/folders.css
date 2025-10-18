@@ -131,7 +131,7 @@ html, body { height: 100%; }
    HEADER INPUTS - PATH & SEARCH
    ================================ */
 .folders-path-input {
-	width: 280px;
+	width: 30vw;
 	max-width: 100%;
 	background: rgba(255,255,255,0.1);
 	color: #76B900;
@@ -141,7 +141,7 @@ html, body { height: 100%; }
 	padding: 4px 6px;
 }
 .folders-search-input {
-	width: 120px;
+	width: 17vw;
 	max-width: 100%;
 	background: rgba(255,255,255,0.1);
 	color: #fff;
