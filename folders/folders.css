@@ -20,7 +20,7 @@ html, body {
 .folders-root {
 	height: 100%;                           /* Container fills full height */
 	display: grid;                          /* Use CSS grid layout */
-	grid-template-columns: 0.9fr 6px 4fr;  /* 3 columns: narrow left, 6px handle, wide right */
+	grid-template-columns: 20vw 6px 1fr;   /* Left pane: 20vw initial width; handle: 6px; right pane: remaining space */
 	background: var(--folders-bg);         /* Transparent background */
 	overflow: hidden;                       /* Hide any content that goes outside */
 }
@@ -236,6 +236,17 @@ html, body {
 	color: #ddd;                          /* Light gray text when hovering */
 }
 
+/* Selected folder row styling */
+.folders-item.selected {
+	background: #4a7c2a !important;       /* Dark green background when selected */
+	color: #fff !important;               /* White text when selected */
+}
+
+.folders-item.selected:hover {
+	background: #4a7c2a !important;       /* Keep dark green even on hover when selected */
+	color: #fff !important;               /* Keep white text when selected and hovering */
+}
+
 .folders-item:last-child {
 	border-bottom: none;                   /* No bottom border on last folder item */
 }
@@ -245,7 +256,7 @@ html, body {
 	content: '';                           /* Empty pseudo-element */
 	display: block;                        /* Block element to fill space */
 	flex: 1;                               /* Take up remaining space */
-	background: #2c2c2c;                   /* Dark gray - alternates with last even row (#303030) */
+	background: #303030;                   /* Light gray - alternates with last folder row (dark gray #2c2c2c) */
 	min-height: 0;                         /* Allow it to shrink if needed */
 }
 
@@ -364,20 +375,13 @@ html, body {
 	border: 1px solid #333;                /* Subtle border */
 	transition: all 0.2s ease;             /* Smooth show/hide animation */
 	overflow: hidden;                      /* Hide content during animation */
+	max-height: calc(4 * 27px);            /* Limit height to 4 rows (27px per item including padding) */
+	overflow-y: auto;                      /* Show vertical scrollbar when content exceeds 4 rows */
 }
 
 /* Hidden state for collapsed content */
 .folders-group.collapsed .folders-group-content {
 	display: none;                         /* Hide content when collapsed */
-}
-
-/* Navigation Group Content Styling */
-.folders-group-content {
-	background: #2a2a2a;                   /* Darker gray background for content */
-	margin-top: 6px;                       /* Space between title and content */
-	padding: 6px;                          /* Internal spacing inside content div */
-	border-radius: 3px;                    /* Slightly rounded corners */
-	border: 1px solid #333;                /* Subtle border */
 }
 
 /* Navigation Group Items Styling */
@@ -387,6 +391,9 @@ html, body {
 	font-size: 11px;                       /* Smaller text size for items */
 	cursor: pointer;                       /* Pointer cursor for items */
 	border-radius: 2px;                    /* Slight rounding for items */
+	white-space: nowrap;                   /* Prevent text from wrapping to next line */
+	overflow: hidden;                      /* Hide overflowing text */
+	text-overflow: ellipsis;               /* Add ... for text that doesn't fit */
 }
 
 .folders-group-item:hover {
