@@ -385,6 +385,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch(_) {}
         }
+        
+        // Close popup on explicit request from an iframe (e.g., Cancel button in Folders)
+        if (data.type === 'popup:close') {
+            try {
+                const modalOverlay = document.getElementById('contentModalOverlay');
+                if (modalOverlay) {
+                    modalOverlay.classList.remove('show');
+                    modalOverlay.setAttribute('aria-hidden', 'true');
+                    // After closing, ensure typing goes to the Command line
+                    const commandInput = document.getElementById('commandInput');
+                    if (commandInput) {
+                        blurAgentChatInput();
+                        enableGlobalKeyboard();
+                        window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                        setTimeout(() => { commandInput.focus(); }, 10);
+                    }
+                }
+            } catch(_) {}
+        }
     });
 });
 

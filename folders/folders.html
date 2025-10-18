@@ -20,10 +20,42 @@
 		     LEFT PANE - NAVIGATION GROUPS
 		     ================================ -->
 		<section class="folders-pane left" id="foldersLeft" aria-label="Left pane">
-			<div class="folders-group">Volumes</div>
-			<div class="folders-group">System</div>
-			<div class="folders-group">Bookmarks</div>
-			<div class="folders-group">Recent</div>
+			<div class="folders-group">
+				<div class="folders-group-header">
+					<span class="folders-group-arrow">▼</span>
+					<span class="folders-group-title">Volumes</span>
+				</div>
+				<div class="folders-group-content">
+					<div class="folders-group-item">Company Server (O:)</div>
+					<div class="folders-group-item">Local Disk (C:)</div>
+					<div class="folders-group-item">Data Drive (D:)</div>
+					<div class="folders-group-item">External Storage (E:)</div>
+				</div>
+			</div>
+			<div class="folders-group">
+				<div class="folders-group-header">
+					<span class="folders-group-arrow">▼</span>
+					<span class="folders-group-title">System</span>
+				</div>
+				<div class="folders-group-content">
+				</div>
+			</div>
+			<div class="folders-group">
+				<div class="folders-group-header">
+					<span class="folders-group-arrow">▼</span>
+					<span class="folders-group-title">Bookmarks</span>
+				</div>
+				<div class="folders-group-content">
+				</div>
+			</div>
+			<div class="folders-group">
+				<div class="folders-group-header">
+					<span class="folders-group-arrow">▼</span>
+					<span class="folders-group-title">Recent</span>
+				</div>
+				<div class="folders-group-content">
+				</div>
+			</div>
 		</section>
 		
 		<!-- ================================
@@ -56,7 +88,7 @@
 				
 				<!-- File Path Input -->
 				<div class="folders-header-item">
-					<input type="text" class="folders-path-input" value="O:\\" aria-label="File path" />
+					<input type="text" class="folders-path-input" value="O:\Projects\" aria-label="File path" />
 				</div>
 				
 				<!-- Search Input -->
@@ -87,20 +119,85 @@
 			
 			<!-- BODY: File/Folder Listing Area -->
 			<div class="folders-right-body">
-				<div class="folders-item">📁 Burj Khalifa</div>
-				<div class="folders-item">📁 McLaren P1</div>
-				<div class="folders-item">📁 Central Park NYC</div>
-				<div class="folders-item">📁 Boston Dynamics Atlas</div>
-				<div class="folders-item">📁 Sydney Opera House</div>
-				<div class="folders-item">📁 Bugatti Chiron</div>
-				<div class="folders-item">📁 High Line Manhattan</div>
-				<div class="folders-item">📁 Tesla Optimus</div>
-				<div class="folders-item">📁 Sagrada Familia</div>
-				<div class="folders-item">📁 Lamborghini Revuelto</div>
+				<!-- Column Headers -->
+				<div class="folders-header-row">
+					<div class="folders-col-name">Name</div>
+					<div class="folders-col-date">Date Modified</div>
+					<div class="folders-col-type">Type</div>
+					<div class="folders-col-size">Size</div>
+				</div>
+				
+				<!-- Folder Items -->
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Burj Khalifa</div>
+					<div class="folders-col-date">Oct 15, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 McLaren P1</div>
+					<div class="folders-col-date">Oct 12, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Central Park NYC</div>
+					<div class="folders-col-date">Oct 10, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Boston Dynamics Atlas</div>
+					<div class="folders-col-date">Oct 8, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Sydney Opera House</div>
+					<div class="folders-col-date">Oct 5, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Bugatti Chiron</div>
+					<div class="folders-col-date">Oct 3, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 High Line Manhattan</div>
+					<div class="folders-col-date">Oct 1, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Tesla Optimus</div>
+					<div class="folders-col-date">Sep 28, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Sagrada Familia</div>
+					<div class="folders-col-date">Sep 25, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				<div class="folders-item">
+					<div class="folders-col-name">📁 Lamborghini Revuelto</div>
+					<div class="folders-col-date">Sep 22, 2025</div>
+					<div class="folders-col-type">Folder</div>
+					<div class="folders-col-size">--</div>
+				</div>
+				
+
 			</div>
 			
 			<!-- FOOTER: Status/Info Bar -->
-			<div class="folders-right-footer">Footer</div>
+			<div class="folders-right-footer">
+				<input type="text" class="folders-footer-input" placeholder="File name..." aria-label="File name input" />
+				<button class="folders-footer-btn folders-open-btn" aria-label="Open">Open</button>
+				<button class="folders-footer-btn folders-cancel-btn" aria-label="Cancel">Cancel</button>
+			</div>
 			
 		</section>
 	</div>

@@ -162,34 +162,152 @@ html, body {
    RIGHT PANE - BODY & FOOTER
    ================================ */
 .folders-right-body { 
-	background: blue;                      /* Blue background for visibility (temporary) */
-	padding: 10px;                         /* 10px space inside body area */
-	overflow: auto;                        /* Show scrollbars if content overflows */
+	background: transparent;               /* Transparent to allow alternating fill */
+	padding: 0;                            /* Remove padding to allow full-width table */
+	overflow-y: auto;                      /* Only show vertical scrollbar when content actually overflows */
+	overflow-x: hidden;                    /* Hide horizontal scrollbar */
+	display: flex;                         /* Flexbox layout for filling remaining space */
+	flex-direction: column;                /* Stack items vertically */
 }
 
+/* Column Header Row */
+.folders-header-row {
+	display: grid;                         /* Grid layout for columns */
+	grid-template-columns: 0.9fr 120px 85px 65px; /* Name increased, others reduced to move right */
+	background: #333;                      /* Dark background for header */
+	border-bottom: 2px solid #444;        /* Separator line below header */
+	font-weight: normal;                   /* Normal weight header text */
+	font-size: 11px;                       /* Header text size */
+	color: #fff;                           /* White header text */
+	padding: 2px 0;                        /* Minimal vertical padding for smaller height */
+}
+
+/* Individual Folder Item Rows */
 .folders-item {
-	padding: 6px 10px;                     /* Space inside each folder item: 6px top/bottom, 10px left/right */
+	display: grid;                         /* Grid layout for columns */
+	grid-template-columns: 0.9fr 120px 85px 65px; /* Match header column widths */
+	padding: 0;                            /* Remove old padding */
 	color: #ddd;                           /* Light gray text color */
-	font-size: 13px;                       /* Text size */
+	font-size: 11px;                       /* Text size */
 	border-bottom: 1px solid rgba(255,255,255,0.1);  /* Faint white line below each item */
 	cursor: pointer;                       /* Show hand cursor when hovering */
+	align-items: center;                   /* Center content vertically */
+	min-height: 24px;                      /* Reduced minimum row height */
+	background: #2c2c2c;                   /* Dark gray background for odd rows (matches header) */
+}
+
+/* Alternating Row Colors - Light gray for even rows */
+.folders-item:nth-child(even) {
+	background: #303030;                   /* Slightly darker light gray background for even rows */
+}
+
+/* Column Content Styling */
+.folders-col-name {
+	padding: 4px 10px;                     /* Reduced vertical padding in name column */
 	display: flex;                         /* Horizontal layout for icon and text */
 	align-items: center;                   /* Center content vertically */
 	gap: 8px;                              /* 8px space between folder icon and name */
 }
 
+.folders-col-date,
+.folders-col-type,
+.folders-col-size {
+	padding: 4px 8px;                      /* Reduced vertical padding in other columns */
+	text-align: center;                    /* Center align text */
+}
+
+/* Empty Row Styling - No hover effects for empty rows */
+.folders-empty-row {
+	cursor: default;                       /* Default cursor for empty rows */
+}
+
+.folders-item.folders-empty-row:hover {
+	background: #2c2c2c !important;        /* Force original dark background - no change on hover */
+	color: #ddd !important;               /* Keep original text color - no change on hover */
+}
+
+.folders-item.folders-empty-row:nth-child(even):hover {
+	background: #303030 !important;        /* Force original light background for even rows - no change on hover */
+	color: #ddd !important;               /* Keep original text color - no change on hover */
+}
+
 .folders-item:hover {
-	background: rgba(118, 185, 0, 0.1);   /* Light NVIDIA green background when hovering */
-	color: #76B900;                        /* NVIDIA green text when hovering */
+	background: #444 !important;          /* Light gray background when hovering - !important to override alternating colors */
+	color: #ddd;                          /* Light gray text when hovering */
 }
 
 .folders-item:last-child {
 	border-bottom: none;                   /* No bottom border on last folder item */
 }
 
+/* Fill remaining space with alternating color pattern */
+.folders-right-body::after {
+	content: '';                           /* Empty pseudo-element */
+	display: block;                        /* Block element to fill space */
+	flex: 1;                               /* Take up remaining space */
+	background: #2c2c2c;                   /* Dark gray - alternates with last even row (#303030) */
+	min-height: 0;                         /* Allow it to shrink if needed */
+}
+
 .folders-right-footer { 
-	background: purple;                    /* Purple background for visibility (temporary) */
-	padding: 8px 10px;                     /* Space inside footer: 8px top/bottom, 10px left/right */
+	background: #2c2c2c;                   /* Dark gray background matching header */
+	padding: 8px 10px;                     /* Padding inside footer area */
+	display: flex;                         /* Horizontal layout for input and buttons */
+	align-items: center;                   /* Center align vertically */
+	gap: 8px;                              /* Space between elements */
+	border-top: 1px solid #444;           /* Top border to separate from body */
+}
+
+/* Footer Input Styling */
+.folders-footer-input {
+	flex: 1;                               /* Take up remaining space */
+	padding: 6px 10px;                     /* Internal spacing */
+	background: #333;                      /* Dark background */
+	border: 1px solid #555;                /* Gray border */
+	color: #ddd;                           /* Light text color */
+	font-size: 11px;                       /* Text size */
+	font-family: Arial, sans-serif;        /* Font family */
+	border-radius: 3px;                    /* Rounded corners */
+}
+
+.folders-footer-input:focus {
+	outline: none;                         /* Remove default outline */
+	border-color: #76B900;                 /* NVIDIA green border on focus */
+}
+
+/* Footer Button Styling */
+.folders-footer-btn {
+	padding: 6px 12px;                     /* Button padding */
+	background: #444;                      /* Dark button background */
+	border: 1px solid #666;                /* Gray border */
+	color: #ddd;                           /* Light text color */
+	font-size: 11px;                       /* Text size */
+	font-family: Arial, sans-serif;        /* Font family */
+	cursor: pointer;                       /* Pointer cursor */
+	border-radius: 3px;                    /* Rounded corners */
+	min-width: 60px;                       /* Minimum button width */
+}
+
+.folders-footer-btn:hover {
+	background: #555;                      /* Lighter background on hover */
+	color: #fff;                           /* White text on hover */
+}
+
+.folders-open-btn {
+	background: #1a1a1a !important;       /* Match popup button background */
+	color: #76B900 !important;             /* NVIDIA green text */
+	border: 1px solid #76B900 !important; /* NVIDIA green border */
+	font-weight: normal !important;        /* Normal weight */
+}
+
+.folders-open-btn:hover {
+	background: #333333 !important;        /* Match popup button hover background */
+	color: #76B900 !important;             /* Keep NVIDIA green text */
+	border-color: #76B900 !important;      /* Keep NVIDIA green border */
+}
+
+.folders-cancel-btn:hover {
+	background: #666;                      /* Gray for Cancel button hover */
 }
 
 /* ================================
@@ -208,12 +326,72 @@ html, body {
 	width: 100%;                           /* Each group fills full width of left pane */
 	box-sizing: border-box;                /* Include borders in width calculation */
 	margin: 0;                             /* No space outside each group */
-	padding: 0;                            /* No space inside each group */
+	padding: 8px;                          /* Add padding to create buffer around content */
 	background: rgba(255,255,255,0.04);   /* Very faint white background */
 	border: 1px solid #444;                /* Dark gray border around each group */
 	border-radius: 0;                      /* Square corners */
 	color: #ddd;                           /* Light gray text color */
-	font-size: 12px;                       /* Text size */
+	font-size: 11px;                       /* Text size for group labels */
+}
+
+/* Group Header (title with arrow) */
+.folders-group-header {
+	display: flex;                         /* Horizontal layout for arrow and text */
+	align-items: center;                   /* Center align vertically */
+	cursor: pointer;                       /* Pointer cursor for clickable header */
+	user-select: none;                     /* Prevent text selection */
+}
+
+/* Arrow icon for collapsible groups */
+.folders-group-arrow {
+	margin-right: 6px;                     /* Space between arrow and text */
+	font-size: 10px;                       /* Smaller arrow size */
+	transition: transform 0.2s ease;       /* Smooth rotation animation */
+	color: #888;                           /* Gray arrow color */
+}
+
+/* Rotated arrow when group is collapsed */
+.folders-group.collapsed .folders-group-arrow {
+	transform: rotate(-90deg);             /* Rotate arrow left when collapsed */
+}
+
+/* Content area that can be shown/hidden */
+.folders-group-content {
+	background: #2a2a2a;                   /* Darker gray background for content */
+	margin-top: 6px;                       /* Space between title and content */
+	padding: 6px;                          /* Internal spacing inside content div */
+	border-radius: 3px;                    /* Slightly rounded corners */
+	border: 1px solid #333;                /* Subtle border */
+	transition: all 0.2s ease;             /* Smooth show/hide animation */
+	overflow: hidden;                      /* Hide content during animation */
+}
+
+/* Hidden state for collapsed content */
+.folders-group.collapsed .folders-group-content {
+	display: none;                         /* Hide content when collapsed */
+}
+
+/* Navigation Group Content Styling */
+.folders-group-content {
+	background: #2a2a2a;                   /* Darker gray background for content */
+	margin-top: 6px;                       /* Space between title and content */
+	padding: 6px;                          /* Internal spacing inside content div */
+	border-radius: 3px;                    /* Slightly rounded corners */
+	border: 1px solid #333;                /* Subtle border */
+}
+
+/* Navigation Group Items Styling */
+.folders-group-item {
+	padding: 4px 8px;                      /* Spacing inside each item */
+	color: #ccc;                           /* Light gray text for items */
+	font-size: 11px;                       /* Smaller text size for items */
+	cursor: pointer;                       /* Pointer cursor for items */
+	border-radius: 2px;                    /* Slight rounding for items */
+}
+
+.folders-group-item:hover {
+	background: #333;                      /* Darker background on hover */
+	color: #fff;                           /* White text on hover */
 }
 
 /* ================================

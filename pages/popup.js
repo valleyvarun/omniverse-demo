@@ -100,6 +100,13 @@
 					}
 			}
 		}
+		
+		// Forward close request from folders iframe to main window
+		if (data.type === 'folders:close') {
+			try {
+				parent.postMessage({ type: 'popup:close' }, '*');
+			} catch (_) {}
+		}
 	});
 
 	// Close button -> notify parent to close

@@ -31,5 +31,25 @@
 	}
 
 	handle.addEventListener('mousedown', onDown);
+
+	// Cancel button functionality - close the popup
+	const cancelBtn = document.querySelector('.folders-cancel-btn');
+	if (cancelBtn) {
+		cancelBtn.addEventListener('click', () => {
+			// Send message to popup parent (which will forward to main window)
+			window.parent.postMessage({ type: 'folders:close' }, '*');
+		});
+	}
+
+	// Collapsible navigation groups functionality
+	const groupHeaders = document.querySelectorAll('.folders-group-header');
+	groupHeaders.forEach(header => {
+		header.addEventListener('click', () => {
+			const group = header.closest('.folders-group');
+			if (group) {
+				group.classList.toggle('collapsed');
+			}
+		});
+	});
 })();
 
