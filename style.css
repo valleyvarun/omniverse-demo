@@ -7,6 +7,46 @@
    ============================================================================= */
 
 /* -----------------------------------------------------------------------------
+   CUSTOM SCROLLBAR STYLING
+   -----------------------------------------------------------------------------
+   Thin, dark theme scrollbars with square edges matching project theme */
+/* Webkit browsers (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+	width: 6px;                            /* Thin scrollbar width */
+	height: 6px;                           /* Thin horizontal scrollbar height */
+}
+
+::-webkit-scrollbar-track {
+	background: #2a2a2a;                   /* Dark track background */
+	border-radius: 0;                      /* Square corners, no curves */
+}
+
+::-webkit-scrollbar-thumb {
+	background: #555;                      /* Dark gray scrollbar thumb */
+	border-radius: 0;                      /* Square corners, no curves */
+	border: none;                          /* No border around thumb */
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: #666;                      /* Slightly lighter on hover */
+}
+
+::-webkit-scrollbar-corner {
+	background: #2a2a2a;                   /* Dark corner where scrollbars meet */
+}
+
+/* Remove scrollbar arrows (up/down buttons) */
+::-webkit-scrollbar-button {
+	display: none;                         /* Hide arrow buttons completely */
+}
+
+/* Firefox scrollbar styling */
+* {
+	scrollbar-width: thin;                 /* Thin scrollbar in Firefox */
+	scrollbar-color: #555 #2a2a2a;        /* Thumb color, track color */
+}
+
+/* -----------------------------------------------------------------------------
    GLOBAL BODY STYLES
    -----------------------------------------------------------------------------
    Sets up the main page layout and appearance */
