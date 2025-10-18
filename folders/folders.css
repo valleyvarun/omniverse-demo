@@ -179,7 +179,7 @@ html, body { height: 100%; }
 	border-bottom: none;
 }
 
-.folders-right-footer { background: green; padding: 8px 10px; }
+.folders-right-footer { background: red; padding: 8px 10px; }
 
 /* ================================
    LEFT PANE - NAVIGATION GROUPS
