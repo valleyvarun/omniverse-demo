@@ -327,11 +327,6 @@ body {
 		padding: 0 10px;                 /* Reduced header padding */
 		gap: 10px;                       /* Reduced gap between elements */
 	}
-	
-	/* Smaller filter container for tablets */
-	.apps-filter-container {
-		width: 10vw;                     /* Reduced width */
-	}
 }
 
 /* MOBILE BREAKPOINT - screens 480px and smaller */
@@ -357,10 +352,5 @@ body {
 	/* Smallest app names for mobile */
 	.app-name {
 		font-size: 8px;                  /* Smallest text size */
-	}
-	
-	/* Smallest filter container for mobile */
-	.apps-filter-container {
-		width: 8vw;                      /* Smallest width */
 	}
 }
