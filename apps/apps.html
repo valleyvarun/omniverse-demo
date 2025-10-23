@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Apps</title>
+	<link rel="stylesheet" href="apps.css">
+	<style>html,body{height:100%;margin:0;padding:0;}</style>
+	<script defer src="apps.js"></script>
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
+</head>
+<body>
+	<!-- ================================
+	     MAIN APPS CONTAINER
+	     ================================ -->
+	<div class="apps-root" id="appsRoot">
+		
+		<!-- ================================
+		     FIXED HEADER - SEARCH & FILTER
+		     ================================ -->
+		<div class="apps-header">
+			<!-- Search Bar -->
+			<div class="apps-search-container">
+				<input type="text" class="apps-search" placeholder="🔍 Search apps..." aria-label="Search apps">
+			</div>
+			
+			<!-- Filter Dropdown -->
+			<div class="apps-filter-container">
+				<span class="apps-filter-icon">🔽</span>
+				<select class="apps-filter" aria-label="Filter apps">
+					<option value="a-to-z">A to Z</option>
+					<option value="by-company">By Company</option>
+					<option value="by-functionality">By Functionality</option>
+					<option value="by-industry">By Industry</option>
+				</select>
+			</div>
+		</div>
+		
+		<!-- ================================
+		     SCROLLABLE BODY - APP GRID
+		     ================================ -->
+		<div class="apps-body">
+			<div class="apps-grid">
+				
+				<!-- Creative Apps -->
+				<div class="app-item" data-category="creative">
+					<div class="app-icon">🎨</div>
+					<div class="app-name">Photoshop</div>
+				</div>
+				
+				<div class="app-item" data-category="creative">
+					<div class="app-icon">📐</div>
+					<div class="app-name">Illustrator</div>
+				</div>
+				
+				<div class="app-item" data-category="creative">
+					<div class="app-icon">🎬</div>
+					<div class="app-name">Premiere Pro</div>
+				</div>
+				
+				<div class="app-item" data-category="creative">
+					<div class="app-icon">🎞️</div>
+					<div class="app-name">After Effects</div>
+				</div>
+				
+				<!-- Productivity Apps -->
+				<div class="app-item" data-category="productivity">
+					<div class="app-icon">📄</div>
+					<div class="app-name">Word</div>
+				</div>
+				
+				<div class="app-item" data-category="productivity">
+					<div class="app-icon">📊</div>
+					<div class="app-name">Excel</div>
+				</div>
+				
+				<div class="app-item" data-category="productivity">
+					<div class="app-icon">📽️</div>
+					<div class="app-name">PowerPoint</div>
+				</div>
+				
+				<div class="app-item" data-category="productivity">
+					<div class="app-icon">📝</div>
+					<div class="app-name">OneNote</div>
+				</div>
+				
+				<!-- Development Apps -->
+				<div class="app-item" data-category="development">
+					<div class="app-icon">💻</div>
+					<div class="app-name">VS Code</div>
+				</div>
+				
+				<div class="app-item" data-category="development">
+					<div class="app-icon">🐙</div>
+					<div class="app-name">GitHub Desktop</div>
+				</div>
+				
+				<div class="app-item" data-category="development">
+					<div class="app-icon">🐳</div>
+					<div class="app-name">Docker</div>
+				</div>
+				
+				<div class="app-item" data-category="development">
+					<div class="app-icon">⚡</div>
+					<div class="app-name">Postman</div>
+				</div>
+				
+				<!-- Entertainment Apps -->
+				<div class="app-item" data-category="entertainment">
+					<div class="app-icon">🎵</div>
+					<div class="app-name">Spotify</div>
+				</div>
+				
+				<div class="app-item" data-category="entertainment">
+					<div class="app-icon">📺</div>
+					<div class="app-name">Netflix</div>
+				</div>
+				
+				<div class="app-item" data-category="entertainment">
+					<div class="app-icon">🎮</div>
+					<div class="app-name">Steam</div>
+				</div>
+				
+				<div class="app-item" data-category="entertainment">
+					<div class="app-icon">📻</div>
+					<div class="app-name">Discord</div>
+				</div>
+				
+				<!-- Utilities Apps -->
+				<div class="app-item" data-category="utilities">
+					<div class="app-icon">🗜️</div>
+					<div class="app-name">WinRAR</div>
+				</div>
+				
+				<div class="app-item" data-category="utilities">
+					<div class="app-icon">🧹</div>
+					<div class="app-name">CCleaner</div>
+				</div>
+				
+				<div class="app-item" data-category="utilities">
+					<div class="app-icon">🔒</div>
+					<div class="app-name">BitLocker</div>
+				</div>
+				
+				<div class="app-item" data-category="utilities">
+					<div class="app-icon">📱</div>
+					<div class="app-name">Phone Link</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -101,6 +101,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Handle menu item clicks
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function(event) {
+            const menuText = this.textContent.trim();
+            console.log('Menu clicked:', menuText);
+            
+            if (menuText === 'Apps') {
+                event.preventDefault();
+                // Open Apps popup
+                window.postMessage({ type: 'popup:open', title: 'Apps' }, '*');
+            }
+        });
+    });
+    
     // -----------------------------------------------------------------------------
     // COMMAND LINE FUNCTIONALITY
     // -----------------------------------------------------------------------------

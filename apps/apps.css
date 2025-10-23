@@ -1,0 +1,366 @@
+/* ===================================================================
+   APPS INTERFACE STYLES - COMPREHENSIVE COMMENTING
+   ===================================================================
+   
+   This CSS file contains all styling for the Apps popup interface.
+   
+   QUICK NAVIGATION:
+   1. ROOT RESET & LAYOUT (Lines ~15-35) - Basic setup and main container
+   2. HEADER CONTROLS (Lines ~40-120) - Search bar and filter dropdown
+   3. SCROLLABLE BODY (Lines ~125-140) - Main content area and grid
+   4. ALPHABET HEADERS (Lines ~145-185) - Collapsible letter sections 
+   5. APP ITEMS (Lines ~190-230) - Individual app icons and names
+   6. UTILITY CLASSES (Lines ~235-250) - Hidden states and special cases
+   7. SCROLLBAR STYLING (Lines ~255-275) - Custom scrollbar appearance
+   8. RESPONSIVE DESIGN (Lines ~280-320) - Mobile and tablet breakpoints
+   
+   ================================================================= */
+
+/* ===================================================================
+   1. ROOT RESET & LAYOUT
+   ================================================================= */
+
+/* Global reset for consistent styling */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+/* Main body styling - dark theme with white text */
+body {
+	font-family: 'Segoe UI', Arial, sans-serif;
+	background-color: #1a1a1a;
+	color: #ffffff;
+	overflow: hidden;                     /* Prevent body scrolling */
+}
+
+/* Root container - splits into header (50px) and body (remaining space) */
+.apps-root {
+	width: 100%;
+	height: 100vh;
+	display: grid;
+	grid-template-rows: 50px 1fr;        /* Fixed header, flexible body */
+	background-color: #1a1a1a;
+}
+
+/* ===================================================================
+   2. HEADER CONTROLS - SEARCH BAR AND FILTER DROPDOWN
+   ================================================================= */
+
+/* Header container - holds search bar and filter dropdown */
+.apps-header {
+	background-color: #2c2c2c;           /* Dark gray header background */
+	display: flex;
+	align-items: center;
+	padding: 0 15px;                     /* Horizontal padding */
+	gap: 15px;                           /* Space between search and filter */
+}
+
+/* Search bar container - takes up specified width */
+.apps-search-container {
+	width: 40vw;                         /* 40% of viewport width */
+}
+
+/* Search input field styling */
+.apps-search {
+	width: 100%;                         /* Fill container width */
+	height: 32px;                        /* Fixed height for consistency */
+	background-color: #1a1a1a;           /* Dark input background */
+	border: 1px solid #555;              /* Gray border */
+	border-radius: 4px;                  /* Slightly rounded corners */
+	color: #ffffff;                      /* White text */
+	font-size: 12px;                     /* TEXT SIZE - Easy to find! */
+	padding: 4px 6px;                    /* Internal spacing */
+	outline: none;                       /* Remove default outline */
+	transition: all 0.2s ease;          /* Smooth hover/focus effects */
+}
+
+/* Search input focus state - NVIDIA green highlight */
+.apps-search:focus {
+	border-color: #76B900;               /* NVIDIA green border */
+	box-shadow: 0 0 4px rgba(118, 185, 0, 0.3); /* Green glow effect */
+}
+
+/* Placeholder text styling */
+.apps-search::placeholder {
+	color: #888;                         /* Lighter gray for placeholder */
+}
+
+/* Filter dropdown container - positioned at right end */
+.apps-filter-container {
+	width: 18vw;                         /* 18% of viewport width - increased for "By Functionality" */
+	display: flex;
+	align-items: center;
+	gap: 6px;                            /* Space between icon and dropdown */
+	margin-left: auto;                   /* Push to right end of header */
+}
+
+/* Filter icon - decorative arrow before dropdown */
+.apps-filter-icon {
+	font-size: 12px;                     /* Icon size */
+	color: #76B900;                      /* NVIDIA green color */
+	user-select: none;                   /* Prevent text selection */
+	pointer-events: none;                /* Icon not clickable */
+}
+
+/* Filter dropdown styling */
+.apps-filter {
+	width: 100%;                         /* Fill container width */
+	height: 32px;                        /* Match search input height */
+	background-color: #1a1a1a;           /* Dark dropdown background */
+	border: 1px solid #555;              /* Gray border */
+	border-radius: 4px;                  /* Slightly rounded corners */
+	color: #ffffff;                      /* White text */
+	font-size: 12px;                     /* TEXT SIZE - matches search */
+	padding: 4px 6px;                    /* Internal spacing */
+	outline: none;                       /* Remove default outline */
+	cursor: pointer;                     /* Show clickable cursor */
+	transition: all 0.2s ease;          /* Smooth hover/focus effects */
+}
+
+/* Filter dropdown focus state - NVIDIA green highlight */
+.apps-filter:focus {
+	border-color: #76B900;               /* NVIDIA green border */
+	box-shadow: 0 0 4px rgba(118, 185, 0, 0.3); /* Green glow effect */
+}
+
+/* Filter dropdown option styling */
+.apps-filter option {
+	background-color: #1a1a1a;           /* Dark option background */
+	color: #ffffff;                      /* White option text */
+}
+
+/* ===================================================================
+   3. SCROLLABLE BODY - MAIN CONTENT AREA AND GRID
+   ================================================================= */
+
+/* Scrollable content area - contains all apps */
+.apps-body {
+	overflow-y: auto;                    /* Enable vertical scrolling */
+	padding: 15px;                       /* Content padding from edges */
+}
+
+/* Main grid container - responsive app layout */
+.apps-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); /* Responsive columns */
+	gap: 0.1vw;                           /* SPACING between grid items */
+	max-width: 100%;                     /* Don't exceed container width */
+}
+
+/* ===================================================================
+   4. ALPHABET HEADERS - COLLAPSIBLE LETTER SECTIONS
+   ================================================================= */
+
+/* Alphabet section headers (A, B, C, etc.) */
+.alphabet-header {
+	grid-column: 1 / -1;                 /* Span entire grid width */
+	font-size: 13px;                     /* LETTER SIZE - easy to find! */
+	font-weight: normal;                 /* Normal weight (not bold) */
+	color: #ffffff;                      /* White text color */
+	padding: 6px 0 6px 0;                /* EQUAL vertical padding for perfect centering */
+	margin-top: 20px;                    /* Space above letter - increased from app names */
+	margin-bottom: 15px;                 /* SPACE TO LOGOS - increased gap! */
+	border-top: 1px solid #404040;       /* Line above alphabet */
+	border-bottom: 1px solid #404040;    /* Line below alphabet */
+	text-align: left;                    /* Left-aligned text */
+	cursor: pointer;                     /* Clickable cursor */
+	transition: color 0.2s ease;        /* Smooth color change */
+	user-select: none;                   /* Prevent text selection */
+}
+
+/* Alphabet header hover effect */
+.alphabet-header:hover {
+	color: #76B900;                      /* NVIDIA green on hover */
+}
+
+/* Collapsed headers - reduced spacing */
+.alphabet-header.collapsed {
+	margin-top: 8px;                     /* Reduced spacing for collapsed headers */
+	margin-bottom: 8px;                  /* Reduced spacing for collapsed headers */
+}
+
+/* Remove top margin from first alphabet header */
+.alphabet-header:first-child {
+	margin-top: 0;
+}
+
+/* Toggle arrows for collapsible sections */
+.alphabet-arrow {
+	display: inline-block;
+	font-size: 14px;                     /* ARROW SIZE - larger than text */
+	margin-right: 8px;                   /* Space between arrow and letter */
+	vertical-align: text-top;            /* Align with letter top */
+	line-height: 1;                      /* Tight line spacing */
+	transform: translateY(1px);          /* Fine-tune vertical position */
+	transition: transform 0.2s ease;    /* Smooth transitions */
+}
+
+/* Container for apps under each letter - uses CSS Grid contents */
+.alphabet-apps-container {
+	grid-column: 1 / -1;                 /* Span entire grid width */
+	display: contents;                   /* Inherit parent grid behavior */
+}
+
+/* ===================================================================
+   5. APP ITEMS - INDIVIDUAL APP ICONS AND NAMES
+   ================================================================= */
+
+/* Individual app containers */
+.app-item {
+	display: flex;
+	flex-direction: column;              /* Stack icon above name */
+	align-items: center;                 /* Center content horizontally */
+	padding: 12px 1px;                   /* ITEM PADDING - increased vertical for row spacing */
+	background-color: transparent;       /* No background rectangle */
+	border: none;                        /* No border rectangle */
+	border-radius: 0;                    /* No rounded corners */
+	cursor: pointer;                     /* Clickable cursor */
+	transition: all 0.2s ease;          /* Smooth hover effects */
+	text-align: center;                  /* Center-aligned text */
+	min-height: 65px;                    /* Minimum container height */
+}
+
+/* App item hover effects - subtle movement and opacity */
+.app-item:hover {
+	background-color: transparent;       /* Keep background transparent */
+	transform: translateY(-2px);        /* Lift slightly on hover */
+	opacity: 0.8;                        /* Slight transparency */
+}
+
+/* App item active/click state */
+.app-item:active {
+	transform: translateY(0);            /* Return to normal position */
+	opacity: 1;                          /* Full opacity */
+}
+
+/* App icon styling (emoji symbols) */
+.app-icon {
+	font-size: 26px;                     /* ICON SIZE - easy to find! */
+	margin-bottom: 10px;                 /* ICON-TO-NAME GAP - increased for better row separation */
+	line-height: 1;                      /* Tight line spacing */
+}
+
+/* App name text styling */
+.app-name {
+	font-size: 10px;                     /* APP NAME SIZE - compact text */
+	color: #ffffff;                      /* White text color */
+	font-weight: 500;                    /* Medium font weight */
+	text-align: center;                  /* Center-aligned text */
+	line-height: 1.2;                    /* Comfortable line spacing */
+	max-width: 100%;                     /* Don't exceed container */
+	word-wrap: break-word;               /* Break long words if needed */
+}
+
+/* ===================================================================
+   6. UTILITY CLASSES - HIDDEN STATES AND SPECIAL CASES
+   ================================================================= */
+
+/* Hidden state for filtered apps */
+.app-item.hidden {
+	display: none;                       /* Completely hide filtered items */
+}
+
+/* ===================================================================
+   7. SCROLLBAR STYLING - CUSTOM DARK THEME SCROLLBARS
+   ================================================================= */
+
+/* Scrollbar track width */
+.apps-body::-webkit-scrollbar {
+	width: 6px;                          /* SCROLLBAR WIDTH - thin design */
+}
+
+/* Scrollbar track background */
+.apps-body::-webkit-scrollbar-track {
+	background-color: #2a2a2a;           /* Dark track background */
+	border-radius: 0;                    /* Square corners */
+}
+
+/* Scrollbar thumb (draggable part) */
+.apps-body::-webkit-scrollbar-thumb {
+	background-color: #555;              /* Gray thumb color */
+	border-radius: 0;                    /* Square corners */
+}
+
+/* Scrollbar thumb hover state */
+.apps-body::-webkit-scrollbar-thumb:hover {
+	background-color: #666;              /* Lighter gray on hover */
+}
+
+/* Scrollbar corner (where horizontal/vertical meet) */
+.apps-body::-webkit-scrollbar-corner {
+	background-color: #2a2a2a;           /* Match track color */
+}
+
+/* ===================================================================
+   8. RESPONSIVE DESIGN - MOBILE AND TABLET BREAKPOINTS
+   ================================================================= */
+
+/* TABLET BREAKPOINT - screens 768px and smaller */
+@media (max-width: 768px) {
+	/* Adjust grid for smaller screens */
+	.apps-grid {
+		grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); /* Smaller min width */
+		gap: 0.5vw;                        /* Reduced gap */
+	}
+	
+	/* Compact app items for tablets */
+	.app-item {
+		padding: 4px 3px;                /* Reduced padding */
+		min-height: 55px;                /* Smaller minimum height */
+	}
+	
+	/* Smaller icons for tablets */
+	.app-icon {
+		font-size: 22px;                 /* Smaller icon size */
+		margin-bottom: 9px;              /* Proportional spacing */
+	}
+	
+	/* Smaller app names for tablets */
+	.app-name {
+		font-size: 9px;                  /* Smaller text size */
+	}
+	
+	/* Adjust header spacing for tablets */
+	.apps-header {
+		padding: 0 10px;                 /* Reduced header padding */
+		gap: 10px;                       /* Reduced gap between elements */
+	}
+	
+	/* Smaller filter container for tablets */
+	.apps-filter-container {
+		width: 10vw;                     /* Reduced width */
+	}
+}
+
+/* MOBILE BREAKPOINT - screens 480px and smaller */
+@media (max-width: 480px) {
+	/* Adjust grid for mobile screens */
+	.apps-grid {
+		grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); /* Even smaller min width */
+		gap: 6px;                        /* Minimal gap */
+	}
+	
+	/* Very compact app items for mobile */
+	.app-item {
+		padding: 3px 2px;                /* Minimal padding */
+		min-height: 50px;                /* Smallest minimum height */
+	}
+	
+	/* Smallest icons for mobile */
+	.app-icon {
+		font-size: 20px;                 /* Smallest icon size */
+		margin-bottom: 6px;              /* Proportional spacing */
+	}
+	
+	/* Smallest app names for mobile */
+	.app-name {
+		font-size: 8px;                  /* Smallest text size */
+	}
+	
+	/* Smallest filter container for mobile */
+	.apps-filter-container {
+		width: 8vw;                      /* Smallest width */
+	}
+}

@@ -95,6 +95,17 @@
 						iframe.style.border = 'none';
 						iframe.style.display = 'block';
 						bodyEl.appendChild(iframe);
+					} else if (data.title.trim().toLowerCase() === 'apps') {
+						clearBody();
+						// Embed the apps interface into the popup body
+						const iframe = document.createElement('iframe');
+						iframe.src = '../apps/apps.html';
+						iframe.title = 'Apps';
+						iframe.style.width = '100%';
+						iframe.style.height = '100%';
+						iframe.style.border = 'none';
+						iframe.style.display = 'block';
+						bodyEl.appendChild(iframe);
 					} else {
 						clearBody();
 					}

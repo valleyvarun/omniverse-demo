@@ -1,0 +1,572 @@
+[
+    {
+        "Product Name": "3ds Max",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "3D modeling, visualization, and animation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Advance Steel",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Structural detailing and fabrication",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "After Effects",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Motion graphics and video compositing",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Alias",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Automotive and industrial surface modeling",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "Altium Designer",
+        "Company Name": "Altium",
+        "What the Software Is Used For": "PCB and electronics design",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "ANSYS",
+        "Company Name": "Ansys Inc.",
+        "What the Software Is Used For": "Simulation, FEA, and CFD analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "ArchiCAD",
+        "Company Name": "Graphisoft",
+        "What the Software Is Used For": "BIM modeling and documentation",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "ArcGIS",
+        "Company Name": "Esri",
+        "What the Software Is Used For": "Professional GIS, mapping, and spatial analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "AutoCAD",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "2D/3D drafting and design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "BIM 360",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "BIM collaboration and coordination",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Blender",
+        "Company Name": "Blender Foundation",
+        "What the Software Is Used For": "3D modeling, rendering, and animation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Bluebeam Revu",
+        "Company Name": "Bluebeam",
+        "What the Software Is Used For": "PDF markup and documentation for AEC",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "BricsCAD",
+        "Company Name": "Bricsys",
+        "What the Software Is Used For": "CAD/BIM alternative to AutoCAD",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "CATIA",
+        "Company Name": "Dassault Syst\u00e8mes",
+        "What the Software Is Used For": "Advanced mechanical and surface modeling",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Cesium",
+        "Company Name": "Cesium GS",
+        "What the Software Is Used For": "3D geospatial visualization using real-world data",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "ChatGPT",
+        "Company Name": "OpenAI",
+        "What the Software Is Used For": "AI-based language and design assistant",
+        "Category": "AI & Computational"
+    },
+    {
+        "Product Name": "Cinema 4D",
+        "Company Name": "Maxon",
+        "What the Software Is Used For": "Visualization, motion graphics, rendering",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "CityEngine",
+        "Company Name": "Esri",
+        "What the Software Is Used For": "Procedural urban modeling and planning",
+        "Category": "GIS & Mapping"
+    },
+    {
+        "Product Name": "COMSOL Multiphysics",
+        "Company Name": "COMSOL",
+        "What the Software Is Used For": "Physics-based simulation and modeling",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "ComfyUI",
+        "Company Name": "Comfy Org",
+        "What the Software Is Used For": "Node-based AI image generation interface for Stable Diffusion",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Creo",
+        "Company Name": "PTC",
+        "What the Software Is Used For": "Mechanical and product design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "D5 Render",
+        "Company Name": "Dimension 5",
+        "What the Software Is Used For": "Real-time architectural rendering",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "DALL\u00b7E",
+        "Company Name": "OpenAI",
+        "What the Software Is Used For": "AI-based image generation",
+        "Category": "AI & Computational"
+    },
+    {
+        "Product Name": "DesignBuilder",
+        "Company Name": "DesignBuilder Software",
+        "What the Software Is Used For": "Building performance and energy modeling",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Dialux",
+        "Company Name": "DIAL GmbH",
+        "What the Software Is Used For": "Lighting design and simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Ecotect",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Environmental and daylight analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Enscape",
+        "Company Name": "Enscape GmbH",
+        "What the Software Is Used For": "Real-time rendering and VR visualization",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "EnergyPlus",
+        "Company Name": "U.S. Department of Energy",
+        "What the Software Is Used For": "Building energy simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "ETABS",
+        "Company Name": "CSI (Computers and Structures Inc.)",
+        "What the Software Is Used For": "Structural analysis and design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Form\u00b7Z",
+        "Company Name": "AutoDesSys",
+        "What the Software Is Used For": "Conceptual architectural modeling",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "FreeCAD",
+        "Company Name": "Open Source",
+        "What the Software Is Used For": "Parametric 3D modeling",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Fusion 360",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "3D CAD, CAM, and simulation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Gephi",
+        "Company Name": "Open Source",
+        "What the Software Is Used For": "Network and systems visualization",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "GeoStudio",
+        "Company Name": "Seequent",
+        "What the Software Is Used For": "Geotechnical modeling and analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Google Earth",
+        "Company Name": "Google",
+        "What the Software Is Used For": "3D geospatial visualization and terrain mapping",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Grasshopper",
+        "Company Name": "McNeel",
+        "What the Software Is Used For": "Visual programming for generative design",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "HEC-RAS",
+        "Company Name": "U.S. Army Corps of Engineers",
+        "What the Software Is Used For": "Hydraulic and river flow modeling",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "Houdini",
+        "Company Name": "SideFX",
+        "What the Software Is Used For": "Procedural modeling and VFX simulation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Illustrator",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Vector graphics and diagramming",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "InDesign",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Page layout and portfolio design",
+        "Category": "Design & Graphics"
+    },
+    {
+        "Product Name": "InfraWorks",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Conceptual infrastructure design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Inventor",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "3D mechanical design",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Isaac Lab",
+        "Company Name": "NVIDIA",
+        "What the Software Is Used For": "Robot learning framework for reinforcement and imitation learning",
+        "Category": "AI & Computational"
+    },
+    {
+        "Product Name": "Isaac Sim",
+        "Company Name": "NVIDIA",
+        "What the Software Is Used For": "Robotics simulation platform built on Omniverse",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "KeyShot",
+        "Company Name": "Luxion",
+        "What the Software Is Used For": "Photorealistic rendering",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Lands Design",
+        "Company Name": "Asuni",
+        "What the Software Is Used For": "Landscape architecture design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Lumion",
+        "Company Name": "Act-3D",
+        "What the Software Is Used For": "Real-time architectural rendering",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Mapbox",
+        "Company Name": "Mapbox",
+        "What the Software Is Used For": "Interactive geospatial visualization",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "MATLAB",
+        "Company Name": "MathWorks",
+        "What the Software Is Used For": "Computation, data analysis, and simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Maya",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Animation, modeling, and simulation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "MicroStation",
+        "Company Name": "Bentley Systems",
+        "What the Software Is Used For": "Infrastructure and CAD modeling",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Midjourney",
+        "Company Name": "Midjourney Inc.",
+        "What the Software Is Used For": "AI-based image generation",
+        "Category": "AI & Computational"
+    },
+    {
+        "Product Name": "Modo",
+        "Company Name": "Foundry",
+        "What the Software Is Used For": "3D modeling and visualization",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Navisworks",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "BIM coordination and clash detection",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Nastran",
+        "Company Name": "Siemens",
+        "What the Software Is Used For": "FEA and structural simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Nuke",
+        "Company Name": "Foundry",
+        "What the Software Is Used For": "Compositing and visual effects",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "NX",
+        "Company Name": "Siemens",
+        "What the Software Is Used For": "Advanced product and mechanical design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Onshape",
+        "Company Name": "PTC",
+        "What the Software Is Used For": "Cloud-based CAD modeling",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "OpenBuildings Designer",
+        "Company Name": "Bentley Systems",
+        "What the Software Is Used For": "BIM for multidisciplinary design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "OpenFOAM",
+        "Company Name": "OpenCFD Foundation",
+        "What the Software Is Used For": "CFD and fluid simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Photoshop",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Image editing and visualization",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Power BI",
+        "Company Name": "Microsoft",
+        "What the Software Is Used For": "Data visualization and analytics",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Premiere Pro",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Video editing",
+        "Category": "Development & IDEs"
+    },
+    {
+        "Product Name": "QGIS",
+        "Company Name": "Open Source",
+        "What the Software Is Used For": "Geospatial analysis and mapping",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "ReCap",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "3D scanning and reality capture",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Revit",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "BIM for architecture and structure",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Rhino 8",
+        "Company Name": "McNeel",
+        "What the Software Is Used For": "NURBS modeling for architecture and design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "RISA",
+        "Company Name": "CSI (Computers and Structures Inc.)",
+        "What the Software Is Used For": "Structural analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Robot Structural Analysis",
+        "Company Name": "Autodesk",
+        "What the Software Is Used For": "Structural simulation and design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "SAP2000",
+        "Company Name": "CSI (Computers and Structures Inc.)",
+        "What the Software Is Used For": "Structural engineering analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Sefaira",
+        "Company Name": "Trimble",
+        "What the Software Is Used For": "Building performance analysis",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "SimScale",
+        "Company Name": "SimScale GmbH",
+        "What the Software Is Used For": "Cloud-based CFD and FEA simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Simulink",
+        "Company Name": "MathWorks",
+        "What the Software Is Used For": "System simulation and modeling",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "SketchUp",
+        "Company Name": "Trimble",
+        "What the Software Is Used For": "Conceptual 3D modeling",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "SolidWorks",
+        "Company Name": "Dassault Syst\u00e8mes",
+        "What the Software Is Used For": "Mechanical and product design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Stable Diffusion",
+        "Company Name": "Stability AI",
+        "What the Software Is Used For": "AI-based image generation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "STAAD.Pro",
+        "Company Name": "Bentley Systems",
+        "What the Software Is Used For": "Structural analysis and design",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Substance 3D Painter",
+        "Company Name": "Adobe",
+        "What the Software Is Used For": "Material and texture authoring",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Tableau",
+        "Company Name": "Salesforce",
+        "What the Software Is Used For": "Data analytics and dashboarding",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "Tekla Structures",
+        "Company Name": "Trimble",
+        "What the Software Is Used For": "Structural detailing and BIM",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Trnsys",
+        "Company Name": "Thermal Energy System Specialists",
+        "What the Software Is Used For": "Energy system simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "Twinmotion",
+        "Company Name": "Epic Games",
+        "What the Software Is Used For": "Real-time visualization and VR",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Unity",
+        "Company Name": "Unity Technologies",
+        "What the Software Is Used For": "Interactive 3D, AR/VR applications",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Unreal Engine",
+        "Company Name": "Epic Games",
+        "What the Software Is Used For": "Real-time visualization and simulation",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Vectorworks",
+        "Company Name": "Nemetschek",
+        "What the Software Is Used For": "BIM and 2D/3D design",
+        "Category": "Architecture & BIM"
+    },
+    {
+        "Product Name": "Visual Studio",
+        "Company Name": "Microsoft",
+        "What the Software Is Used For": "Integrated development environment (IDE)",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Visual Studio Code",
+        "Company Name": "Microsoft",
+        "What the Software Is Used For": "Lightweight code editor for development",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Visum",
+        "Company Name": "PTV Group",
+        "What the Software Is Used For": "Transport planning and network modeling",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "Vissim",
+        "Company Name": "PTV Group",
+        "What the Software Is Used For": "Traffic simulation",
+        "Category": "Simulation & Engineering"
+    },
+    {
+        "Product Name": "V-Ray",
+        "Company Name": "Chaos Group",
+        "What the Software Is Used For": "Photorealistic rendering engine",
+        "Category": "Visualization & Rendering"
+    },
+    {
+        "Product Name": "Wolfram Mathematica",
+        "Company Name": "Wolfram Research",
+        "What the Software Is Used For": "Computational modeling and mathematics",
+        "Category": "AI & Computational"
+    },
+    {
+        "Product Name": "ZBrush",
+        "Company Name": "Pixologic, Maxon",
+        "What the Software Is Used For": "Digital sculpting",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "Zemax OpticStudio",
+        "Company Name": "Ansys, Zemax",
+        "What the Software Is Used For": "Optical and photonic system design",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "ZWCAD",
+        "Company Name": "ZWSOFT",
+        "What the Software Is Used For": "CAD alternative",
+        "Category": "General / Misc"
+    },
+    {
+        "Product Name": "OBS Studio",
+        "Company Name": "OBS Project",
+        "What the Software Is Used For": "Live streaming and screen recording",
+        "Category": "General / Misc"
+    }
+]
