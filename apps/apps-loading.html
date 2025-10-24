@@ -1,331 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- 
+=============================================================================
+APPS LOADING MODAL - STANDALONE WINDOW
+=============================================================================
+This HTML file creates a standalone modal window that displays when a user 
+clicks on an app from the main apps grid. It shows a preview of the selected
+app with loading functionality.
+
+PURPOSE:
+- Display app preview image in a modal format
+- Show app icon and name in the footer
+- Provide "Open" and "Cancel" buttons
+- Handle loading state with 5-second timer
+- Communicate with parent window via postMessage
+
+USAGE FLOW:
+1. User clicks an app in the main apps grid (apps.html)
+2. This modal window opens showing the selected app
+3. User can click "Open" to launch the app (enters loading state)
+4. User can click "Cancel" or press Escape to close
+5. Modal auto-closes after 5 seconds when loading
+
+EXTERNAL DEPENDENCIES:
+- apps-loading.css (styling)
+- apps-loading.js (functionality)
+- ../logo/dummy-cover1.png (default preview image)
+=============================================================================
+-->
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>App Loading</title>
-	<style>
-		/* Global reset for consistent styling */
-		* {
-			margin: 0;
-			padding: 0;
-			box-sizing: border-box;
-		}
-
-		/* Main body styling - dark theme with white text */
-		body {
-			font-family: 'Segoe UI', Arial, sans-serif;
-			background-color: transparent;
-			color: #ffffff;
-			overflow: hidden;
-			width: 100vw;
-			height: 100vh;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		/* ===================================================================
-		   APP LAUNCH MODAL
-		   ================================================================= */
-
-		/* Modal overlay - covers entire screen */
-		.app-launch-modal {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.7);
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 2000;
-			opacity: 1;
-			visibility: visible;
-		}
-
-		/* Modal content container */
-		.modal-content {
-			background-color: #2c2c2c;
-			border: 1px solid #76B900;
-			border-radius: 8px;
-			text-align: center;
-			width: 35vw;
-			aspect-ratio: 16 / 10;
-			box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-			display: flex;
-			flex-direction: column;
-			overflow: hidden;
-		}
-
-		/* Modal body content */
-		.modal-body {
-			flex: 1;
-			padding: 0;
-			display: flex;
-			align-items: stretch;
-			justify-content: stretch;
-			overflow: hidden;
-		}
-
-		/* Modal preview image */
-		.modal-preview-image {
-			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			border: none;
-			border-radius: 0;
-		}
-
-		/* Modal footer */
-		.modal-footer {
-			border-top: 1px solid #404040;
-			padding: 8px 16px 6px 16px;
-			background-color: #252525;
-			border-radius: 0 0 8px 8px;
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			min-height: 28px;
-		}
-
-		/* Modal app info container in footer */
-		.modal-app-info {
-			display: flex;
-			align-items: center;
-			gap: 12px;
-		}
-
-		/* Modal app icon in footer */
-		.modal-app-icon {
-			font-size: 12px;
-			line-height: 1;
-			margin: 0;
-		}
-
-		/* Modal app name in footer */
-		.modal-app-name {
-			font-size: 11px;
-			color: #ffffff;
-			font-weight: normal;
-			margin: 0;
-		}
-
-		/* Modal buttons container */
-		.modal-buttons {
-			display: flex;
-			gap: 8px;
-			justify-content: flex-end;
-		}
-
-		/* Modal loading text */
-		.modal-loading-text {
-			font-size: 11px;
-			color: #76B900;
-			font-weight: normal;
-		}
-
-		/* Modal button styling */
-		.modal-button {
-			padding: 4px 12px;
-			border: 1px solid #333;
-			border-radius: 4px;
-			font-size: 11px;
-			font-weight: normal;
-			cursor: pointer;
-			transition: all 0.2s ease;
-			min-width: 60px;
-			height: 22px;
-			background-color: #1a1a1a;
-			color: #f0f0f0;
-			display: inline-flex;
-			align-items: center;
-			justify-content: center;
-		}
-
-		/* Open button */
-		.modal-button.open {
-			background-color: #1a1a1a;
-			border: 1px solid #76B900;
-			color: #76B900;
-		}
-
-		.modal-button.open:hover {
-			background-color: #333333;
-		}
-
-		/* Cancel button */
-		.modal-button.cancel:hover {
-			background-color: rgba(255,255,255,0.06);
-		}
-
-		/* Focus states for accessibility */
-		.modal-button:focus {
-			outline: 1px solid #76B900;
-			outline-offset: 1px;
-		}
-
-		/* Remove outline for open button since it already has green border */
-		.modal-button.open:focus {
-			outline: none;
-		}
-	</style>
+	<!-- External CSS file for all modal styling -->
+	<link rel="stylesheet" href="apps-loading.css">
 </head>
 <body>
-	<!-- ================================
-	     APP LAUNCH MODAL
-	     ================================ -->
+	<!-- ================================================================
+	     MAIN MODAL STRUCTURE
+	     ================================================================
+	     This is the complete modal that covers the entire window.
+	     The modal uses a 35vw width with 16:10 aspect ratio to match
+	     the design specifications from the main application.
+	     ================================================================ -->
 	<div class="app-launch-modal" id="appLaunchModal">
+		<!-- MODAL CONTENT CONTAINER -->
+		<!-- Contains the actual modal box with border and background -->
 		<div class="modal-content">
+			
+			<!-- MODAL BODY SECTION -->
+			<!-- Displays the app preview image -->
+			<!-- Takes up most of the modal space (flex: 1) -->
 			<div class="modal-body">
-				<img src="../logo/dummy-cover1.png" alt="App Preview" class="modal-preview-image" id="modalPreviewImage">
+				<!-- APP PREVIEW IMAGE -->
+				<!-- Shows preview of the selected app -->
+				<!-- Default image is dummy-cover1.png, updated via JavaScript -->
+				<img src="../logo/dummy-cover1.png" 
+				     alt="App Preview" 
+				     class="modal-preview-image" 
+				     id="modalPreviewImage">
 			</div>
+			
+			<!-- MODAL FOOTER SECTION -->
+			<!-- Contains app info (icon + name) and action buttons -->
+			<!-- Fixed height section at bottom of modal -->
 			<div class="modal-footer">
+				
+				<!-- LEFT SIDE: APP INFORMATION -->
+				<!-- Shows the app icon and name -->
 				<div class="modal-app-info">
+					<!-- APP ICON -->
+					<!-- Can be emoji text or image, updated via JavaScript -->
 					<div class="modal-app-icon" id="modalAppIcon">🎨</div>
+					
+					<!-- APP NAME -->
+					<!-- App title text, updated via JavaScript -->
 					<div class="modal-app-name" id="modalAppName">App Name</div>
 				</div>
+				
+				<!-- RIGHT SIDE: ACTION BUTTONS -->
+				<!-- Contains Open and Cancel buttons -->
 				<div class="modal-buttons">
+					<!-- OPEN BUTTON -->
+					<!-- Primary action - launches the app and enters loading state -->
+					<!-- Has NVIDIA green styling to match brand -->
 					<button class="modal-button open" id="modalOpenButton">Open</button>
+					
+					<!-- CANCEL BUTTON -->
+					<!-- Secondary action - closes the modal without launching -->
 					<button class="modal-button cancel" id="modalCancelButton">Cancel</button>
 				</div>
+				
 			</div>
 		</div>
 	</div>
 
-	<script>
-		// Modal elements
-		let appLaunchModal;
-		let modalAppIcon;
-		let modalAppName;
-		let modalOpenButton;
-		let modalCancelButton;
-		let currentSelectedApp = null;
-
-		// Initialize when DOM is loaded
-		document.addEventListener('DOMContentLoaded', function() {
-			initializeModal();
-		});
-
-		function initializeModal() {
-			appLaunchModal = document.getElementById('appLaunchModal');
-			modalAppIcon = document.getElementById('modalAppIcon');
-			modalAppName = document.getElementById('modalAppName');
-			modalOpenButton = document.getElementById('modalOpenButton');
-			modalCancelButton = document.getElementById('modalCancelButton');
-			
-			// Add event listeners
-			modalOpenButton.addEventListener('click', handleModalOpen);
-			modalCancelButton.addEventListener('click', handleModalCancel);
-			
-			// Close modal when clicking outside
-			appLaunchModal.addEventListener('click', function(event) {
-				if (event.target === appLaunchModal) {
-					handleModalCancel();
-				}
-			});
-
-			// Keyboard navigation
-			document.addEventListener('keydown', function(event) {
-				if (event.key === 'Enter') {
-					event.preventDefault();
-					handleModalOpen();
-				} else if (event.key === 'Escape') {
-					event.preventDefault();
-					handleModalCancel();
-				}
-			});
-
-			// Listen for app data from parent window
-			window.addEventListener('message', function(event) {
-				const data = event.data;
-				if (data.type === 'showAppModal') {
-					showAppModal(data.appData);
-				}
-			});
-
-			// Focus on Open button for keyboard navigation
-			setTimeout(() => {
-				if (modalOpenButton) {
-					modalOpenButton.focus();
-				}
-			}, 100);
-		}
-
-		function showAppModal(appData) {
-			currentSelectedApp = appData;
-			
-			// Update modal content
-			modalAppName.textContent = appData.name;
-			
-			// Handle icon display (image vs text/emoji)
-			if (appData.icon.includes('logo/')) {
-				modalAppIcon.innerHTML = `<img src="${appData.icon}" alt="${appData.name}" style="width: 20px; height: 20px; object-fit: contain;">`;
-			} else {
-				modalAppIcon.textContent = appData.icon;
-			}
-			
-			// Reset loading state
-			resetLoadingState();
-			
-			// Modal is already visible since this page is the modal
-		}
-
-		function handleModalOpen() {
-			if (currentSelectedApp) {
-				// Close the main apps popup immediately
-				try {
-					// Send message to parent popup to close
-					window.parent.postMessage({ type: 'closeAppsPopup' }, '*');
-				} catch (e) {
-					console.log('Error closing popup:', e);
-				}
-				
-				// Enter loading state
-				enterLoadingState();
-				
-				// Hide modal after 5 seconds by closing this window
-				setTimeout(() => {
-					window.close();
-				}, 5000);
-			}
-		}
-
-		function handleModalCancel() {
-			// Close this modal window
-			window.close();
-		}
-
-		function enterLoadingState() {
-			// Hide the buttons
-			const modalButtons = document.querySelector('.modal-buttons');
-			modalButtons.style.display = 'none';
-			
-			// Create and show loading text
-			const loadingText = document.createElement('div');
-			loadingText.className = 'modal-loading-text';
-			loadingText.textContent = 'Loading...';
-			loadingText.id = 'modalLoadingText';
-			
-			// Add loading text to the footer
-			const modalFooter = document.querySelector('.modal-footer');
-			modalFooter.appendChild(loadingText);
-		}
-
-		function resetLoadingState() {
-			// Show the buttons again
-			const modalButtons = document.querySelector('.modal-buttons');
-			if (modalButtons) {
-				modalButtons.style.display = 'flex';
-			}
-			
-			// Remove loading text if it exists
-			const loadingText = document.getElementById('modalLoadingText');
-			if (loadingText) {
-				loadingText.remove();
-			}
-		}
-	</script>
+	<!-- EXTERNAL JAVASCRIPT -->
+	<!-- All modal functionality including:
+	     - Event listeners for buttons and keyboard
+	     - Communication with parent window
+	     - Loading state management
+	     - Modal open/close behavior -->
+	<script src="apps-loading.js"></script>
 </body>
 </html>

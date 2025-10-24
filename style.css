@@ -293,14 +293,15 @@ header {
 }
 
 .command-bubble {
-    background-color: #404040;      /* Light grey background for command bubbles */
-    color: #ffffff;                 /* White text */
-    padding: 4px 12px;              /* Padding inside bubbles */
-    border-radius: 12px;            /* Rounded bubble shape */
-    font-size: 12px;                /* Small font size */
+    background-color: transparent;  /* Remove bubble background */
+    color: #76B900;                 /* NVIDIA green text color */
+    padding: 0;                     /* Remove bubble padding */
+    border-radius: 0;               /* Remove rounded corners */
+    font-size: 11px;                /* Match other command line text size */
     white-space: nowrap;            /* Prevent text wrapping */
     width: fit-content;             /* Size to content */
-    align-self: flex-start;         /* Align bubble to the left */
+    align-self: flex-start;         /* Align text to the left */
+    margin-left: 8px;               /* Match indentation of other command line text */
 }
 
 .function-line {
@@ -329,13 +330,14 @@ header {
 }
 
 .command-bubble {
-    background-color: #404040;      /* Light grey background for command bubbles */
-    color: #ffffff;                 /* White text */
-    padding: 4px 12px;              /* Padding inside bubbles */
-    border-radius: 12px;            /* Rounded bubble shape */
-    font-size: 12px;                /* Small font size */
+    background-color: transparent;  /* Remove bubble background */
+    color: #76B900;                 /* NVIDIA green text color */
+    padding: 0;                     /* Remove bubble padding */
+    border-radius: 0;               /* Remove rounded corners */
+    font-size: 11px;                /* Match other command line text size */
     white-space: nowrap;            /* Prevent text wrapping */
     width: fit-content;             /* Size to content */
+    margin-left: 8px;               /* Match indentation of other command line text */
 }
 
 .command-prompt {
