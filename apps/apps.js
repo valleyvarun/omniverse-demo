@@ -504,48 +504,36 @@ function clearAlphabetHeaders() {
 /* ===================================================
    APP INTERACTION
    =================================================== */
+
+let currentSelectedApp = null;
+
 function handleAppClick(event) {
 	const appItem = event.currentTarget;
 	const appName = appItem.querySelector('.app-name').textContent;
+	const appIcon = appItem.querySelector('.app-icon');
 	
-	console.log(`Launching app: ${appName}`);
+	console.log(`App clicked: ${appName}`);
 	
-	// Add visual feedback
-	appItem.style.transform = 'scale(0.95)';
-	setTimeout(() => {
-		appItem.style.transform = '';
-	}, 150);
+	// Store current selected app
+	currentSelectedApp = {
+		name: appName,
+		icon: appIcon.textContent || appIcon.querySelector('img')?.src || appName.charAt(0).toUpperCase()
+	};
 	
-	// Here you would implement actual app launching logic
-	// For now, just show a message
-	showLaunchMessage(appName);
+	// Open modal in new window
+	openAppModal(currentSelectedApp);
 }
 
-function showLaunchMessage(appName) {
-	// Create temporary message
-	const message = document.createElement('div');
-	message.style.cssText = `
-		position: fixed;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%, -50%);
-		background-color: #2c2c2c;
-		border: 2px solid #76B900;
-		color: #ffffff;
-		padding: 15px 25px;
-		border-radius: 8px;
-		font-size: 14px;
-		z-index: 1000;
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-	`;
-	message.textContent = `Launching ${appName}...`;
-	
-	document.body.appendChild(message);
-	
-	// Remove message after 2 seconds
-	setTimeout(() => {
-		document.body.removeChild(message);
-	}, 2000);
+function openAppModal(appData) {
+	// Send message to parent to show the apps loading modal
+	try {
+		window.top.postMessage({
+			type: 'showAppsModal',
+			appData: appData
+		}, '*');
+	} catch (e) {
+		console.log('Could not send message to parent window:', e);
+	}
 }
 
 /* ===================================================

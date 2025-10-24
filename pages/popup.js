@@ -118,6 +118,13 @@
 				parent.postMessage({ type: 'popup:close' }, '*');
 			} catch (_) {}
 		}
+		
+		// Forward close request from apps iframe to main window
+		if (data.type === 'closeAppsPopup') {
+			try {
+				parent.postMessage({ type: 'popup:close' }, '*');
+			} catch (_) {}
+		}
 	});
 
 	// Close button -> notify parent to close

@@ -824,6 +824,143 @@ body {
     background-clip: padding-box;    /* Prevent background bleeding into border */
 }
 
+/* ===================================================================
+   APPS LOADING MODAL
+   ================================================================= */
+
+.apps-loading-overlay {
+    position: absolute;
+    inset: 0;
+    display: none;                   /* Hidden by default */
+    align-items: center;             /* Center modal vertically */
+    justify-content: center;         /* Center modal horizontally */
+    z-index: 10;                     /* Above other modals */
+    pointer-events: none;            /* Don't block clicks when hidden */
+}
+
+.apps-loading-overlay.show {
+    display: flex;                   /* Show and center */
+    pointer-events: auto;            /* Capture clicks when visible */
+    background: rgba(0,0,0,0.7);     /* Darker backdrop than popup */
+}
+
+.apps-loading-modal {
+    width: 35vw;                     /* Same as original modal */
+    aspect-ratio: 16 / 10;           /* Maintain 16:10 ratio */
+    background: #2c2c2c;             /* Modal background */
+    border: 1px solid #76B900;       /* Green border */
+    border-radius: 8px;              /* Rounded corners */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Shadow */
+    overflow: hidden;                /* Clip content to rounded corners */
+    display: flex;
+    flex-direction: column;
+}
+
+.apps-modal-content {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.apps-modal-body {
+    flex: 1;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    overflow: hidden;
+}
+
+.apps-modal-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+    border-radius: 0;
+}
+
+.apps-modal-footer {
+    border-top: 1px solid #404040;
+    padding: 8px 16px 6px 16px;
+    background-color: #252525;
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 28px;
+}
+
+.apps-modal-app-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.apps-modal-app-icon {
+    font-size: 12px;
+    line-height: 1;
+    margin: 0;
+}
+
+.apps-modal-app-name {
+    font-size: 11px;
+    color: #ffffff;
+    font-weight: normal;
+    margin: 0;
+}
+
+.apps-modal-buttons {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.apps-modal-loading-text {
+    font-size: 11px;
+    color: #76B900;
+    font-weight: normal;
+}
+
+.apps-modal-button {
+    padding: 4px 12px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 60px;
+    height: 22px;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.apps-modal-button.open {
+    background-color: #1a1a1a;
+    border: 1px solid #76B900;
+    color: #76B900;
+}
+
+.apps-modal-button.open:hover {
+    background-color: #333333;
+}
+
+.apps-modal-button.cancel:hover {
+    background-color: rgba(255,255,255,0.06);
+}
+
+.apps-modal-button:focus {
+    outline: 1px solid #76B900;
+    outline-offset: 1px;
+}
+
+.apps-modal-button.open:focus {
+    outline: none;
+}
+
 /* Vertical resize handle between sidebar and content */
 .project-resize-handle {
     width: 6px;                      /* Slightly smaller handle */

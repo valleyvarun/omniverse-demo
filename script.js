@@ -2,6 +2,70 @@
 // OMNIVERSE DEMO APPLICATION JAVASCRIPT
 // =============================================================================
 // This file contains all the interactive functionality for the Omniverse demo
+//
+// =========================
+// 0. TABLE OF CONTENTS:
+// =========================
+// 
+// 1. GLOBAL KEYBOARD CONTROL (Lines ~10-35)
+//    - disableGlobalKeyboard() - Disable global keyboard capture
+//    - enableGlobalKeyboard() - Re-enable global keyboard capture
+//
+// 2. USER ACCOUNT DROPDOWN FUNCTIONALITY (Lines ~35-430)
+//    - toggleDropdown() - Toggle account dropdown visibility
+//    - Document initialization and event listeners
+//    - Menu item click handlers
+//    - Project manager resize handle functionality
+//    - Message event listeners for iframe communication
+//
+// 3. COMMAND LINE FUNCTIONALITY (Lines ~430-1030)
+//    - initializeCommandLine() - Initialize command line interface
+//    - handleInputState() - Handle keyboard input in INPUT state
+//    - handleConfirmationState() - Handle keyboard input in CONFIRMATION state
+//    - executeCommand() - Execute commands and show confirmation
+//    - showFunctionExecution() - Show function execution results
+//    - showCancellation() - Show operation cancellation
+//    - createCommandEntry() - Create new command history entries
+//    - updateCommandEntry() - Update existing command entries
+//    - adjustScrollPosition() - Handle scrolling and positioning
+//    - updateFunctionDisplay() - Update function display content
+//    - generateDummyFunction() - Generate dummy function names
+//
+// 4. HISTORY TOGGLE FUNCTIONALITY (Lines ~1030-1160)
+//    - toggleHistorySize() - Toggle command history display size
+//    - collapseHistory() - Collapse history display completely
+//    - showHistory() - Show history display (restore to default)
+//    - toggleWindowDropdown() - Toggle Window dropdown menu
+//
+// 5. ADD ACCOUNT FLOW FUNCTIONALITY (Lines ~1160-1420)
+//    - startAddAccountFlow() - Start the add account flow
+//    - showEmailPasswordForm() - Show email/password input form
+//    - proceedTo2FA() - Proceed to 2FA verification step
+//    - show2FAForm() - Show 2FA verification form
+//    - setup2FAInputs() - Set up 2FA input behavior
+//    - completeAddAccount() - Complete the add account process
+//    - addEmailToDropdown() - Add new email to dropdown list
+//    - cancelAddAccount() - Cancel add account flow
+//    - resetAddAccountFlow() - Reset add account flow to normal
+//    - resetDropdownToNormal() - Reset dropdown to normal state
+//
+// 6. CHATBOT INPUT FOCUS HELPER (Lines ~1420-1455)
+//    - focusAgentChatInput() - Focus on agent chat input
+//    - blurAgentChatInput() - Blur agent chat input
+//
+// 7. APPS LOADING MODAL FUNCTIONALITY (Lines ~1455-1600)
+//    - showAppsLoadingModal() - Show apps loading modal
+//    - handleAppsModalOpen() - Handle modal open button click
+//    - handleAppsModalCancel() - Handle modal cancel button click
+//    - hideAppsLoadingModal() - Hide apps loading modal
+//    - enterAppsLoadingState() - Enter loading state
+//    - resetAppsLoadingState() - Reset loading state
+//    - handleAppsModalKeyboard() - Handle modal keyboard shortcuts
+
+
+// =============================================================================
+// 1. GLOBAL KEYBOARD CONTROL
+// =============================================================================
 
 // Global state for keyboard capture control
 window.chatbotActive = false;
@@ -31,9 +95,15 @@ function enableGlobalKeyboard() {
     window.chatbotActive = false;
 }
 
-// -----------------------------------------------------------------------------
-// USER ACCOUNT DROPDOWN FUNCTIONALITY
-// -----------------------------------------------------------------------------
+
+
+
+
+
+// =============================================================================
+// 2. USER ACCOUNT DROPDOWN FUNCTIONALITY
+// =============================================================================
+
 
 /**
  * Toggle the visibility of the account dropdown menu
@@ -418,12 +488,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } catch(_) {}
         }
+
+        // Show apps loading modal
+        if (data.type === 'showAppsModal') {
+            try {
+                showAppsLoadingModal(data.appData);
+            } catch(_) {}
+        }
     });
 });
 
-// -----------------------------------------------------------------------------
-// COMMAND LINE FUNCTIONALITY
-// -----------------------------------------------------------------------------
+
+
+
+
+
+// =============================================================================
+// 3. COMMAND LINE FUNCTIONALITY
+// =============================================================================
 
 // State management for command execution flow
 let currentState = 'INPUT'; // 'INPUT', 'CONFIRMATION', 'EXECUTED'
@@ -1023,9 +1105,16 @@ function generateDummyFunction(command) {
     }
 }
 
-// -----------------------------------------------------------------------------
-// HISTORY TOGGLE FUNCTIONALITY
-// -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+// =============================================================================
+// 4. HISTORY TOGGLE FUNCTIONALITY
+// =============================================================================
 
 /**
  * Toggle the size of the command history display
@@ -1153,9 +1242,17 @@ function toggleWindowDropdown() {
     }, 0);
 }
 
-// -----------------------------------------------------------------------------
-// ADD ACCOUNT FLOW FUNCTIONALITY
-// -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+// =============================================================================
+// 5. ADD ACCOUNT FLOW FUNCTIONALITY
+// =============================================================================
+
 
 let addAccountStep = 0; // 0: normal, 1: email/password, 2: 2FA
 let newAccountData = { email: '', password: '' };
@@ -1410,9 +1507,17 @@ function resetDropdownToNormal() {
     });
 }
 
-// -----------------------------------------------------------------------------
-// CHATBOT INPUT FOCUS HELPER
-// -----------------------------------------------------------------------------
+
+
+
+
+
+
+
+// =============================================================================
+// 6. CHATBOT INPUT FOCUS HELPER
+// =============================================================================
+
 function focusAgentChatInput() {
     const iframe = document.getElementById('agentFrame');
     if (!iframe) return false;
@@ -1443,4 +1548,151 @@ function blurAgentChatInput() {
         console.log('Unable to blur agent chat input:', e);
     }
     return false;
+}
+
+
+
+
+
+
+
+
+
+// =============================================================================
+// 7. APPS LOADING MODAL FUNCTIONALITY
+// =============================================================================
+
+let appsCurrentSelectedApp = null;
+
+function showAppsLoadingModal(appData) {
+    appsCurrentSelectedApp = appData;
+    
+    const overlay = document.getElementById('appsLoadingOverlay');
+    const appIcon = document.getElementById('appsModalAppIcon');
+    const appName = document.getElementById('appsModalAppName');
+    const openButton = document.getElementById('appsModalOpenButton');
+    const cancelButton = document.getElementById('appsModalCancelButton');
+    
+    if (!overlay || !appIcon || !appName || !openButton || !cancelButton) {
+        console.error('Apps modal elements not found');
+        return;
+    }
+    
+    // Update modal content
+    appName.textContent = appData.name;
+    
+    // Handle icon display (image vs text/emoji)
+    if (appData.icon && appData.icon.includes('logo/')) {
+        appIcon.innerHTML = `<img src="${appData.icon}" alt="${appData.name}" style="width: 20px; height: 20px; object-fit: contain;">`;
+    } else {
+        appIcon.textContent = appData.icon || appData.name.charAt(0).toUpperCase();
+    }
+    
+    // Reset loading state
+    resetAppsLoadingState();
+    
+    // Show modal
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    
+    // Add event listeners (remove existing ones first)
+    openButton.removeEventListener('click', handleAppsModalOpen);
+    cancelButton.removeEventListener('click', handleAppsModalCancel);
+    openButton.addEventListener('click', handleAppsModalOpen);
+    cancelButton.addEventListener('click', handleAppsModalCancel);
+    
+    // Focus on Open button
+    setTimeout(() => {
+        openButton.focus();
+    }, 100);
+    
+    // Handle keyboard shortcuts
+    document.addEventListener('keydown', handleAppsModalKeyboard);
+}
+
+function handleAppsModalOpen() {
+    if (!appsCurrentSelectedApp) return;
+    
+    // Close the main apps popup first
+    try {
+        const modalOverlay = document.getElementById('contentModalOverlay');
+        if (modalOverlay) {
+            modalOverlay.classList.remove('show');
+            modalOverlay.setAttribute('aria-hidden', 'true');
+        }
+    } catch (e) {
+        console.log('Error closing popup:', e);
+    }
+    
+    // Enter loading state
+    enterAppsLoadingState();
+    
+    // Hide modal after 5 seconds
+    setTimeout(() => {
+        hideAppsLoadingModal();
+    }, 5000);
+}
+
+function handleAppsModalCancel() {
+    hideAppsLoadingModal();
+}
+
+function hideAppsLoadingModal() {
+    const overlay = document.getElementById('appsLoadingOverlay');
+    if (overlay) {
+        overlay.classList.remove('show');
+        overlay.setAttribute('aria-hidden', 'true');
+    }
+    
+    // Remove keyboard listener
+    document.removeEventListener('keydown', handleAppsModalKeyboard);
+    
+    // Reset state
+    appsCurrentSelectedApp = null;
+    
+    // Focus back to command input
+    const commandInput = document.getElementById('commandInput');
+    if (commandInput) {
+        setTimeout(() => { commandInput.focus(); }, 10);
+    }
+}
+
+function enterAppsLoadingState() {
+    const buttonsContainer = document.querySelector('.apps-modal-buttons');
+    const footer = document.querySelector('.apps-modal-footer');
+    
+    if (buttonsContainer && footer) {
+        // Hide buttons
+        buttonsContainer.style.display = 'none';
+        
+        // Add loading text
+        const loadingText = document.createElement('div');
+        loadingText.className = 'apps-modal-loading-text';
+        loadingText.textContent = 'Loading...';
+        loadingText.id = 'appsModalLoadingText';
+        footer.appendChild(loadingText);
+    }
+}
+
+function resetAppsLoadingState() {
+    const buttonsContainer = document.querySelector('.apps-modal-buttons');
+    const loadingText = document.getElementById('appsModalLoadingText');
+    
+    if (buttonsContainer) {
+        buttonsContainer.style.display = 'flex';
+    }
+    
+    if (loadingText) {
+        loadingText.remove();
+    }
+}
+
+function handleAppsModalKeyboard(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        handleAppsModalOpen();
+    } else if (event.key === 'Escape') {
+        event.preventDefault();
+        handleAppsModalCancel();
+    }
 }

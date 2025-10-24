@@ -213,6 +213,27 @@
                         <iframe id="popupFrame" src="pages/popup.html" title="Popup" frameborder="0" style="width:100%;height:100%;display:block;background:transparent;border:none;"></iframe>
                     </div>
                 </div>
+
+                <!-- Apps loading modal overlay -->
+                <div id="appsLoadingOverlay" class="apps-loading-overlay" aria-hidden="true">
+                    <div class="apps-loading-modal" role="dialog" aria-modal="true" aria-label="App Loading Modal">
+                        <div class="apps-modal-content">
+                            <div class="apps-modal-body">
+                                <img src="logo/dummy-cover1.png" alt="App Preview" class="apps-modal-preview-image" id="appsModalPreviewImage">
+                            </div>
+                            <div class="apps-modal-footer">
+                                <div class="apps-modal-app-info">
+                                    <div class="apps-modal-app-icon" id="appsModalAppIcon">🎨</div>
+                                    <div class="apps-modal-app-name" id="appsModalAppName">App Name</div>
+                                </div>
+                                <div class="apps-modal-buttons">
+                                    <button class="apps-modal-button open" id="appsModalOpenButton">Open</button>
+                                    <button class="apps-modal-button cancel" id="appsModalCancelButton">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
         </main>
         </div>
