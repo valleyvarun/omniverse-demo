@@ -878,6 +878,15 @@ body {
 /* Home tab special styling - no icon needed */
 .content-tab.home-tab .tab-icon { display: none; }
 
+/* Make Home tab size to its text only (no stretching) */
+.content-tab.home-tab {
+    flex: 0 0 auto;          /* Do not grow or shrink; width based on content */
+    min-width: 0;            /* Allow narrower than global min-width */
+}
+.content-tab.home-tab .tab-text {
+    flex: 0 0 auto;          /* Prevent the text from expanding inside the tab */
+}
+
 /* Tabs navigation buttons */
 .tabs-nav-btn {
     display: none;                   /* Shown via JS when needed */
