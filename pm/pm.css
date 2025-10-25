@@ -22,7 +22,7 @@ body {
 .pm-header {
     background: var(--pm-surface);
     border-bottom: 1px solid var(--pm-border);
-    height: 30px;               /* Match reduced agent header height */
+    height: 27px;               /* Adjusted from 25px to 27px */
     display: flex;              /* Layout for title and button */
     align-items: center;        /* Center content vertically */
     justify-content: space-between; /* Space between title and collapse button */

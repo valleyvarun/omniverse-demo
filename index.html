@@ -3,11 +3,26 @@
 <!-- ============================================================================
      OMNIVERSE DEMO APPLICATION - HTML STRUCTURE
      ============================================================================
-     This HTML file contains the complete structure for the Omniverse demo app.
+     
+     CONTENTS:
+     1. Document Head
+     2. Top Black Bar
+     3. Main Header Bar
+     4. Navigation Menu Bar
+     5. Main Layout Container
+     6. Workspace Container
+     7. Function Display Header
+     8. Command Line Interface
+     9. Main Content Area
+     10. Footer Bar
+     11. JavaScript Inclusion
+     
      ============================================================================ -->
 
 <head>
-    <!-- Document metadata and external resources -->
+    <!-- ===========================================================================
+         1. DOCUMENT HEAD
+         =========================================================================== -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse Demo</title>
@@ -15,20 +30,16 @@
 </head>
 
 <body>
-    <!-- ========================================================================
-         TOP BLACK BAR (3px height)
-         ======================================================================== -->
+    <!-- ===========================================================================
+         2. TOP BLACK BAR
+         =========================================================================== -->
     <div class="black">
         <!-- Empty div - styling handled in CSS -->
     </div>
 
-    <!-- ========================================================================
-         MAIN HEADER BAR (35px height)
-         ========================================================================
-         Primary header containing logo, app name, user account, and window controls.
-         Fixed positioning ensures it stays visible when scrolling.
-         Contains three main sections: left (branding), center (user), right (controls)
-         ======================================================================== -->
+    <!-- ===========================================================================
+         3. MAIN HEADER BAR
+         =========================================================================== -->
     <header>
         <!-- LEFT SECTION: Logo and Application Name -->
         <div class="header-left">
@@ -85,13 +96,9 @@
         </div>
     </header>
     
-    <!-- ========================================================================
-         NAVIGATION MENU BAR (30px height)
-         ========================================================================
-         Secondary header with main navigation options.
-         Fixed positioning below the main header.
-         Contains horizontal menu items for different application sections.
-         ======================================================================== -->
+    <!-- ===========================================================================
+         4. NAVIGATION MENU BAR
+         =========================================================================== -->
     <nav class="menu-bar">
         <ul class="menu-list">
             <li><a href="#" class="menu-item">Home</a></li>
@@ -109,26 +116,17 @@
         </ul>
     </nav>
 
-    <!-- ========================================================================
-         MAIN LAYOUT CONTAINER
-         ========================================================================
-         Container that holds workspace, resize handle, and chatbot side by side
-         ======================================================================== -->
+    <!-- ===========================================================================
+         5. MAIN LAYOUT CONTAINER
+         =========================================================================== -->
     <div class="main-layout">
-        <!-- ====================================================================
-             MAIN WORKSPACE CONTAINER
-             ====================================================================
-             Groups the command history, command line, and main content together
-             ==================================================================== -->
+        <!-- ===========================================================================
+             6. WORKSPACE CONTAINER
+             =========================================================================== -->
         <div class="workspace-container">
-        <!-- ====================================================================
-             FUNCTION DISPLAY HEADER (40px height)
-             ====================================================================
-             Shows executed functions as light grey bubbles.
-             Fixed positioning below the menu bar.
-             Automatically populated when commands are executed via JavaScript.
-             Supports horizontal scrolling for multiple function bubbles.
-             ==================================================================== -->
+        <!-- ===========================================================================
+             7. FUNCTION DISPLAY HEADER
+             =========================================================================== -->
         <div class="function-display">
             <button class="history-toggle-btn" id="historyToggleBtn" onclick="toggleHistorySize()" title="Expand/Collapse History">
                 <span>▼</span>
@@ -142,14 +140,9 @@
             </div>
         </div>
 
-        <!-- ====================================================================
-             COMMAND LINE INTERFACE (35px height)
-             ====================================================================
-             Interactive command input area with black background.
-             Fixed positioning below the function display.
-             Captures global keyboard input for seamless command entry.
-             Commands are executed on Enter key press.
-             ==================================================================== -->
+        <!-- ===========================================================================
+             8. COMMAND LINE INTERFACE
+             =========================================================================== -->
         <div class="command-line-container">
             <!-- Show history button (appears when history is collapsed) -->
             <button class="show-history-btn" id="showHistoryBtn" onclick="showHistory()" title="Show History" style="display: none;">
@@ -167,13 +160,9 @@
                    autocomplete="off">
         </div>
 
-        <!-- ====================================================================
-             MAIN CONTENT AREA
-             ====================================================================
-             The remaining space below all fixed headers.
-             Content will be added here for the main application interface.
-             Body has padding-top to account for all fixed elements above.
-             ==================================================================== -->
+        <!-- ===========================================================================
+             9. MAIN CONTENT AREA
+             =========================================================================== -->
         <main class="main-content">
             <!-- Left Sidebar: Project Manager -->
             <aside class="project-manager-container" aria-label="Project Manager">
@@ -197,6 +186,20 @@
 
             <!-- Right Content Pane -->
             <section class="content-pane">
+                <!-- Tabs Header -->
+                <div class="content-tabs-header">
+                    <button class="tabs-nav-btn tabs-nav-left" aria-label="Scroll left" title="Scroll left" style="display:none">&#8249;</button>
+                    <div class="content-tabs-scroll">
+                        <div class="content-tabs-list">
+                            <!-- Home Tab (Default) -->
+                            <div class="content-tab active home-tab">
+                                <div class="tab-text">Home</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="tabs-nav-btn tabs-nav-right" aria-label="Scroll right" title="Scroll right" style="display:none">&#8250;</button>
+                </div>
+                
                 <!-- Iframe for loading external HTML content -->
                 <iframe id="contentFrame" 
                         src="pages/home.html" 
@@ -257,26 +260,16 @@
         </div>
     </div>
 
-    <!-- ========================================================================
-         FOOTER BAR (35px height)
-         ========================================================================
-         Footer bar at the bottom of the page with same styling as main header.
-         Fixed positioning ensures it stays at bottom regardless of screen size.
-         Same color (#1e1e1e) and height (35px) as the command line interface.
-         ======================================================================== -->
+    <!-- ===========================================================================
+         10. FOOTER BAR
+         =========================================================================== -->
     <footer class="footer-bar">
         <!-- Footer content can be added here -->
     </footer>
 
-    <!-- ========================================================================
-         JAVASCRIPT INCLUSION
-         ========================================================================
-         External JavaScript file containing all interactive functionality:
-         - User account dropdown behavior
-         - Command line input handling
-         - Function bubble management
-         - Global keyboard event listeners
-         ======================================================================== -->
+    <!-- ===========================================================================
+         11. JAVASCRIPT INCLUSION
+         =========================================================================== -->
     <script src="script.js"></script>
     <script src="agent/agent-resize.js"></script>
 </body>

@@ -1,0 +1,18 @@
+/* Software page styles */
+
+/* Global reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling with black background */
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}

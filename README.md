@@ -1,5 +1,23 @@
 # omniverse-demo
 
+## Built-in commands
+
+- "clear" — Clear the command line history
+- "open folders" — Open the Folders popup
+- "open apps" — Open the Apps popup
+- "open store" — Open the Store popup
+- "open autocad"
+- "open rhino8"
+- "open sketchup"
+- "open revit"
+- "open d5render"
+- "open photoshop"
+- "open indesign" 
+- "open chatgpt" 
+- "open midjourney" 
+- "open blender" 
+- "open vscode" 
+
 ## UI Background Colors
 
 Below are the key background colors used across the UI. Each row lists: 1) Name, 2) Class/selector, 3) Color value, 4) Where the style is defined.

@@ -191,6 +191,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize command line functionality
     initializeCommandLine();
+    
+    // Initialize tab functionality
+    initializeTabs();
 
     // Chatbot focus routing: clicking inside chatbot panel should focus its input
     const chatbotContainer = document.getElementById('chatbotContainer');
@@ -883,8 +886,124 @@ function executeCommand(command) {
             'Yes: <enter>    No: <esc>'
         ]);
         pendingFunction = 'clear_history()';
-    } else {
-        // Regular command handling
+        currentState = 'CONFIRMATION';
+    } 
+    // Immediate execution commands (no confirmation needed)
+    else if (command.toLowerCase() === 'open folders') {
+        // Execute immediately - open the folders popup
+        window.postMessage({ type: 'popup:open', title: 'Folders' }, '*');
+        
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            'Folders popup opened'
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    else if (command.toLowerCase() === 'open apps') {
+        // Execute immediately - open the apps popup
+        window.postMessage({ type: 'popup:open', title: 'Apps' }, '*');
+        
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            'Apps popup opened'
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    else if (command.toLowerCase() === 'open store') {
+        // Execute immediately - open the store popup
+        window.postMessage({ type: 'popup:open', title: 'Store' }, '*');
+        
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            'Store popup opened'
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    // Generic: open {favorite software name}
+    else if (/^open\s+.+/i.test(command)) {
+        const namePart = command.replace(/^open\s+/i, '').trim();
+        const appData = resolveFavoriteApp(namePart);
+        if (appData) {
+            try {
+                showAppsLoadingModal(appData);
+                handleAppsModalOpen();
+            } catch (e) {
+                console.warn('Failed to auto-open app via modal flow, creating tab directly:', e);
+                try { createAppTab(appData); } catch (_) {}
+            }
+
+            currentCommandEntry = createCommandEntry(command, [
+                `${appData.name} opening...`
+            ]);
+            currentState = 'INPUT';
+            currentCommandEntry = null;
+            pendingCommand = '';
+            pendingFunction = '';
+        } else {
+            // Not a known favorite - fall through to regular confirmation flow
+            pendingFunction = generateDummyFunction(command);
+            currentCommandEntry = createCommandEntry(command, [
+                `Would you like to perform ${command}?`,
+                'Yes: <enter>    No: <esc>'
+            ]);
+            currentState = 'CONFIRMATION';
+        }
+    }
+    // Immediate app open commands: open blender/sketchup/photoshop/rhino8
+    else if ((() => {
+        const lc = command.toLowerCase();
+        return lc === 'open blender' || lc === 'open sketchup' || lc === 'open photoshop' || lc === 'open rhino8';
+    })()) {
+        const lc = command.toLowerCase();
+        let appData = null;
+        if (lc === 'open blender') {
+            appData = { name: 'Blender', icon: 'logo/blender-logo.png' };
+        } else if (lc === 'open sketchup') {
+            appData = { name: 'SketchUp', icon: 'logo/sketchup-logo.png' };
+        } else if (lc === 'open photoshop') {
+            appData = { name: 'Photoshop', icon: 'logo/photoshop-logo.png' };
+        } else if (lc === 'open rhino8') {
+            appData = { name: 'Rhino 8', icon: 'logo/rhino8-logo.png' };
+        }
+
+        try {
+            // Show loading modal (auto-hides after 5s) and immediately proceed to open
+            showAppsLoadingModal(appData);
+            // Immediately simulate clicking Open
+            handleAppsModalOpen();
+        } catch (e) {
+            console.warn('Failed to auto-open app via modal flow, creating tab directly:', e);
+            try { createAppTab(appData); } catch (_) {}
+        }
+
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            `${appData.name} opening...`
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    else {
+        // Regular command handling with confirmation
         pendingFunction = generateDummyFunction(command);
         
         // Create new command entry with command bubble and store reference
@@ -892,9 +1011,8 @@ function executeCommand(command) {
             `Would you like to perform ${command}?`,
             'Yes: <enter>    No: <esc>'
         ]);
+        currentState = 'CONFIRMATION';
     }
-    
-    currentState = 'CONFIRMATION';
 }
 
 /**
@@ -920,7 +1038,8 @@ function showFunctionExecution() {
         
         // Ensure scroll position is properly adjusted after clearing
         adjustScrollPosition();
-    } else {
+    }
+    else {
         // Regular command execution result
         updateCommandEntry(currentCommandEntry, [
             `${pendingCommand}`,
@@ -1563,6 +1682,7 @@ function blurAgentChatInput() {
 // =============================================================================
 
 let appsCurrentSelectedApp = null;
+let appsLoadingTimerId = null; // ensures modal auto-hides after 5s regardless of clicks
 
 function showAppsLoadingModal(appData) {
     appsCurrentSelectedApp = appData;
@@ -1605,7 +1725,13 @@ function showAppsLoadingModal(appData) {
     setTimeout(() => {
         openButton.focus();
     }, 100);
-    
+
+    // Start or restart the auto-hide timer (max lifetime 5s)
+    try { if (appsLoadingTimerId) { clearTimeout(appsLoadingTimerId); } } catch(_) {}
+    appsLoadingTimerId = setTimeout(() => {
+        hideAppsLoadingModal();
+    }, 5000);
+
     // Handle keyboard shortcuts
     document.addEventListener('keydown', handleAppsModalKeyboard);
 }
@@ -1626,11 +1752,417 @@ function handleAppsModalOpen() {
     
     // Enter loading state
     enterAppsLoadingState();
+
+    // Create a new tab for this app
+    createAppTab(appsCurrentSelectedApp);
+
+    // Do NOT start a new timer here; respect the original 5s lifetime started on show
+}
+
+/**
+ * Initialize tab functionality for existing tabs
+ */
+function initializeTabs() {
+    // Get all existing tabs (including Home tab)
+    const allTabs = document.querySelectorAll('.content-tabs-list .content-tab, .content-tab.home-tab');
+
+    // Add click event listeners to all tabs
+    allTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            setActiveTab(this);
+        });
+    });
+
+    // Set up nav buttons
+    const header = document.querySelector('.content-tabs-header');
+    const scrollWrap = document.querySelector('.content-tabs-scroll');
+    const tabsList = document.querySelector('.content-tabs-list');
+    const leftBtn = document.querySelector('.tabs-nav-left');
+    const rightBtn = document.querySelector('.tabs-nav-right');
+
+    const updateArrowState = () => {
+        if (!scrollWrap || !tabsList || !leftBtn || !rightBtn) return;
+        const maxScroll = Math.max(0, tabsList.scrollWidth - scrollWrap.clientWidth);
+        if (maxScroll <= 0) {
+            // No overflow: hide both
+            leftBtn.style.display = 'none';
+            rightBtn.style.display = 'none';
+            return;
+        }
+        // At start: hide left, else show
+        if (scrollWrap.scrollLeft <= 0) {
+            leftBtn.style.display = 'none';
+        } else {
+            leftBtn.style.display = 'inline-flex';
+        }
+        // At end: hide right, else show
+        if (scrollWrap.scrollLeft >= maxScroll - 1) {
+            rightBtn.style.display = 'none';
+        } else {
+            rightBtn.style.display = 'inline-flex';
+        }
+    };
+
+    if (leftBtn && rightBtn && tabsList && scrollWrap) {
+        leftBtn.addEventListener('click', () => {
+            const delta = Math.max(80, Math.floor(scrollWrap.clientWidth * 0.8));
+            scrollWrap.scrollBy({ left: -delta, behavior: 'smooth' });
+            setTimeout(updateArrowState, 200);
+        });
+        rightBtn.addEventListener('click', () => {
+            const delta = Math.max(80, Math.floor(scrollWrap.clientWidth * 0.8));
+            scrollWrap.scrollBy({ left: delta, behavior: 'smooth' });
+            setTimeout(updateArrowState, 200);
+        });
+        scrollWrap.addEventListener('scroll', updateArrowState, { passive: true });
+    }
+
+    // Initial layout check
+    updateTabsLayout();
+
+    // Recompute on window resize
+    window.addEventListener('resize', updateTabsLayout);
+}
+
+/**
+ * Create a new tab for an opened app
+ */
+function createAppTab(appData) {
+    if (!appData) return;
     
-    // Hide modal after 5 seconds
-    setTimeout(() => {
-        hideAppsLoadingModal();
-    }, 5000);
+    // Get the tabs list container
+    const tabsList = document.querySelector('.content-tabs-list');
+    if (!tabsList) return;
+    
+    // Count existing tabs for this app to determine instance number
+    const existingTabs = tabsList.querySelectorAll(`[data-app-name="${appData.name}"]`);
+    const instanceCount = existingTabs.length;
+    
+    // Determine the display name for the new tab (apply short aliases)
+    const shortNameMap = {
+        'visual studio code': 'VS Code'
+    };
+    const baseName = shortNameMap[appData.name?.toLowerCase?.()] || appData.name;
+    let instanceSuffix = '';
+    if (instanceCount > 0) {
+        // If there are existing tabs for this app, add instance number
+        instanceSuffix = ` #${instanceCount + 1}`;
+    }
+    const displayName = `${baseName}${instanceSuffix}`;
+    
+    // Deactivate all current tabs
+    const allTabs = tabsList.querySelectorAll('.content-tab');
+    allTabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Create new tab element
+    const newTab = document.createElement('div');
+    newTab.className = 'content-tab active';
+    newTab.setAttribute('data-app-name', appData.name);
+    newTab.setAttribute('data-app-icon', appData.icon);
+    newTab.setAttribute('data-instance-number', instanceCount + 1);
+    
+    // Create tab icon container
+    const tabIcon = document.createElement('div');
+    tabIcon.className = 'tab-icon';
+    
+    // Set the icon content based on app data
+    const iconContent = getTabIcon(appData.name, appData.icon);
+    console.log('Creating tab for:', appData.name, 'with icon:', iconContent); // Debug log
+
+    // Decide if this is an image path/URL
+    const isImageUrl = (val) => {
+        if (!val || typeof val !== 'string') return false;
+        const v = val.trim();
+        return (
+            v.startsWith('http://') ||
+            v.startsWith('https://') ||
+            v.startsWith('data:image') ||
+            v.startsWith('logo/') ||
+            v.startsWith('../logo/') ||
+            /\.(png|jpe?g|gif|svg)$/i.test(v)
+        );
+    };
+
+    if (isImageUrl(iconContent)) {
+        // Create image element for logo files or absolute URLs
+        const iconImg = document.createElement('img');
+        let src = iconContent;
+        // Normalize relative paths: index.html lives at project root
+        if (src.startsWith('../logo/')) src = src.replace('../', '');
+        iconImg.src = src;
+        iconImg.alt = appData.name + ' logo';
+        iconImg.title = appData.name;
+        iconImg.style.width = '100%';
+        iconImg.style.height = '100%';
+        iconImg.style.objectFit = 'contain';
+        console.log('Loading image from:', iconImg.src); // Debug log
+
+        // Add error handling
+        iconImg.onerror = function() {
+            console.error('Failed to load image:', iconImg.src);
+            // Fallback to text icon
+            tabIcon.innerHTML = '';
+            tabIcon.textContent = appData.name.charAt(0).toUpperCase();
+            tabIcon.style.fontSize = '11px';
+            tabIcon.style.fontWeight = 'bold';
+        };
+
+        iconImg.onload = function() {
+            console.log('Successfully loaded image:', iconImg.src);
+        };
+
+        tabIcon.appendChild(iconImg);
+    } else {
+        // Use text/emoji icon
+        tabIcon.textContent = iconContent;
+        tabIcon.style.fontSize = '11px';
+        console.log('Using text/emoji icon:', iconContent); // Debug log
+    }
+    
+    // Create tab text container
+    const tabText = document.createElement('div');
+    tabText.className = 'tab-text';
+    tabText.textContent = displayName;
+    
+    
+    // Add click handler for tab switching
+    newTab.addEventListener('click', function() {
+        setActiveTab(this);
+    });
+    
+    // Add close button to tab
+    const closeButton = document.createElement('span');
+    closeButton.className = 'tab-close-btn';
+    closeButton.innerHTML = '×';
+    closeButton.title = 'Close tab';
+    closeButton.addEventListener('click', function(e) {
+        e.stopPropagation(); // Prevent tab activation
+        closeAppTab(newTab);
+    });
+    
+    // Assemble tab elements
+    newTab.appendChild(tabIcon);
+    newTab.appendChild(tabText);
+    newTab.appendChild(closeButton);
+    
+    // Insert the new tab after the Home tab
+    const homeTab = tabsList.querySelector('.content-tab.home-tab');
+    if (homeTab && homeTab.nextSibling) {
+        tabsList.insertBefore(newTab, homeTab.nextSibling);
+    } else {
+        tabsList.appendChild(newTab);
+    }
+    
+    // Recompute layout and arrows
+    updateTabsLayout();
+    
+    // Load software.html since this is an app tab and it's now active
+    const contentFrame = document.getElementById('contentFrame');
+    if (contentFrame) {
+        contentFrame.src = 'software/software.html';
+    }
+}
+
+/**
+ * Get the appropriate icon for a tab based on app name and icon data
+ */
+function getTabIcon(appName, appIcon) {
+    console.log('getTabIcon called with:', { appName, appIcon }); // Debug log
+
+    // If apps iframe provided an absolute URL (e.g., http://.../logo/xxx.png) or data URI, use it directly
+    if (appIcon && typeof appIcon === 'string') {
+        const v = appIcon.trim();
+        if (
+            v.startsWith('http://') ||
+            v.startsWith('https://') ||
+            v.startsWith('data:image') ||
+            v.includes('/logo/') ||
+            /\.(png|jpe?g|gif|svg)$/i.test(v)
+        ) {
+            console.log('Using provided icon URL:', v); // Debug log
+            return v;
+        }
+        // If appIcon is already a relative logo path, use it
+        if (v.startsWith('logo/') || v.startsWith('../logo/')) {
+            console.log('Using provided logo path:', v); // Debug log
+            return v;
+        }
+    }
+    
+    // Map specific app names to logo images
+    const logoMap = {
+        'AutoCAD': 'logo/autocad-logo.png',
+        'Revit': 'logo/revit-logo.png',
+        'SketchUp': 'logo/sketchup-logo.png',
+        '3ds Max': 'logo/3dsmax-logo.png',
+        'Photoshop': 'logo/photoshop-logo.png',
+        'Rhino 8': 'logo/rhino8-logo.png',
+        'Blender': 'logo/blender-logo.png',
+        'D5 Render': 'logo/D5Render-logo.png',
+        'Midjourney': 'logo/midjourney-logo.png',
+        'ChatGPT': 'logo/chatgpt-logo.png',
+        'InDesign': 'logo/indesign-logo.png',
+        'Visual Studio Code': 'logo/vscode-logo.png',
+        'VS Code': 'logo/vscode-logo.png'
+    };
+    
+    // Check if we have a specific logo for this app
+    if (logoMap[appName]) {
+        console.log('Found logo mapping for', appName, ':', logoMap[appName]); // Debug log
+        return logoMap[appName];
+    }
+    
+    // If appIcon is provided and is not a path, use it as emoji/text
+    if (appIcon && !appIcon.includes('/')) {
+        return appIcon;
+    }
+    
+    // Default emoji icons based on app name patterns
+    const emojiMap = {
+        'photoshop': '🎨',
+        'illustrator': '🖌️',
+        'after effects': '🎞️',
+        'premiere': '🎬',
+        'maya': '🎭',
+        'unity': '🎮',
+        'unreal': '🎮',
+        'word': '📝',
+        'excel': '📊',
+        'powerpoint': '📽️',
+        'autocad': '📐',
+        'revit': '🏗️',
+        'sketchup': '🏠',
+        'blender': '🔮',
+        'spotify': '🎵',
+        'netflix': '📺',
+        'steam': '🎮',
+        'discord': '📻'
+    };
+    
+    // Try to find emoji based on app name
+    const lowerAppName = appName.toLowerCase();
+    for (const [key, emoji] of Object.entries(emojiMap)) {
+        if (lowerAppName.includes(key)) {
+            return emoji;
+        }
+    }
+    
+    // Fall back to first letter of app name
+    return appName.charAt(0).toUpperCase();
+}
+
+/**
+ * Check if tabs are overflowing and enable compact mode if needed
+ */
+function updateTabsLayout() {
+    const header = document.querySelector('.content-tabs-header');
+    const scrollWrap = document.querySelector('.content-tabs-scroll');
+    const tabsList = document.querySelector('.content-tabs-list');
+    const leftBtn = document.querySelector('.tabs-nav-left');
+    const rightBtn = document.querySelector('.tabs-nav-right');
+    if (!header || !scrollWrap || !tabsList || !leftBtn || !rightBtn) return;
+
+    // Measure natural content width by temporarily disabling shrink
+    const prevListWidth = tabsList.style.width;
+    const prevTabFlex = [];
+    const tabs = Array.from(tabsList.querySelectorAll('.content-tab'));
+    tabs.forEach((t, i) => {
+        prevTabFlex[i] = t.style.flex;
+        t.style.flex = '0 0 auto';
+    });
+    tabsList.style.width = 'auto';
+    const naturalWidth = tabsList.scrollWidth; // intrinsic total width
+    const visibleWidth = scrollWrap.clientWidth;
+    // Restore shrink settings for normal mode
+    tabsList.style.width = prevListWidth || '';
+    tabs.forEach((t, i) => { t.style.flex = prevTabFlex[i] || ''; });
+
+    // Determine modes
+    const enableScrollMode = naturalWidth > visibleWidth; // show arrows as soon as content exceeds bar
+
+    if (enableScrollMode) {
+        // In scroll mode, tabs do not shrink; list is natural width
+        header.classList.add('tabs-scroll-mode');
+        // Make them visible first; update will hide as needed
+        leftBtn.style.display = 'inline-flex';
+        rightBtn.style.display = 'inline-flex';
+        // Update arrow visibility state
+        const updateArrowState = () => {
+            const maxScroll = Math.max(0, tabsList.scrollWidth - scrollWrap.clientWidth);
+            if (maxScroll <= 0) {
+                leftBtn.style.display = 'none';
+                rightBtn.style.display = 'none';
+                return;
+            }
+            if (scrollWrap.scrollLeft <= 0) {
+                leftBtn.style.display = 'none';
+            } else {
+                leftBtn.style.display = 'inline-flex';
+            }
+            if (scrollWrap.scrollLeft >= maxScroll - 1) {
+                rightBtn.style.display = 'none';
+            } else {
+                rightBtn.style.display = 'inline-flex';
+            }
+        };
+        // Slight delay to let layout settle, then update
+        setTimeout(updateArrowState, 0);
+    } else {
+        // Non-scroll mode: tabs shrink to fit; hide arrows
+        header.classList.remove('tabs-scroll-mode');
+        leftBtn.style.display = 'none';
+        rightBtn.style.display = 'none';
+        // Ensure list uses width: 100% to enforce shrinking
+        tabsList.style.width = '100%';
+    }
+}
+
+/**
+ * Set the active tab
+ */
+function setActiveTab(tabElement) {
+    // Remove active class from all tabs
+    const allTabs = document.querySelectorAll('.content-tab');
+    allTabs.forEach(tab => tab.classList.remove('active'));
+    
+    // Add active class to clicked tab
+    tabElement.classList.add('active');
+    
+    // Get the content iframe
+    const contentFrame = document.getElementById('contentFrame');
+    if (!contentFrame) return;
+    
+    // Switch content based on tab type
+    const tabText = tabElement.textContent.trim();
+    const isHomeTab = tabText === 'Home';
+    
+    if (isHomeTab) {
+        // Load home.html for Home tab
+        contentFrame.src = 'pages/home.html';
+    } else {
+        // Load software.html for app tabs
+        contentFrame.src = 'software/software.html';
+    }
+}
+
+/**
+ * Close an app tab
+ */
+function closeAppTab(tabElement) {
+    const isActive = tabElement.classList.contains('active');
+    
+    // Remove the tab
+    tabElement.remove();
+    // Recompute layout after removing tab
+    updateTabsLayout();
+    
+    // If this was the active tab, activate the Home tab
+    if (isActive) {
+        const homeTab = document.querySelector('.content-tab'); // First tab is Home
+        if (homeTab) {
+            setActiveTab(homeTab);
+        }
+    }
 }
 
 function handleAppsModalCancel() {
@@ -1643,7 +2175,12 @@ function hideAppsLoadingModal() {
         overlay.classList.remove('show');
         overlay.setAttribute('aria-hidden', 'true');
     }
-    
+    // Clear auto-hide timer if any
+    if (appsLoadingTimerId) {
+        try { clearTimeout(appsLoadingTimerId); } catch(_) {}
+        appsLoadingTimerId = null;
+    }
+
     // Remove keyboard listener
     document.removeEventListener('keydown', handleAppsModalKeyboard);
     
@@ -1695,4 +2232,44 @@ function handleAppsModalKeyboard(event) {
         event.preventDefault();
         handleAppsModalCancel();
     }
+}
+
+/**
+ * Resolve a user-entered name to a favorite app with icon
+ * @param {string} rawName
+ * @returns {{name:string, icon:string}|null}
+ */
+function resolveFavoriteApp(rawName) {
+    if (!rawName) return null;
+    const n = rawName.trim().toLowerCase();
+
+    // Canonical names set from favorites section
+    const canonical = {
+        'autocad': { name: 'AutoCAD', icon: 'logo/autocad-logo.png' },
+        'rhino 8': { name: 'Rhino 8', icon: 'logo/rhino8-logo.png' },
+        'rhino8': { name: 'Rhino 8', icon: 'logo/rhino8-logo.png' },
+        'sketchup': { name: 'SketchUp', icon: 'logo/sketchup-logo.png' },
+        'revit': { name: 'Revit', icon: 'logo/revit-logo.png' },
+        'd5 render': { name: 'D5 Render', icon: 'logo/D5Render-logo.png' },
+        'd5render': { name: 'D5 Render', icon: 'logo/D5Render-logo.png' },
+        'photoshop': { name: 'Photoshop', icon: 'logo/photoshop-logo.png' },
+        'indesign': { name: 'InDesign', icon: 'logo/indesign-logo.png' },
+        'chatgpt': { name: 'ChatGPT', icon: 'logo/chatgpt-logo.png' },
+        'midjourney': { name: 'Midjourney', icon: 'logo/midjourney-logo.png' },
+        'blender': { name: 'Blender', icon: 'logo/blender-logo.png' },
+        'visual studio code': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' },
+        'vs code': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' },
+        'vscode': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' }
+    };
+
+    if (canonical[n]) return canonical[n];
+
+    // Fuzzy: try to match by stripping spaces and punctuation
+    const deSlug = (s) => s.replace(/[^a-z0-9]/g, '');
+    const key = deSlug(n);
+    const keys = Object.keys(canonical);
+    for (const k of keys) {
+        if (deSlug(k) === key) return canonical[k];
+    }
+    return null;
 }
