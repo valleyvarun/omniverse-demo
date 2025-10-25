@@ -113,7 +113,7 @@ header {
     top: 38px;                       /* Position below main header (3px black + 35px header) */
     left: 0;                         /* Position at very left of viewport */
     width: 100%;                     /* Span the full width of the browser window */
-    height: 30px;                    /* Menu bar height */
+    height: 27px;                    /* Menu bar height */
     z-index: 999;                    /* Lower than main header but above content */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); /* Subtle shadow for separation */
 }
@@ -132,9 +132,10 @@ header {
 }
 
 .menu-item {
+    font-weight: lighter;
     color: #ffffff;                  /* White text color */
     text-decoration: none;           /* Remove underline from links */
-    padding: 0 15px;                 /* Horizontal padding for clickable area */
+    padding: 3px 15px 0 15px;                 /* Horizontal padding for clickable area */
     font-size: 12px;                 /* Small font size for menu items */
     height: 100%;                    /* Full height for larger click area */
     display: flex;                   /* Flexbox for centering text */
@@ -1380,7 +1381,7 @@ body {
    CHATBOT CONTAINER
    ----------------------------------------------------------------------------- */
 .chatbot-container {
-    width: 25vw;                     /* Initial width set to 38% of viewport width */
+    width: 18vw;                     /* Initial width set to 20% of viewport width */
     background-color: green;         /* Green background for visibility */
     border-left: 2px solid #333;    /* Border to separate from workspace */
     flex-shrink: 0;                  /* Don't shrink */

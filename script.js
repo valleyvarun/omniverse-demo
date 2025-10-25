@@ -456,6 +456,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Force-stop agent drag if active (function from agent-resize.js)
             try { if (typeof forceStopResize === 'function') forceStopResize(); } catch(_) {}
             document.body.classList.add('agent-collapsed');
+            // After collapsing the agent, route typing back to the command line automatically
+            try {
+                blurAgentChatInput();
+                enableGlobalKeyboard();
+                window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                const commandInput = document.getElementById('commandInput');
+                if (commandInput) {
+                    setTimeout(() => { commandInput.focus(); }, 10);
+                }
+            } catch(_) {}
         }
 
         // Open popup on explicit request from an iframe (e.g., PM 'Open Project Folder')
@@ -926,6 +936,63 @@ function executeCommand(command) {
         // Create command entry with immediate result
         currentCommandEntry = createCommandEntry(command, [
             'Store popup opened'
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    else if (command.toLowerCase() === 'open agent') {
+        // Open the Agent panel if collapsed; otherwise leave as-is
+        try {
+            const body = document.body;
+            if (body.classList.contains('agent-collapsed')) {
+                const btn = document.getElementById('reopenAgentBtn');
+                if (btn) {
+                    btn.click();
+                } else {
+                    body.classList.remove('agent-collapsed');
+                }
+            }
+        } catch (e) {
+            console.warn('open agent: failed to toggle agent state', e);
+        }
+
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            'Agent opened'
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
+    else if (command.toLowerCase() === 'open explorer') {
+        // Open the Explorer sidebar if collapsed; otherwise leave as-is
+        try {
+            const body = document.body;
+            if (body.classList.contains('explorer-collapsed')) {
+                // Prefer triggering the existing reopen button logic to restore width/state
+                const btn = document.getElementById('reopenExplorerBtn');
+                if (btn) {
+                    // Ensure any stale drag state is cleared
+                    try { window.__pmEndExplorerDrag && window.__pmEndExplorerDrag(); } catch(_) {}
+                    btn.click();
+                } else {
+                    body.classList.remove('explorer-collapsed');
+                }
+            }
+        } catch (e) {
+            console.warn('open explorer: failed to toggle explorer state', e);
+        }
+
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            'Explorer opened'
         ]);
         
         // Reset state immediately since no confirmation needed
