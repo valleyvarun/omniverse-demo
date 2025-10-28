@@ -12,7 +12,6 @@
 **/3d/
 
 # Common 3D file extensions (additional protection)
-*.obj
 *.fbx
 *.blend
 *.max

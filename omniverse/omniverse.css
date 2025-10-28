@@ -1,0 +1,20 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: #1e1e1e; /* dark grey used across the app */
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* prevent scrollbars while zooming/panning */
+}
+
+/* Canvas fills the viewport */
+#gridCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block; /* remove default inline spacing */
+}

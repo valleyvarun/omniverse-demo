@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omniverse Workspace</title>
+  <link rel="stylesheet" href="omniverse.css">
+</head>
+<body>
+  <canvas id="gridCanvas"></canvas>
+
+  <script>
+    (function() {
+      const canvas = document.getElementById('gridCanvas');
+      const ctx = canvas.getContext('2d');
+
+      let dpr = window.devicePixelRatio || 1;
+      let scale = 1; // zoom level
+      const minScale = 0.05;
+      const maxScale = 20;
+      let offsetX = 0; // pan offset in screen pixels
+      let offsetY = 0;
+
+      let isPanning = false;
+      let panStartX = 0;
+      let panStartY = 0;
+      let startOffsetX = 0;
+      let startOffsetY = 0;
+
+      function resizeCanvas() {
+        dpr = window.devicePixelRatio || 1;
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        canvas.style.width = w + 'px';
+        canvas.style.height = h + 'px';
+        canvas.width = Math.floor(w * dpr);
+        canvas.height = Math.floor(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // reset to device pixel ratio
+        draw();
+      }
+
+      function screenToWorld(x, y) {
+        return {
+          x: (x - offsetX) / scale,
+          y: (y - offsetY) / scale
+        };
+      }
+
+      function worldToScreen(x, y) {
+        return {
+          x: x * scale + offsetX,
+          y: y * scale + offsetY
+        };
+      }
+
+      function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+      function zoomAt(pointX, pointY, deltaY) {
+        // Zoom factor per wheel tick
+        const zoomFactor = Math.exp(-deltaY * 0.0015); // smooth, independent of device
+        const oldScale = scale;
+        const newScale = clamp(oldScale * zoomFactor, minScale, maxScale);
+        if (newScale === oldScale) return;
+
+        // Keep the world point under cursor stationary in screen space
+        const wx = (pointX - offsetX) / oldScale;
+        const wy = (pointY - offsetY) / oldScale;
+        offsetX = pointX - wx * newScale;
+        offsetY = pointY - wy * newScale;
+        scale = newScale;
+        draw();
+      }
+
+      function startPan(clientX, clientY) {
+        isPanning = true;
+        panStartX = clientX;
+        panStartY = clientY;
+        startOffsetX = offsetX;
+        startOffsetY = offsetY;
+      }
+
+      function doPan(clientX, clientY) {
+        if (!isPanning) return;
+        const dx = clientX - panStartX;
+        const dy = clientY - panStartY;
+        offsetX = startOffsetX + dx;
+        offsetY = startOffsetY + dy;
+        draw();
+      }
+
+      function endPan() { isPanning = false; }
+
+      function drawGrid() {
+        const cssW = canvas.width / dpr;
+        const cssH = canvas.height / dpr;
+
+        // 1) Clear the entire canvas in device pixels to avoid ghosting/web artifacts
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // 2) Switch to CSS pixel coordinates
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+        // 3) World transform (pan + zoom)
+        ctx.save();
+        ctx.translate(offsetX, offsetY);
+        ctx.scale(scale, scale);
+
+  // Grid parameters in world units with non-square cells
+  // Maintain a 3:1 width:height ratio for grid cells (X:Y)
+  const ratio = 3; // width : height
+  const baseStepX = 150; // world units between minor vertical lines at scale=1
+  const minScreenStepX = 50; // keep X spacing ~50–200px on screen
+
+        // Adjust step so that screen spacing stays within comfortable range
+  // Adjust X step so that screen spacing stays within comfortable range
+  let stepX = baseStepX;
+  let stepScreenX = stepX * scale;
+  while (stepScreenX < minScreenStepX) { stepX *= 2; stepScreenX = stepX * scale; }
+  while (stepScreenX > minScreenStepX * 4) { stepX /= 2; stepScreenX = stepX * scale; }
+
+  // Derive Y step from X to preserve ratio (width:height = 3:1)
+  const stepY = stepX / ratio;
+
+        // Draw minor grid
+        const bounds = {
+          left: (-offsetX) / scale,
+          top: (-offsetY) / scale,
+          right: (cssW - offsetX) / scale,
+          bottom: (cssH - offsetY) / scale
+        };
+
+  const startX = Math.floor(bounds.left / stepX) * stepX;
+  const endX = Math.ceil(bounds.right / stepX) * stepX;
+  const startY = Math.floor(bounds.top / stepY) * stepY;
+  const endY = Math.ceil(bounds.bottom / stepY) * stepY;
+
+        ctx.lineWidth = 1 / scale; // keep lines 1px in screen space
+        ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+        ctx.beginPath();
+        for (let x = startX; x <= endX; x += stepX) {
+          ctx.moveTo(x, startY);
+          ctx.lineTo(x, endY);
+        }
+        for (let y = startY; y <= endY; y += stepY) {
+          ctx.moveTo(startX, y);
+          ctx.lineTo(endX, y);
+        }
+        ctx.stroke();
+
+        // Major grid every 10 minor steps (preserve ratio for majors)
+        const majorStepX = stepX * 10;
+        const majorStepY = stepY * 10;
+        const startXMaj = Math.floor(bounds.left / majorStepX) * majorStepX;
+        const endXMaj = Math.ceil(bounds.right / majorStepX) * majorStepX;
+        const startYMaj = Math.floor(bounds.top / majorStepY) * majorStepY;
+        const endYMaj = Math.ceil(bounds.bottom / majorStepY) * majorStepY;
+
+        ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+        ctx.beginPath();
+        for (let x = startXMaj; x <= endXMaj; x += majorStepX) {
+          ctx.moveTo(x, startYMaj);
+          ctx.lineTo(x, endYMaj);
+        }
+        for (let y = startYMaj; y <= endYMaj; y += majorStepY) {
+          ctx.moveTo(startXMaj, y);
+          ctx.lineTo(endXMaj, y);
+        }
+        ctx.stroke();
+
+        // Origin rays (not full axes): X+ (to the right) and Y- (downwards in this app)
+        ctx.strokeStyle = 'rgba(118,185,0,0.9)'; // NVIDIA green-ish
+        ctx.lineWidth = 1 / scale;
+        ctx.beginPath();
+        // Positive X ray from origin
+        const axisEndX = Math.max(0, bounds.right);
+        if (axisEndX > 0) {
+          ctx.moveTo(0, 0);
+          ctx.lineTo(axisEndX, 0);
+        }
+        // "Negative Y" as desired in this context means downward on screen
+        const axisEndY = Math.max(0, bounds.bottom);
+        if (axisEndY > 0) {
+          ctx.moveTo(0, 0);
+          ctx.lineTo(0, axisEndY);
+        }
+        ctx.stroke();
+
+        ctx.restore();
+
+        // HUD labels (scale) in CSS pixels
+        // We are already in CSS pixel transform (dpr), no need to reset to identity
+        ctx.fillStyle = 'rgba(255,255,255,0.7)';
+        ctx.font = '12px Arial';
+        ctx.fillText(`Scale: ${scale.toFixed(2)}x`, 10, 18);
+      }
+
+      function draw() {
+        drawGrid();
+      }
+
+      // Events
+      window.addEventListener('resize', resizeCanvas);
+      canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        // Use offset within canvas in CSS pixels
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        zoomAt(x, y, e.deltaY);
+      }, { passive: false });
+
+      canvas.addEventListener('mousedown', (e) => {
+        if (e.button === 0 || e.button === 1) { // left or middle for pan
+          startPan(e.clientX, e.clientY);
+        }
+      });
+      window.addEventListener('mousemove', (e) => doPan(e.clientX, e.clientY));
+      window.addEventListener('mouseup', endPan);
+
+  // Initialize with origin near the top-left corner
+  const originMargin = 40; // px from top and left
+  offsetX = originMargin;
+  offsetY = originMargin;
+  resizeCanvas(); // triggers initial draw with the new origin
+    })();
+  </script>
+</body>
+</html>

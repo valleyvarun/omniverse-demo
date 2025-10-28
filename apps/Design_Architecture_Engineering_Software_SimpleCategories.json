@@ -568,5 +568,11 @@
         "Company Name": "OBS Project",
         "What the Software Is Used For": "Live streaming and screen recording",
         "Category": "General / Misc"
+    },
+    {
+        "Product Name": "OpenUSD",
+        "Company Name": "ASWF",
+        "What the Software Is Used For": "Universal Scene Description framework for 3D data interchange and composition",
+        "Category": "Visualization & Rendering"
     }
 ]

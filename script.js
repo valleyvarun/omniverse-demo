@@ -508,6 +508,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 showAppsLoadingModal(data.appData);
             } catch(_) {}
         }
+
+        // Load a page into the Project Manager iframe on request
+        if (data.type === 'pm:load') {
+            try {
+                const pmFrame = document.getElementById('pmFrame');
+                if (pmFrame) {
+                    const target = data.src || 'omniverse/omniverse.html';
+                    pmFrame.src = target;
+                }
+            } catch(_) {}
+        }
+
+        // Load a page into the main content iframe on request
+        if (data.type === 'content:load') {
+            try {
+                const contentFrame = document.getElementById('contentFrame');
+                if (contentFrame) {
+                    const target = data.src || 'omniverse/omniverse.html';
+                    contentFrame.src = target;
+                }
+            } catch(_) {}
+        }
+
+        // Open an app tab with provided appData (supports custom contentSrc)
+        if (data.type === 'app:open') {
+            try {
+                const appData = data.appData || { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' };
+                createAppTab(appData);
+            } catch(_) {}
+        }
     });
 });
 
@@ -1927,6 +1957,11 @@ function createAppTab(appData) {
     newTab.setAttribute('data-app-name', appData.name);
     newTab.setAttribute('data-app-icon', appData.icon);
     newTab.setAttribute('data-instance-number', instanceCount + 1);
+    if (appData.contentSrc) {
+        newTab.setAttribute('data-content-src', appData.contentSrc);
+    } else {
+        newTab.setAttribute('data-content-src', 'software/software.html');
+    }
     
     // Create tab icon container
     const tabIcon = document.createElement('div');
@@ -2023,10 +2058,11 @@ function createAppTab(appData) {
     // Recompute layout and arrows
     updateTabsLayout();
     
-    // Load software.html since this is an app tab and it's now active
+    // Load the associated content for this app tab
     const contentFrame = document.getElementById('contentFrame');
     if (contentFrame) {
-        contentFrame.src = 'software/software.html';
+        const targetSrc = newTab.getAttribute('data-content-src') || 'software/software.html';
+        contentFrame.src = targetSrc;
     }
 }
 
@@ -2070,7 +2106,9 @@ function getTabIcon(appName, appIcon) {
         'ChatGPT': 'logo/chatgpt-logo.png',
         'InDesign': 'logo/indesign-logo.png',
         'Visual Studio Code': 'logo/vscode-logo.png',
-        'VS Code': 'logo/vscode-logo.png'
+        'VS Code': 'logo/vscode-logo.png',
+        'Omniverse': 'logo/omniverse-logo.png',
+        'OpenUSD': 'logo/openusd-logo.png'
     };
     
     // Check if we have a specific logo for this app
@@ -2200,15 +2238,15 @@ function setActiveTab(tabElement) {
     if (!contentFrame) return;
     
     // Switch content based on tab type
-    const tabText = tabElement.textContent.trim();
-    const isHomeTab = tabText === 'Home';
+    const isHomeTab = tabElement.classList.contains('home-tab');
     
     if (isHomeTab) {
         // Load home.html for Home tab
         contentFrame.src = 'pages/home.html';
     } else {
-        // Load software.html for app tabs
-        contentFrame.src = 'software/software.html';
+        // Load per-tab content if set, else default software page
+        const targetSrc = tabElement.getAttribute('data-content-src') || 'software/software.html';
+        contentFrame.src = targetSrc;
     }
 }
 
@@ -2326,7 +2364,10 @@ function resolveFavoriteApp(rawName) {
         'blender': { name: 'Blender', icon: 'logo/blender-logo.png' },
         'visual studio code': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' },
         'vs code': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' },
-        'vscode': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' }
+        'vscode': { name: 'Visual Studio Code', icon: 'logo/vscode-logo.png' },
+        'openusd': { name: 'OpenUSD', icon: 'logo/openusd-logo.png' },
+        'open usd': { name: 'OpenUSD', icon: 'logo/openusd-logo.png' },
+        'usd': { name: 'OpenUSD', icon: 'logo/openusd-logo.png' }
     };
 
     if (canonical[n]) return canonical[n];

@@ -17,6 +17,7 @@
 - "open midjourney" 
 - "open blender" 
 - "open vscode" 
+- "open openusd" 
 
 ## UI Background Colors
 

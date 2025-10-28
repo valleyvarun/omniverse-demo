@@ -55,8 +55,16 @@
 		createBtn.type = 'button';
 		createBtn.innerHTML = '+ Create New Omniverse';
 		createBtn.addEventListener('click', () => {
-			// Placeholder: wire real action later
-			console.log('[Popup] Create New Omniverse clicked');
+			// Instruct parent to load omniverse.html in the Project Manager iframe
+			// Ask parent to open Omniverse as an app tab, with specific content source
+			try {
+				parent.postMessage({
+					type: 'app:open',
+					appData: { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' }
+				}, '*');
+			} catch (_) {}
+			// Optionally close the popup after action
+			try { parent.postMessage({ type: 'popup:close' }, '*'); } catch (_) {}
 		});
 
 		const openBtn = document.createElement('button');
