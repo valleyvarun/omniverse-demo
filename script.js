@@ -440,6 +440,47 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // ---------------------------------------------------------------------------
+    // AGENT HEADER BUTTON PLACEMENT: Home -> inside iframe; Apps -> parent header
+    // ---------------------------------------------------------------------------
+    let __agentHeaderHomeMode = true; // true = show inside iframe; false = show in parent header
+    const agentFrame = document.getElementById('agentFrame');
+    function updateAgentHeaderPlacement(isHome) {
+        __agentHeaderHomeMode = !!isHome;
+        // Toggle parent header visibility
+        const topHeader = document.getElementById('chatbotHeader');
+        if (topHeader) {
+            topHeader.style.display = isHome ? 'none' : 'flex';
+        }
+        // Tell the agent iframe to show/hide its internal button
+        try {
+            const win = agentFrame?.contentWindow;
+            if (win && typeof win.postMessage === 'function') {
+                win.postMessage({ type: 'agent:headerButtonVisibility', visible: !!isHome }, '*');
+            }
+        } catch(_) {}
+    }
+
+    // Ensure child receives the current mode after it loads
+    if (agentFrame) {
+        agentFrame.addEventListener('load', () => {
+            try {
+                const win = agentFrame.contentWindow;
+                win?.postMessage({ type: 'agent:headerButtonVisibility', visible: !!__agentHeaderHomeMode }, '*');
+            } catch(_) {}
+        });
+    }
+    // Initial state: Home is active on first load
+    updateAgentHeaderPlacement(true);
+
+    // Top-level chatbot header collapse button
+    const agentCollapseTopBtn = document.getElementById('agentCollapseTopBtn');
+    if (agentCollapseTopBtn) {
+        agentCollapseTopBtn.addEventListener('click', () => {
+            try { collapseAgentPanel(); } catch(_) {}
+        });
+    }
+
     // Listen to collapse requests from iframes
     window.addEventListener('message', (ev) => {
         const data = ev.data || {};
@@ -453,10 +494,11 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.classList.add('explorer-collapsed');
         }
         if (data.type === 'agent:collapse') {
-            // Force-stop agent drag if active (function from agent-resize.js)
-            try { if (typeof forceStopResize === 'function') forceStopResize(); } catch(_) {}
-            document.body.classList.add('agent-collapsed');
-            // After collapsing the agent, route typing back to the command line automatically
+            try { collapseAgentPanel(); } catch(_) {}
+        }
+
+        // Explicit focus routing request from content iframes (e.g., omniverse nodes layer)
+        if (data.type === 'focusCommand') {
             try {
                 blurAgentChatInput();
                 enableGlobalKeyboard();
@@ -527,6 +569,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (contentFrame) {
                     const target = data.src || 'omniverse/omniverse.html';
                     contentFrame.src = target;
+                    // Toggle agent header placement based on whether Home is loaded
+                    const isHome = (target || '').includes('pages/home.html');
+                    updateAgentHeaderPlacement(isHome);
                 }
             } catch(_) {}
         }
@@ -536,6 +581,67 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const appData = data.appData || { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' };
                 createAppTab(appData);
+            } catch(_) {}
+        }
+
+        // Persist Omniverse world transform per tab and restore on request
+        if (data.type === 'world:state') {
+            try {
+                // Save state on the currently active tab element
+                const activeTab = document.querySelector('.content-tabs-list .content-tab.active');
+                if (activeTab) {
+                    activeTab.dataset.worldScale = String(data.scale ?? '');
+                    activeTab.dataset.worldOffsetX = String(data.offsetX ?? '');
+                    activeTab.dataset.worldOffsetY = String(data.offsetY ?? '');
+                }
+            } catch(_) {}
+        }
+
+        if (data.type === 'world:requestState') {
+            try {
+                // Read saved state from active tab and send to content frame
+                const activeTab = document.querySelector('.content-tabs-list .content-tab.active');
+                const contentFrame = document.getElementById('contentFrame');
+                const win = contentFrame?.contentWindow;
+                if (activeTab && win) {
+                    const scale = parseFloat(activeTab.dataset.worldScale || '') || null;
+                    const offsetX = parseFloat(activeTab.dataset.worldOffsetX || '') || null;
+                    const offsetY = parseFloat(activeTab.dataset.worldOffsetY || '') || null;
+                    if (scale != null && offsetX != null && offsetY != null) {
+                        win.postMessage({ type: 'world:restore', scale, offsetX, offsetY }, '*');
+                    }
+                }
+            } catch(_) {}
+        }
+
+        // Persist nodes positions per tab
+        if (data.type === 'nodes:state') {
+            try {
+                const activeTab = document.querySelector('.content-tabs-list .content-tab.active');
+                if (activeTab) {
+                    // Store as JSON string
+                    activeTab.dataset.nodesState = JSON.stringify(data.nodes || []);
+                }
+            } catch(_) {}
+        }
+
+        // Restore nodes positions to the requester (nodes iframe)
+        if (data.type === 'nodes:requestState') {
+            try {
+                const activeTab = document.querySelector('.content-tabs-list .content-tab.active');
+                let nodes = [];
+                if (activeTab && activeTab.dataset.nodesState) {
+                    try { nodes = JSON.parse(activeTab.dataset.nodesState) || []; } catch(_) { nodes = []; }
+                }
+                // Reply directly to the requesting window (nodes iframe)
+                const src = ev?.source;
+                if (src && typeof src.postMessage === 'function') {
+                    src.postMessage({ type: 'nodes:restore', nodes }, '*');
+                } else {
+                    // Fallback: send to contentFrame if source not available
+                    const contentFrame = document.getElementById('contentFrame');
+                    contentFrame?.contentWindow?.postMessage({ type: 'nodes:restore', nodes }, '*');
+                }
             } catch(_) {}
         }
     });
@@ -2062,6 +2168,23 @@ function createAppTab(appData) {
     const contentFrame = document.getElementById('contentFrame');
     if (contentFrame) {
         const targetSrc = newTab.getAttribute('data-content-src') || 'software/software.html';
+        // When the content loads, if it's Omniverse, restore saved world state for this tab
+        try {
+            contentFrame.addEventListener('load', function onLoadOnce() {
+                try {
+                    const cw = contentFrame.contentWindow;
+                    const isOmni = (contentFrame.src || '').includes('omniverse/omniverse.html');
+                    if (cw && isOmni) {
+                        const scale = parseFloat(newTab.dataset.worldScale || '');
+                        const offsetX = parseFloat(newTab.dataset.worldOffsetX || '');
+                        const offsetY = parseFloat(newTab.dataset.worldOffsetY || '');
+                        if (!Number.isNaN(scale) && !Number.isNaN(offsetX) && !Number.isNaN(offsetY)) {
+                            cw.postMessage({ type: 'world:restore', scale, offsetX, offsetY }, '*');
+                        }
+                    }
+                } catch(_) {}
+            }, { once: true });
+        } catch(_) {}
         contentFrame.src = targetSrc;
     }
 }
@@ -2243,10 +2366,30 @@ function setActiveTab(tabElement) {
     if (isHomeTab) {
         // Load home.html for Home tab
         contentFrame.src = 'pages/home.html';
+        // Place collapse button inside agent header on Home
+        try { updateAgentHeaderPlacement(true); } catch(_) {}
     } else {
         // Load per-tab content if set, else default software page
         const targetSrc = tabElement.getAttribute('data-content-src') || 'software/software.html';
+        try {
+            contentFrame.addEventListener('load', function onLoadOnce() {
+                try {
+                    const cw = contentFrame.contentWindow;
+                    const isOmni = (contentFrame.src || '').includes('omniverse/omniverse.html');
+                    if (cw && isOmni) {
+                        const scale = parseFloat(tabElement.dataset.worldScale || '');
+                        const offsetX = parseFloat(tabElement.dataset.worldOffsetX || '');
+                        const offsetY = parseFloat(tabElement.dataset.worldOffsetY || '');
+                        if (!Number.isNaN(scale) && !Number.isNaN(offsetX) && !Number.isNaN(offsetY)) {
+                            cw.postMessage({ type: 'world:restore', scale, offsetX, offsetY }, '*');
+                        }
+                    }
+                } catch(_) {}
+            }, { once: true });
+        } catch(_) {}
         contentFrame.src = targetSrc;
+        // Place collapse button in parent header when not Home
+        try { updateAgentHeaderPlacement(false); } catch(_) {}
     }
 }
 
@@ -2380,4 +2523,23 @@ function resolveFavoriteApp(rawName) {
         if (deSlug(k) === key) return canonical[k];
     }
     return null;
+}
+
+// =============================================================================
+// AGENT PANEL: collapse helper
+// =============================================================================
+function collapseAgentPanel() {
+    // Force-stop agent drag if active (function from agent-resize.js)
+    try { if (typeof forceStopResize === 'function') forceStopResize(); } catch(_) {}
+    document.body.classList.add('agent-collapsed');
+    // After collapsing the agent, route typing back to the command line automatically
+    try {
+        blurAgentChatInput();
+        enableGlobalKeyboard();
+        window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+        const commandInput = document.getElementById('commandInput');
+        if (commandInput) {
+            setTimeout(() => { commandInput.focus(); }, 10);
+        }
+    } catch(_) {}
 }

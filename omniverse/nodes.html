@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nodes</title>
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: transparent; /* let parent show through */
+      font-family: Arial, sans-serif;
+    }
+    /* World wrapper will receive the parent's pan/zoom transform */
+    #world {
+      position: absolute;
+      top: 0; left: 0;
+      width: 0; height: 0; /* size not used; children positioned absolutely */
+      transform-origin: 0 0;
+      will-change: transform;
+      pointer-events: none; /* allow only nodes to capture */
+    }
+    /* Node style */
+    .node {
+      position: absolute;
+      background: #d9d9d9; /* light grey */
+      border-radius: 12px;
+      width: 240px; /* in world units (px), scaled by parent */
+      height: 80px;  /* 3:1 aspect roughly, matches grid ratio feel */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      user-select: none;
+      pointer-events: auto; /* this captures mouse for dragging */
+      cursor: grab;
+    }
+    .node:active { cursor: grabbing; }
+  </style>
+</head>
+<body>
+  <div id="world">
+    <div id="node1" class="node">Node</div>
+  </div>
+
+  <script>
+    // Current world transform (provided by parent)
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // Simple world-space position for the node (in world pixels)
+    const node = document.getElementById('node1');
+    const world = document.getElementById('world');
+    let nodeWX = 120; // world x
+    let nodeWY = 120; // world y
+
+    function updateWorldTransform() {
+      world.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+    }
+
+    function updateNodePosition() {
+      node.style.left = nodeWX + 'px';
+      node.style.top  = nodeWY + 'px';
+      publishNodesState();
+    }
+
+    // Drag handling in screen space, convert to world space by dividing by scale
+    let dragging = false;
+    let dragStartSX = 0, dragStartSY = 0; // screen
+    let startWX = 0, startWY = 0; // world
+
+    node.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      dragging = true;
+      dragStartSX = e.clientX;
+      dragStartSY = e.clientY;
+      startWX = nodeWX;
+      startWY = nodeWY;
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!dragging) return;
+      const dSX = e.clientX - dragStartSX;
+      const dSY = e.clientY - dragStartSY;
+      nodeWX = startWX + dSX / scale; // convert screen delta to world delta
+      nodeWY = startWY + dSY / scale;
+      updateNodePosition();
+    });
+    window.addEventListener('mouseup', () => { dragging = false; });
+
+    function publishNodesState() {
+      try {
+        window.top.postMessage({ type: 'nodes:state', nodes: [{ id: 'node1', x: nodeWX, y: nodeWY }] }, '*');
+      } catch (_) {}
+    }
+
+    // Request saved node state from top on load
+    try { window.top.postMessage({ type: 'nodes:requestState' }, '*'); } catch (_) {}
+
+    // Apply restored nodes positions
+    window.addEventListener('message', (ev) => {
+      const data = ev.data || {};
+      if (data.type === 'nodes:restore' && Array.isArray(data.nodes)) {
+        const n = data.nodes.find(n => n.id === 'node1');
+        if (n && typeof n.x === 'number' && typeof n.y === 'number') {
+          nodeWX = n.x; nodeWY = n.y; updateNodePosition();
+        }
+      }
+    });
+
+    // Receive world transform from parent
+    window.addEventListener('message', (ev) => {
+      const data = ev.data || {};
+      if (data.type === 'world:transform') {
+        scale = data.scale;
+        offsetX = data.offsetX;
+        offsetY = data.offsetY;
+        updateWorldTransform();
+      }
+    });
+
+    // Forward wheel events to parent so zoom works over the nodes layer too
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      // Send to parent (omniverse.html), not top, so it can handle zoom
+      window.parent.postMessage({ type: 'world:wheel', clientX: e.clientX, clientY: e.clientY, deltaY: e.deltaY }, '*');
+    }, { passive: false });
+
+    // Any click inside nodes iframe should route focus back to the command line in the top window
+    document.addEventListener('click', () => {
+      try {
+        window.top.postMessage({ type: 'focusCommand' }, '*');
+      } catch (_) {}
+    });
+
+    // Background panning support: when clicking NOT on a node, pan the world via parent
+    let bgPanning = false;
+    document.addEventListener('mousedown', (e) => {
+      // Ignore if starting on a node (node dragging takes priority)
+      if (e.target.closest('.node')) return;
+      // Only left or middle button
+      if (e.button !== 0 && e.button !== 1) return;
+      e.preventDefault();
+      bgPanning = true;
+      window.parent.postMessage({ type: 'world:panStart', clientX: e.clientX, clientY: e.clientY }, '*');
+    });
+    window.addEventListener('mousemove', (e) => {
+      if (!bgPanning) return;
+      window.parent.postMessage({ type: 'world:panMove', clientX: e.clientX, clientY: e.clientY }, '*');
+    });
+    window.addEventListener('mouseup', () => {
+      if (!bgPanning) return;
+      bgPanning = false;
+      window.parent.postMessage({ type: 'world:panEnd' }, '*');
+    });
+
+    // Initial paint
+    updateWorldTransform();
+    updateNodePosition();
+  </script>
+</body>
+</html>

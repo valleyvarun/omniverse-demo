@@ -7,6 +7,7 @@
 	// Map popup titles to logo filenames in ../logo
 	const logoMap = {
 		'omniverse': 'omniverse-logo.png',
+		'plexus': 'omniverse-logo.png',
 		'apps': 'apps-logo.png',
 		'nucleus': 'nucleus-logo.png',
 		'browser': 'browser-logo.png',
@@ -82,6 +83,56 @@
 		bodyEl.appendChild(overlay);
 	}
 
+	function renderPlexusOptions() {
+		clearBody();
+
+		// Hero image at the top
+		const hero = document.createElement('img');
+		hero.className = 'popup-hero';
+		hero.src = '../logo/omniverse-graphic2.png';
+		hero.alt = 'Plexus';
+		bodyEl.appendChild(hero);
+
+		// Invisible square overlay centered over the image
+		const overlay = document.createElement('div');
+		overlay.className = 'popup-overlay-square';
+
+		// Options stack inside the overlay, centered both ways
+		const wrap = document.createElement('div');
+		wrap.className = 'popup-options';
+
+		const createBtn = document.createElement('button');
+		createBtn.className = 'popup-option';
+		createBtn.type = 'button';
+		createBtn.innerHTML = '+ Create New Plexus';
+		createBtn.addEventListener('click', () => {
+			// Instruct parent to load omniverse.html in the Project Manager iframe
+			// Ask parent to open Plexus as an app tab, with specific content source
+			try {
+				parent.postMessage({
+					type: 'app:open',
+					appData: { name: 'Plexus', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' }
+				}, '*');
+			} catch (_) {}
+			// Optionally close the popup after action
+			try { parent.postMessage({ type: 'popup:close' }, '*'); } catch (_) {}
+		});
+
+		const openBtn = document.createElement('button');
+		openBtn.className = 'popup-option';
+		openBtn.type = 'button';
+		openBtn.innerHTML = 'Open Existing Plexus';
+		openBtn.addEventListener('click', () => {
+			// Placeholder: wire real action later
+			console.log('[Popup] Open Existing Plexus clicked');
+		});
+
+		wrap.appendChild(createBtn);
+		wrap.appendChild(openBtn);
+		overlay.appendChild(wrap);
+		bodyEl.appendChild(overlay);
+	}
+
 	// Receive initial data from parent (e.g., { type: 'popup:init', title: 'Apps' })
 	window.addEventListener('message', (ev) => {
 		const data = ev.data || {};
@@ -92,6 +143,8 @@
 					// Conditional content based on the clicked item
 					if (data.title.trim().toLowerCase() === 'omniverse') {
 						renderOmniverseOptions();
+					} else if (data.title.trim().toLowerCase() === 'plexus') {
+						renderPlexusOptions(); // Use dedicated Plexus function
 					} else if (data.title.trim().toLowerCase() === 'folders') {
 						clearBody();
 						// Embed the folders split layout into the popup body

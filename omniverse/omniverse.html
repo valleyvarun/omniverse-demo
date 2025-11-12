@@ -8,6 +8,7 @@
 </head>
 <body>
   <canvas id="gridCanvas"></canvas>
+  <iframe id="nodesFrame" src="nodes.html"></iframe>
 
   <script>
     (function() {
@@ -188,15 +189,31 @@
 
         ctx.restore();
 
-        // HUD labels (scale) in CSS pixels
-        // We are already in CSS pixel transform (dpr), no need to reset to identity
-        ctx.fillStyle = 'rgba(255,255,255,0.7)';
-        ctx.font = '12px Arial';
-        ctx.fillText(`Scale: ${scale.toFixed(2)}x`, 10, 18);
+        // HUD labels removed per request (no scale text)
       }
 
+      let allowPublish = false; // avoid overwriting saved state on initial load
       function draw() {
         drawGrid();
+        broadcastTransform();
+        if (allowPublish) publishState();
+      }
+
+      function broadcastTransform() {
+        try {
+          const frame = document.getElementById('nodesFrame');
+          const win = frame && frame.contentWindow;
+          if (win) {
+            win.postMessage({ type: 'world:transform', scale, offsetX, offsetY }, '*');
+          }
+        } catch (_) {}
+      }
+
+      function publishState() {
+        try {
+          // Inform parent so it can persist per-tab state
+          window.parent.postMessage({ type: 'world:state', scale, offsetX, offsetY }, '*');
+        } catch (_) {}
       }
 
       // Events
@@ -210,6 +227,27 @@
         zoomAt(x, y, e.deltaY);
       }, { passive: false });
 
+      // Allow zooming when the cursor is over the nodes iframe by forwarding wheel events
+      window.addEventListener('message', (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'world:wheel') {
+          const rect = canvas.getBoundingClientRect();
+          const x = data.clientX - rect.left;
+          const y = data.clientY - rect.top;
+          zoomAt(x, y, data.deltaY);
+        }
+        // Panning forwarded from nodes iframe background
+        if (data.type === 'world:panStart') {
+          startPan(data.clientX, data.clientY);
+        }
+        if (data.type === 'world:panMove') {
+          doPan(data.clientX, data.clientY);
+        }
+        if (data.type === 'world:panEnd') {
+          endPan();
+        }
+      });
+
       canvas.addEventListener('mousedown', (e) => {
         if (e.button === 0 || e.button === 1) { // left or middle for pan
           startPan(e.clientX, e.clientY);
@@ -218,11 +256,31 @@
       window.addEventListener('mousemove', (e) => doPan(e.clientX, e.clientY));
       window.addEventListener('mouseup', endPan);
 
-  // Initialize with origin near the top-left corner
-  const originMargin = 40; // px from top and left
-  offsetX = originMargin;
-  offsetY = originMargin;
-  resizeCanvas(); // triggers initial draw with the new origin
+      // Initialize with origin near the top-left corner
+      const originMargin = 40; // px from top and left
+      offsetX = originMargin;
+      offsetY = originMargin;
+      resizeCanvas(); // triggers initial draw with the new origin
+
+      // Listen for restore from parent BEFORE requesting state to avoid race
+      window.addEventListener('message', (ev) => {
+        const data = ev.data || {};
+        if (data.type === 'world:restore') {
+          if (typeof data.scale === 'number') scale = data.scale;
+          if (typeof data.offsetX === 'number') offsetX = data.offsetX;
+          if (typeof data.offsetY === 'number') offsetY = data.offsetY;
+          // Once restored, allow publishing future state updates
+          allowPublish = true;
+          draw();
+        }
+      });
+
+      // Ask parent for any saved state for this tab and apply it
+      try {
+        window.parent.postMessage({ type: 'world:requestState' }, '*');
+      } catch (_) {}
+      // If no restore arrives soon (new tab case), enable publishing after a short delay
+      setTimeout(() => { allowPublish = true; }, 500);
     })();
   </script>
 </body>

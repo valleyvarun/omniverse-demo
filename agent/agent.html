@@ -29,7 +29,7 @@
 		<!-- ============================================================= -->
 		<header class="agent-header"> <!-- Header bar containing status only -->
 			<div class="agent-status" id="agentStatus">Agent</div> <!-- Static label -->
-			<button id="agentCollapseBtn" class="agent-collapse-btn" type="button" title="Collapse" aria-label="Collapse">−</button>
+			<button id="agentCollapseBtn" class="agent-collapse-btn" type="button" title="Collapse" aria-label="Collapse" style="display:none">−</button>
 		</header> <!-- End header -->
 
 
@@ -100,6 +100,19 @@
 			if (btn) btn.addEventListener('click', () => {
 				try { parent.postMessage({ type: 'agent:collapse' }, '*'); } catch(_) {}
 			});
+		});
+
+		// Show/hide internal collapse button based on parent instruction
+		window.addEventListener('message', (ev) => {
+			try {
+				const data = ev.data || {};
+				if (data.type === 'agent:headerButtonVisibility') {
+					const btn = document.getElementById('agentCollapseBtn');
+					if (btn) {
+						btn.style.display = data.visible ? 'inline-flex' : 'none';
+					}
+				}
+			} catch(_) {}
 		});
 	</script> <!-- End inline integration script -->
 

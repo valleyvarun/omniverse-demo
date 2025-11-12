@@ -17,4 +17,16 @@ body {
   width: 100vw;
   height: 100vh;
   display: block; /* remove default inline spacing */
+  z-index: 0;
+}
+
+/* Overlay nodes iframe above the grid */
+#nodesFrame {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  border: none;
+  background: transparent;
+  z-index: 1;
 }

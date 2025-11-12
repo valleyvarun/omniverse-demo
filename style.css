@@ -469,8 +469,9 @@ body {
    -----------------------------------------------------------------------------
    Styling for the application name text next to the logo */
 .brand-text {
-    font-size: 15px;                 /* Medium size text for brand name */
-    font-weight: thin;             /* Regular font weight (not bold) */
+    font-size: 14px;                 /* Medium size text for brand name */
+    font-family: Arial; 
+    font-weight: 250;                /* Thin/Light weight (numeric for broad support) */
     color: #ffffff;                  /* White text color for visibility on dark header */
     margin: 0;                       /* Remove default heading margins */
 }
@@ -1399,3 +1400,37 @@ body {
     background: transparent;
     border: none;
 }
+
+/* -----------------------------------------------------------------------------
+   CHATBOT PARENT HEADER (ABOVE AGENT IFRAME)
+   ----------------------------------------------------------------------------- */
+.chatbot-header {
+    height: 24px;
+    background-color: #2a2a2a;      /* Match Navigation/Menu bar */
+    border-bottom: 1px solid #555;  /* Subtle separator */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px;                 /* Horizontal padding */
+}
+
+.chatbot-header-title {
+    font-size: 11px;
+    color: #b0b0b0;                 /* Muted label if needed */
+}
+
+.chatbot-collapse-btn {
+    background: transparent;
+    color: #b0b0b0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    width: 18px;
+    height: 18px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.chatbot-collapse-btn:hover { background: rgba(255,255,255,0.06); color: #fff; }
