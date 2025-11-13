@@ -556,7 +556,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const pmFrame = document.getElementById('pmFrame');
                 if (pmFrame) {
-                    const target = data.src || 'omniverse/omniverse.html';
+                    const target = data.src || 'omniverse/plexus.html';
                     pmFrame.src = target;
                 }
             } catch(_) {}
@@ -567,7 +567,7 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const contentFrame = document.getElementById('contentFrame');
                 if (contentFrame) {
-                    const target = data.src || 'omniverse/omniverse.html';
+                    const target = data.src || 'omniverse/plexus.html';
                     contentFrame.src = target;
                     // Toggle agent header placement based on whether Home is loaded
                     const isHome = (target || '').includes('pages/home.html');
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Open an app tab with provided appData (supports custom contentSrc)
         if (data.type === 'app:open') {
             try {
-                const appData = data.appData || { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' };
+                const appData = data.appData || { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/plexus.html' };
                 createAppTab(appData);
             } catch(_) {}
         }
@@ -2173,7 +2173,7 @@ function createAppTab(appData) {
             contentFrame.addEventListener('load', function onLoadOnce() {
                 try {
                     const cw = contentFrame.contentWindow;
-                    const isOmni = (contentFrame.src || '').includes('omniverse/omniverse.html');
+                    const isOmni = (contentFrame.src || '').includes('omniverse/plexus.html');
                     if (cw && isOmni) {
                         const scale = parseFloat(newTab.dataset.worldScale || '');
                         const offsetX = parseFloat(newTab.dataset.worldOffsetX || '');
@@ -2375,7 +2375,7 @@ function setActiveTab(tabElement) {
             contentFrame.addEventListener('load', function onLoadOnce() {
                 try {
                     const cw = contentFrame.contentWindow;
-                    const isOmni = (contentFrame.src || '').includes('omniverse/omniverse.html');
+                    const isOmni = (contentFrame.src || '').includes('omniverse/plexus.html');
                     if (cw && isOmni) {
                         const scale = parseFloat(tabElement.dataset.worldScale || '');
                         const offsetX = parseFloat(tabElement.dataset.worldOffsetX || '');

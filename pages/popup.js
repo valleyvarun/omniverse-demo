@@ -55,12 +55,12 @@
 		createBtn.type = 'button';
 		createBtn.innerHTML = '+ Create New Omniverse';
 		createBtn.addEventListener('click', () => {
-			// Instruct parent to load omniverse.html in the Project Manager iframe
+			// Instruct parent to load plexus.html in the Project Manager iframe
 			// Ask parent to open Omniverse as an app tab, with specific content source
 			try {
 				parent.postMessage({
 					type: 'app:open',
-					appData: { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' }
+					appData: { name: 'Omniverse', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/plexus.html' }
 				}, '*');
 			} catch (_) {}
 			// Optionally close the popup after action
@@ -105,12 +105,12 @@
 		createBtn.type = 'button';
 		createBtn.innerHTML = '+ Create New Plexus';
 		createBtn.addEventListener('click', () => {
-			// Instruct parent to load omniverse.html in the Project Manager iframe
+			// Instruct parent to load plexus.html in the Project Manager iframe
 			// Ask parent to open Plexus as an app tab, with specific content source
 			try {
 				parent.postMessage({
 					type: 'app:open',
-					appData: { name: 'Plexus', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/omniverse.html' }
+					appData: { name: 'Plexus', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/plexus.html' }
 				}, '*');
 			} catch (_) {}
 			// Optionally close the popup after action

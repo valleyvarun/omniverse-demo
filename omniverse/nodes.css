@@ -1,0 +1,236 @@
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: transparent; /* let parent show through */
+  font-family: Arial, sans-serif;
+}
+
+/* Global constants for consistent spacing */
+:root {
+  --edge-gap: 2px;
+}
+
+/* World wrapper will receive the parent's pan/zoom transform */
+#world {
+  position: absolute;
+  top: 0; left: 0;
+  width: 0; height: 0; /* size not used; children positioned absolutely */
+  transform-origin: 0 0;
+  will-change: transform;
+  pointer-events: none; /* allow only nodes to capture */
+}
+
+/* Node style */
+.node {
+  position: absolute;
+  background: #2a2a2a;
+  border: 1px solid #76B900;
+  border-radius: 6px;
+  width: 188px; /* slimmer so side columns are closer to center while edges stay aligned */
+  height: 140px; /* increased height to accommodate header */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  font-size: 12px;
+  user-select: none;
+  pointer-events: auto; /* this captures mouse for dragging */
+  cursor: grab;
+  overflow: hidden;
+  box-sizing: border-box; /* ensure borders don't affect inner spacing calculations */
+}
+.node:active { cursor: grabbing; }
+
+/* Default positions */
+#node1 {
+  left: 230px; /* moved further right; gap increased relative to boolean node */
+  top: 80px;   /* lowered further down */
+}
+
+/* Node header */
+.node-header {
+  height: 24px;
+  background: #1e1e1e;
+  border-radius: 6px 6px 0 0;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.node-logo {
+  height: 16px;
+  width: auto;
+}
+
+.node-header-text {
+  color: white;
+  font-size: 10px;
+  font-weight: normal;
+  margin-left: 8px;
+}
+
+/* Node content area */
+.node-content {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between; /* anchor side columns to edges */
+  column-gap: 0; /* rely on flex distribution (computed from container width) */
+  flex: 1;
+  padding: 8px var(--edge-gap); /* exact horizontal edge distance for circles */
+}
+
+/* Node sections */
+.inputs, .outputs {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* align items from the top for 1:1 alignment */
+  gap: 12px; /* increased spacing further between items */
+  width: 70px;
+  padding: 0; /* remove inner padding so edge distance is controlled consistently */
+}
+
+.inputs {
+  padding-left: 0; /* no extra left padding */
+  margin-left: 0; /* rely on node-content padding for edge distance */
+  margin-top: 8px; /* increase gap from header to first input */
+}
+
+.node-name {
+  flex: 0 0 32px; /* slimmer center column */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin: 0; /* spacing handled by column-gap */
+}
+
+.center-logo {
+  height: 28px; /* slightly smaller to fit slimmer center */
+  width: auto;
+  max-width: 100%;
+}
+
+/* Input items */
+.input-item {
+  display: flex;
+  align-items: center;
+  margin: 0; /* spacing controlled by container gap */
+  font-size: 10px;
+  justify-content: flex-start;
+}
+
+.input-circle, .output-circle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #bfbfbf; /* light grey */
+  border: 1px solid #ffffff; /* white border */
+  flex-shrink: 0;
+}
+
+/* Circle spacing differences by context */
+.input-circle { 
+  margin-right: 8px; 
+  margin-left: 0; /* rely on inputs margin-left to set exact edge distance */
+}
+
+.input-label {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Output section */
+.outputs {
+  align-items: flex-end;
+  padding-right: 0;
+  margin-right: 0; /* rely on node-content padding for edge distance */
+  margin-top: 8px; /* increase gap from header to first output */
+}
+
+/* Output items with labels */
+.output-item {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0; /* spacing controlled by container gap */
+  font-size: 10px;
+}
+
+.output-label {
+  margin-right: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Boolean Node Styles */
+.boolean-node {
+  width: 110px;
+  height: 32px;
+  left: 64px; /* moved further right */
+  top: 80px;  /* lowered further down */
+}
+
+.boolean-content {
+  display: flex;
+  align-items: center; /* vertically center items within the node */
+  justify-content: space-between;
+  flex: 1;
+  height: 100%;
+  /* remove vertical padding so centering is exact; 2px gap from node edge to button */
+  padding: 0 var(--edge-gap) 0 var(--edge-gap); /* match Plexus edge distance */
+}
+
+.boolean-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.boolean-toggle {
+  background: #444;
+  border: 1px solid #666;
+  color: white;
+  padding: 5px 12px; /* larger button without changing node height */
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-family: Arial, sans-serif;
+  transition: all 0.2s ease;
+}
+
+.boolean-toggle:hover {
+  background: #555;
+}
+
+.boolean-toggle:active {
+  transform: translateY(1px);
+}
+
+.boolean-toggle.true {
+  background: #76B900;
+  border-color: #76B900;
+}
+
+.boolean-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0; /* right padding controlled by boolean-content above */
+}
+
+.output-circle { 
+  margin-right: 0; /* node-content padding handles edge distance */
+}
+
+/* Boolean node keeps its 2px right edge via explicit margin */
+.boolean-right .output-circle {
+  margin-right: 0; /* edge distance handled by boolean-content right padding */
+}

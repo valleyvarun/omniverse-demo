@@ -4,46 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nodes</title>
-  <style>
-    html, body {
-      margin: 0;
-      height: 100%;
-      overflow: hidden;
-      background: transparent; /* let parent show through */
-      font-family: Arial, sans-serif;
-    }
-    /* World wrapper will receive the parent's pan/zoom transform */
-    #world {
-      position: absolute;
-      top: 0; left: 0;
-      width: 0; height: 0; /* size not used; children positioned absolutely */
-      transform-origin: 0 0;
-      will-change: transform;
-      pointer-events: none; /* allow only nodes to capture */
-    }
-    /* Node style */
-    .node {
-      position: absolute;
-      background: #d9d9d9; /* light grey */
-      border-radius: 12px;
-      width: 240px; /* in world units (px), scaled by parent */
-      height: 80px;  /* 3:1 aspect roughly, matches grid ratio feel */
-      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
-      color: #222;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      user-select: none;
-      pointer-events: auto; /* this captures mouse for dragging */
-      cursor: grab;
-    }
-    .node:active { cursor: grabbing; }
-  </style>
+  <link rel="stylesheet" href="nodes.css" />
 </head>
 <body>
   <div id="world">
-    <div id="node1" class="node">Node</div>
+    <div id="node1" class="node">
+      <!-- Header with Omniverse logo -->
+      <div class="node-header">
+        <img src="../logo/omniverse-logo.png" alt="Omniverse" class="node-logo">
+        <span class="node-header-text">Plexus</span>
+      </div>
+      
+      <!-- Content area -->
+      <div class="node-content">
+        <!-- Left side - Inputs -->
+        <div class="inputs">
+          <div class="input-item">
+            <div class="input-circle"></div>
+            <div class="input-label">run</div>
+          </div>
+          <div class="input-item">
+            <div class="input-circle"></div>
+            <div class="input-label">file name</div>
+          </div>
+          <div class="input-item">
+            <div class="input-circle"></div>
+            <div class="input-label">folder</div>
+          </div>
+          <div class="input-item">
+            <div class="input-circle"></div>
+            <div class="input-label">version</div>
+          </div>
+        </div>
+        
+        <!-- Center - Node Name -->
+        <div class="node-name">
+          <img src="../logo/store-logo.png" alt="Plexus" class="center-logo">
+        </div>
+        
+        <!-- Right side - Outputs -->
+        <div class="outputs">
+          <div class="output-item">
+            <div class="output-label">work</div>
+            <div class="output-circle"></div>
+          </div>
+          <div class="output-item">
+            <div class="output-label">users</div>
+            <div class="output-circle"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- True/False Node -->
+    <div id="node2" class="node boolean-node">
+      <!-- Content area -->
+      <div class="boolean-content">
+        <!-- Left side - Toggle Button -->
+        <div class="boolean-left">
+          <button type="button" class="boolean-toggle" onclick="toggleBoolean(event, this)">false</button>
+        </div>
+        
+        <!-- Right side - Output Circle -->
+        <div class="boolean-right">
+          <div class="output-circle"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -52,48 +79,78 @@
     let offsetX = 0;
     let offsetY = 0;
 
-    // Simple world-space position for the node (in world pixels)
-    const node = document.getElementById('node1');
+    // World/nodes setup
     const world = document.getElementById('world');
-    let nodeWX = 120; // world x
-    let nodeWY = 120; // world y
+    const nodeEls = Array.from(document.querySelectorAll('.node'));
+    // Store world-space positions for each node by id
+    const nodePos = {};
+
+    // Initialize node positions from computed styles (left/top from CSS) or defaults
+    nodeEls.forEach(el => {
+      const cs = getComputedStyle(el);
+      const wx = parseFloat(cs.left) || 0;
+      const wy = parseFloat(cs.top) || 0;
+      nodePos[el.id] = { x: wx, y: wy };
+      // Ensure positions are applied inline so future updates are consistent
+      el.style.left = wx + 'px';
+      el.style.top  = wy + 'px';
+    });
 
     function updateWorldTransform() {
       world.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
     }
 
-    function updateNodePosition() {
-      node.style.left = nodeWX + 'px';
-      node.style.top  = nodeWY + 'px';
+    function updateAllNodePositions() {
+      nodeEls.forEach(el => {
+        const p = nodePos[el.id];
+        if (!p) return;
+        el.style.left = p.x + 'px';
+        el.style.top  = p.y + 'px';
+      });
       publishNodesState();
     }
 
     // Drag handling in screen space, convert to world space by dividing by scale
     let dragging = false;
+    let draggingNodeId = null;
     let dragStartSX = 0, dragStartSY = 0; // screen
     let startWX = 0, startWY = 0; // world
 
-    node.addEventListener('mousedown', (e) => {
-      e.preventDefault();
-      dragging = true;
-      dragStartSX = e.clientX;
-      dragStartSY = e.clientY;
-      startWX = nodeWX;
-      startWY = nodeWY;
+    // Attach drag handlers to all nodes
+    nodeEls.forEach(el => {
+      el.addEventListener('mousedown', (e) => {
+        // Only left or middle button
+        if (e.button !== 0 && e.button !== 1) return;
+        // Don't start dragging when interacting with controls (e.g., buttons inside node)
+        if (e.target.closest('button, input, textarea, select')) return;
+        e.preventDefault();
+        dragging = true;
+        draggingNodeId = el.id;
+        dragStartSX = e.clientX;
+        dragStartSY = e.clientY;
+        const p = nodePos[draggingNodeId] || { x: 0, y: 0 };
+        startWX = p.x;
+        startWY = p.y;
+      });
     });
     window.addEventListener('mousemove', (e) => {
       if (!dragging) return;
       const dSX = e.clientX - dragStartSX;
       const dSY = e.clientY - dragStartSY;
-      nodeWX = startWX + dSX / scale; // convert screen delta to world delta
-      nodeWY = startWY + dSY / scale;
-      updateNodePosition();
+      const nx = startWX + dSX / scale; // convert screen delta to world delta
+      const ny = startWY + dSY / scale;
+      if (draggingNodeId && nodePos[draggingNodeId]) {
+        nodePos[draggingNodeId].x = nx;
+        nodePos[draggingNodeId].y = ny;
+        updateAllNodePositions();
+      }
     });
-    window.addEventListener('mouseup', () => { dragging = false; });
+    window.addEventListener('mouseup', () => { dragging = false; draggingNodeId = null; });
 
     function publishNodesState() {
       try {
-        window.top.postMessage({ type: 'nodes:state', nodes: [{ id: 'node1', x: nodeWX, y: nodeWY }] }, '*');
+        const payload = Object.entries(nodePos).map(([id, p]) => ({ id, x: p.x, y: p.y }));
+        window.top.postMessage({ type: 'nodes:state', nodes: payload }, '*');
       } catch (_) {}
     }
 
@@ -104,10 +161,13 @@
     window.addEventListener('message', (ev) => {
       const data = ev.data || {};
       if (data.type === 'nodes:restore' && Array.isArray(data.nodes)) {
-        const n = data.nodes.find(n => n.id === 'node1');
-        if (n && typeof n.x === 'number' && typeof n.y === 'number') {
-          nodeWX = n.x; nodeWY = n.y; updateNodePosition();
-        }
+        data.nodes.forEach(n => {
+          if (!n || typeof n.id !== 'string') return;
+          if (typeof n.x === 'number' && typeof n.y === 'number') {
+            nodePos[n.id] = { x: n.x, y: n.y };
+          }
+        });
+        updateAllNodePositions();
       }
     });
 
@@ -125,7 +185,7 @@
     // Forward wheel events to parent so zoom works over the nodes layer too
     window.addEventListener('wheel', (e) => {
       e.preventDefault();
-      // Send to parent (omniverse.html), not top, so it can handle zoom
+      // Send to parent (plexus.html), not top, so it can handle zoom
       window.parent.postMessage({ type: 'world:wheel', clientX: e.clientX, clientY: e.clientY, deltaY: e.deltaY }, '*');
     }, { passive: false });
 
@@ -158,8 +218,20 @@
     });
 
     // Initial paint
-    updateWorldTransform();
-    updateNodePosition();
+  updateWorldTransform();
+  updateAllNodePositions();
+
+    // Boolean toggle function
+    function toggleBoolean(e, button) {
+      if (e) { e.preventDefault(); e.stopPropagation(); }
+      if ((button.textContent || '').trim().toLowerCase() === 'false') {
+        button.textContent = 'true';
+        button.classList.add('true');
+      } else {
+        button.textContent = 'false';
+        button.classList.remove('true');
+      }
+    }
   </script>
 </body>
 </html>
