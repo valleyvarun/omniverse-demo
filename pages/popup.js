@@ -7,11 +7,10 @@
 	// Map popup titles to logo filenames in ../logo
 	const logoMap = {
 		'omniverse': 'omniverse-logo.png',
-		'plexus': 'omniverse-logo.png',
+		'plexus': 'store-logo.png',
 		'apps': 'apps-logo.png',
 		'nucleus': 'nucleus-logo.png',
 		'browser': 'browser-logo.png',
-		'store': 'store-logo.png',
 		'folders': 'folders-logo.png'
 	};
 
