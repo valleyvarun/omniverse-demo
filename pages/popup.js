@@ -7,7 +7,7 @@
 	// Map popup titles to logo filenames in ../logo
 	const logoMap = {
 		'omniverse': 'omniverse-logo.png',
-		'plexus': 'store-logo.png',
+		'plexus': 'plexus-logo.png',
 		'apps': 'apps-logo.png',
 		'nucleus': 'nucleus-logo.png',
 		'browser': 'browser-logo.png',
@@ -110,7 +110,7 @@
 			try {
 				parent.postMessage({
 					type: 'app:open',
-					appData: { name: 'Plexus', icon: 'logo/omniverse-logo.png', contentSrc: 'omniverse/plexus.html' }
+					appData: { name: 'Plexus', icon: 'logo/plexus-logo.png', contentSrc: 'omniverse/plexus.html' }
 				}, '*');
 			} catch (_) {}
 			// Optionally close the popup after action

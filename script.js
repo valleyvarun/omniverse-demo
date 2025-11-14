@@ -2247,6 +2247,7 @@ function getTabIcon(appName, appIcon) {
         'Visual Studio Code': 'logo/vscode-logo.png',
         'VS Code': 'logo/vscode-logo.png',
         'Omniverse': 'logo/omniverse-logo.png',
+        'Plexus': 'logo/plexus-logo.png',
         'OpenUSD': 'logo/openusd-logo.png'
     };
     
