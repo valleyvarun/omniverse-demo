@@ -9,6 +9,10 @@ html, body {
 /* Global constants for consistent spacing */
 :root {
   --edge-gap: 2px;
+  --text-output-width: 32px;
+  --text-resize-bar-width: 6px;
+  --text-corner-size: 10px;
+  --text-side-width: calc(var(--text-resize-bar-width) + var(--text-output-width));
 }
 
 /* World wrapper will receive the parent's pan/zoom transform */
@@ -44,7 +48,7 @@ html, body {
 
 /* Default positions */
 #node1 {
-  left: 230px; /* moved further right; gap increased relative to boolean node */
+  left: 360px; /* move Plexus node further right by default */
   top: 80px;   /* lowered further down */
 }
 
@@ -130,6 +134,7 @@ html, body {
   background: #bfbfbf; /* light grey */
   border: 1px solid #ffffff; /* white border */
   flex-shrink: 0;
+  position: relative; /* allow inner green dot positioning */
 }
 
 /* Circle spacing differences by context */
@@ -176,6 +181,160 @@ html, body {
   left: 64px; /* moved further right */
   top: 80px;  /* lowered further down */
 }
+.text-node {
+  width: 220px;
+  height: auto;
+  min-height: 95px; /* minimal height with reduced padding */
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  position: absolute; /* independent positioning - won't affect other nodes */
+  padding-bottom: 14px;
+}
+
+.text-node .node-header {
+  height: 24px;
+  border-bottom: 1px solid #333;
+}
+
+.text-node-body {
+  flex: 1;
+  padding: 4px var(--edge-gap) 2px 4px; /* reduced padding for tighter default spacing */
+  min-height: 60px; /* ensure minimum vertical space */
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.text-block {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 2px 0; /* reduced vertical buffer */
+  flex: 1;
+  min-width: 100px; /* ensure text area doesn't collapse under resize bars */
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: normal;
+  color: #ffffff;
+  cursor: default;
+}
+
+.text-block.editing,
+.text-content.editing {
+  border-color: #76B900;
+  box-shadow: 0 0 0 1px rgba(118,185,0,0.4);
+  cursor: text;
+}
+
+.line-numbers {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 8px;
+  border-right: 1px solid #333;
+  min-width: 24px;
+  font-size: 10px;
+  line-height: 1.4;
+  color: #aaaaaa;
+  user-select: none;
+}
+
+.line-numbers div {
+  height: 1.4em;
+}
+
+.text-content {
+  flex: 1;
+  min-height: 48px;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.4;
+  cursor: text;
+}
+
+.text-side-column {
+  flex: 0 0 var(--text-side-width);
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+}
+
+.text-resize-bar {
+  flex: 0 0 var(--text-resize-bar-width);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.text-node-output {
+  flex: 0 0 var(--text-output-width);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 0;
+}
+
+.resize-handle {
+  position: absolute;
+  background: rgba(118,185,0,0.15);
+  border: 1px solid transparent;
+  border-radius: 2px;
+  z-index: inherit; /* inherit parent node's z-index to stay together */
+}
+
+.resize-handle-right {
+  top: 28px;
+  bottom: 20px;
+  right: 2px;
+  width: 3px;
+  cursor: ew-resize;
+}
+
+/* Vertical resize bar sits inside text-resize-bar, fills it completely */
+.text-resize-bar .resize-handle-right {
+  position: static;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  cursor: ew-resize;
+}
+
+/* Horizontal resize bar: stops at the left edge of the corner square */
+.resize-handle-bottom {
+  left: 4px;
+  right: calc(var(--edge-gap) + var(--text-output-width) + (var(--text-resize-bar-width) / 2) + (var(--text-corner-size) / 2) + 1px);
+  bottom: 2px; /* minimal buffer below text block */
+  height: 3px;
+  cursor: ns-resize;
+}
+
+/* Corner square: centered on the vertical bar, aligned with bottom bar baseline */
+.resize-handle-corner {
+  width: var(--text-corner-size);
+  height: var(--text-corner-size);
+  right: calc(var(--edge-gap) + var(--text-output-width) + (var(--text-resize-bar-width) / 2) - (var(--text-corner-size) / 2));
+  bottom: 2px; /* lowered to align with bottom bar */
+  cursor: se-resize;
+  border-color: #76B900;
+  background: rgba(118,185,0,0.25);
+}
+
+/* Default positions for new text nodes */
+#node3 {
+  left: 64px;
+  top: 160px;
+}
+
+#node4 {
+  left: 64px;
+  top: 240px;
+}
+
 
 .boolean-content {
   display: flex;
@@ -233,4 +392,19 @@ html, body {
 /* Boolean node keeps its 2px right edge via explicit margin */
 .boolean-right .output-circle {
   margin-right: 0; /* edge distance handled by boolean-content right padding */
+}
+
+/* Connected state: render a small green inner circle */
+.input-circle.connected::after,
+.output-circle.connected::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 6px;
+  height: 6px;
+  background: #76B900; /* NVIDIA green */
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 2px rgba(118,185,0,0.8);
 }

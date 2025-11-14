@@ -71,10 +71,68 @@
         </div>
       </div>
     </div>
+
+    <!-- Text Nodes -->
+    <!-- Text node: editable text field with line numbers, resize handles, and output connector -->
+    <div id="node3" class="node text-node" data-node-type="text">
+      <!-- Header bar with node type label -->
+      <div class="node-header">
+        <span class="node-header-text">Text</span>
+      </div>
+      
+      <!-- Main body: contains text editor and right-side column for resize/output -->
+      <div class="text-node-body">
+        <!-- Text editor block: line numbers + editable content area -->
+        <div class="text-block">
+          <div class="line-numbers"></div> <!-- Auto-generated line numbers (1, 2, 3...) -->
+          <div class="text-content" data-node-id="node3">ProjectWorkflow.cs</div> <!-- Editable text (double-click to edit) -->
+        </div>
+        
+        <!-- Right side column: vertical resize bar + output connector -->
+        <div class="text-side-column">
+          <!-- Vertical resize bar (drag to adjust node width) -->
+          <div class="text-resize-bar">
+            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize text node right edge"></div>
+          </div>
+          <!-- Output connector circle (aligned to right edge, consistent spacing) -->
+          <div class="text-node-output">
+            <div class="output-circle"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Horizontal resize bar (drag bottom edge to adjust height) -->
+      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize text node bottom edge"></div>
+      <!-- Corner resize square (drag to resize both width and height) -->
+      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
+    </div>
+
+    <!-- Second text node (same structure as above) -->
+    <div id="node4" class="node text-node" data-node-type="text">
+      <div class="node-header">
+        <span class="node-header-text">Text</span>
+      </div>
+      <div class="text-node-body">
+        <div class="text-block">
+          <div class="line-numbers"></div>
+          <div class="text-content" data-node-id="node4">O:\Projects\2025\Workflow\Release</div>
+        </div>
+        <div class="text-side-column">
+          <div class="text-resize-bar">
+            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize text node right edge"></div>
+          </div>
+          <div class="text-node-output">
+            <div class="output-circle"></div>
+          </div>
+        </div>
+      </div>
+      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize text node bottom edge"></div>
+      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
+    </div>
   </div>
 
   <script>
-    // Current world transform (provided by parent)
+  // Current world transform (provided by parent)
     let scale = 1;
     let offsetX = 0;
     let offsetY = 0;
@@ -84,6 +142,93 @@
     const nodeEls = Array.from(document.querySelectorAll('.node'));
     // Store world-space positions for each node by id
     const nodePos = {};
+
+    // Enable inline editing for text nodes on double-click
+    let editingTextBlock = false;
+    const textEditors = Array.from(document.querySelectorAll('.text-content'));
+    textEditors.forEach(editor => {
+      editor.setAttribute('contenteditable', 'false');
+      editor.addEventListener('dblclick', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        startEditingTextBlock(editor);
+      });
+      editor.addEventListener('blur', () => endEditingTextBlock(editor));
+      editor.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          editor.blur();
+        }
+      });
+      editor.addEventListener('input', () => updateLineNumbers(editor));
+      updateLineNumbers(editor);
+    });
+
+    function startEditingTextBlock(editor) {
+      editingTextBlock = true;
+      const block = editor.closest('.text-block');
+      if (block) block.classList.add('editing');
+      editor.classList.add('editing');
+      editor.setAttribute('contenteditable', 'true');
+      editor.focus();
+      // move caret to end
+      const range = document.createRange();
+      range.selectNodeContents(editor);
+      range.collapse(false);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+    }
+
+    function endEditingTextBlock(editor) {
+      if (!editingTextBlock) return;
+      const block = editor.closest('.text-block');
+      if (block) block.classList.remove('editing');
+      editor.classList.remove('editing');
+      editor.setAttribute('contenteditable', 'false');
+      editingTextBlock = false;
+      updateLineNumbers(editor);
+      try {
+        window.top.postMessage({ type: 'focusCommand' }, '*');
+      } catch (_) {}
+    }
+
+    function updateLineNumbers(editor) {
+      const block = editor.closest('.text-block');
+      if (!block) return;
+      const column = block.querySelector('.line-numbers');
+      if (!column) return;
+      const text = editor.innerText.replace(/\u00a0/g, ' ');
+      const lines = text.split(/\n/);
+      const count = Math.max(1, lines.length);
+      column.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const line = document.createElement('div');
+        line.textContent = i;
+        column.appendChild(line);
+      }
+    }
+
+    // Boolean node state persistence
+    const booleanButton = document.querySelector('#node2 .boolean-toggle');
+    function readBooleanState() {
+      try {
+        const val = localStorage.getItem('boolean:node2');
+        if (val === 'true') return true;
+        if (val === 'false') return false;
+      } catch (_) {}
+      return null;
+    }
+    function applyBooleanState(state) {
+      if (!booleanButton) return;
+      if (state === true) {
+        booleanButton.textContent = 'true';
+        booleanButton.classList.add('true');
+      } else if (state === false) {
+        booleanButton.textContent = 'false';
+        booleanButton.classList.remove('true');
+      }
+    }
 
     // Initialize node positions from computed styles (left/top from CSS) or defaults
     nodeEls.forEach(el => {
@@ -115,6 +260,12 @@
     let draggingNodeId = null;
     let dragStartSX = 0, dragStartSY = 0; // screen
     let startWX = 0, startWY = 0; // world
+    // Resize handling
+    let resizing = false;
+    let resizingNode = null;
+    let resizeStartSX = 0, resizeStartSY = 0;
+    let resizeStartWidth = 0, resizeStartHeight = 0;
+    let resizeDirection = 'se';
 
     // Attach drag handlers to all nodes
     nodeEls.forEach(el => {
@@ -122,8 +273,11 @@
         // Only left or middle button
         if (e.button !== 0 && e.button !== 1) return;
         // Don't start dragging when interacting with controls (e.g., buttons inside node)
-        if (e.target.closest('button, input, textarea, select')) return;
+        if (e.target.closest('button, input, textarea, select, .text-block, .text-content')) return;
         e.preventDefault();
+        // Bring clicked node to front
+        nodeEls.forEach(n => n.style.zIndex = '1');
+        el.style.zIndex = '10';
         dragging = true;
         draggingNodeId = el.id;
         dragStartSX = e.clientX;
@@ -145,7 +299,49 @@
         updateAllNodePositions();
       }
     });
-    window.addEventListener('mouseup', () => { dragging = false; draggingNodeId = null; });
+    window.addEventListener('mousemove', (e) => {
+      if (!resizing || !resizingNode) return;
+      const dSX = e.clientX - resizeStartSX;
+      const dSY = e.clientY - resizeStartSY;
+      if (resizeDirection.includes('e')) {
+        // Min width accounts for text block (100px) + side column (38px) + padding (10px) + border (2px)
+        const newWidth = Math.max(150, resizeStartWidth + dSX / scale);
+        resizingNode.style.width = newWidth + 'px';
+      }
+      if (resizeDirection.includes('s')) {
+        // Min height: header (24px) + body padding top/bottom (4+2=6px) + text-block margins (4px) + text content min (48px) + buffers (13px) = 95px
+        const newHeight = Math.max(95, resizeStartHeight + dSY / scale);
+        resizingNode.style.height = newHeight + 'px';
+      }
+    });
+    window.addEventListener('mouseup', () => {
+      dragging = false;
+      draggingNodeId = null;
+      if (resizing && resizingNode) {
+        resizingNode.classList.remove('resizing');
+      }
+      resizing = false;
+      resizingNode = null;
+    });
+
+    const resizeHandles = Array.from(document.querySelectorAll('.resize-handle'));
+    resizeHandles.forEach(handle => {
+      handle.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const node = handle.closest('.text-node');
+        if (!node) return;
+        resizing = true;
+        resizingNode = node;
+        resizeStartSX = e.clientX;
+        resizeStartSY = e.clientY;
+        const cs = getComputedStyle(node);
+        resizeStartWidth = parseFloat(cs.width) || node.offsetWidth;
+        resizeStartHeight = parseFloat(cs.height) || node.offsetHeight;
+        resizeDirection = handle.dataset.direction || 'se';
+        node.classList.add('resizing');
+      });
+    });
 
     function publishNodesState() {
       try {
@@ -190,9 +386,19 @@
     }, { passive: false });
 
     // Any click inside nodes iframe should route focus back to the command line in the top window
-    document.addEventListener('click', () => {
+    document.addEventListener('click', (e) => {
+      if (editingTextBlock) return;
+      if (e.target.closest('.text-block, .text-content')) return;
       try {
         window.top.postMessage({ type: 'focusCommand' }, '*');
+      } catch (_) {}
+    });
+
+    // Background double-click should prefill command input with "add: "
+    document.addEventListener('dblclick', (e) => {
+      if (e.target.closest('.node, button, input, textarea, select, .text-block, .text-content')) return;
+      try {
+        window.top.postMessage({ type: 'command:prefill', value: 'add: ' }, '*');
       } catch (_) {}
     });
 
@@ -218,6 +424,10 @@
     });
 
     // Initial paint
+  // Restore boolean state from storage before first paint
+  const storedBool = readBooleanState();
+  if (storedBool !== null) applyBooleanState(storedBool);
+
   updateWorldTransform();
   updateAllNodePositions();
 
@@ -231,6 +441,11 @@
         button.textContent = 'false';
         button.classList.remove('true');
       }
+      // Persist state
+      try {
+        const isTrue = button.classList.contains('true');
+        localStorage.setItem('boolean:node2', isTrue ? 'true' : 'false');
+      } catch (_) {}
     }
   </script>
 </body>

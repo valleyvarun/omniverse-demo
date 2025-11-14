@@ -206,6 +206,8 @@
           if (win) {
             win.postMessage({ type: 'world:transform', scale, offsetX, offsetY }, '*');
           }
+          // Also notify overlays in this window (e.g., connectors)
+          window.postMessage({ type: 'world:transform', scale, offsetX, offsetY }, '*');
         } catch (_) {}
       }
 
@@ -283,5 +285,8 @@
       setTimeout(() => { allowPublish = true; }, 500);
     })();
   </script>
+  <!-- p5.js for connector rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.9.0/lib/p5.min.js"></script>
+  <script src="plexus.js"></script>
 </body>
 </html>

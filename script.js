@@ -510,6 +510,22 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch(_) {}
         }
 
+        if (data.type === 'command:prefill') {
+            try {
+                blurAgentChatInput();
+                enableGlobalKeyboard();
+                window.chatbotState = { ...(window.chatbotState||{}), inputFocused: false };
+                const commandInput = document.getElementById('commandInput');
+                if (commandInput) {
+                    const value = typeof data.value === 'string' ? data.value : 'add: ';
+                    commandInput.value = value;
+                    const cursorPos = value.length;
+                    commandInput.setSelectionRange(cursorPos, cursorPos);
+                    setTimeout(() => { commandInput.focus(); }, 10);
+                }
+            } catch(_) {}
+        }
+
         // Open popup on explicit request from an iframe (e.g., PM 'Open Project Folder')
         if (data.type === 'popup:open') {
             try {
