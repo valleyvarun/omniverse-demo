@@ -8,6 +8,8 @@
 </head>
 <body>
   <div id="world">
+    <svg id="connections" class="connections-layer" xmlns="http://www.w3.org/2000/svg"></svg>
+    <!--============================ NODE 1: PLEXUS ============================-->
     <div id="node1" class="node">
       <!-- Header with Omniverse logo -->
       <div class="node-header">
@@ -21,7 +23,7 @@
         <div class="inputs">
           <div class="input-item">
             <div class="input-circle"></div>
-            <div class="input-label">run</div>
+            <div class="input-label label-accent">RUN</div>
           </div>
           <div class="input-item">
             <div class="input-circle"></div>
@@ -52,11 +54,17 @@
             <div class="output-label">users</div>
             <div class="output-circle"></div>
           </div>
+          <div class="output-item">
+            <div class="output-label label-accent">START</div>
+            <div class="output-circle" data-connector="start-output">
+              <span class="connector-inner"></span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- True/False Node -->
+    <!--============================ NODE 2: BOOLEAN ============================-->
     <div id="node2" class="node boolean-node">
       <!-- Content area -->
       <div class="boolean-content">
@@ -72,8 +80,7 @@
       </div>
     </div>
 
-    <!-- Text Nodes -->
-    <!-- Text node: editable text field with line numbers, resize handles, and output connector -->
+    <!--============================ NODE 3: TEXT ============================-->
     <div id="node3" class="node text-node" data-node-type="text">
       <!-- Header bar with node type label -->
       <div class="node-header">
@@ -107,7 +114,7 @@
       <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
     </div>
 
-    <!-- Second text node (same structure as above) -->
+    <!--============================ NODE 4: TEXT ============================-->
     <div id="node4" class="node text-node" data-node-type="text">
       <div class="node-header">
         <span class="node-header-text">Text</span>
@@ -129,6 +136,73 @@
       <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize text node bottom edge"></div>
       <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
     </div>
+
+    <!--============================ NODE 5: SCRIPT ============================-->
+    <div id="node5" class="node script-node" data-node-type="script">
+      <!-- Header bar with node type label -->
+      <div class="node-header script-header">
+        <div class="script-header-left">
+          <img src="../logo/plexus-logo.png" alt="Plexus" class="node-logo">
+          <span class="node-header-text">Script</span>
+        </div>
+        <div class="script-header-center">
+          <label class="visually-hidden" for="script-language-select">Script language</label>
+          <select id="script-language-select" class="script-language-select" aria-label="Script language">
+            <option value="csharp" selected>C#</option>
+            <option value="cpp">C++</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+          </select>
+        </div>
+      </div>
+      
+      <!-- Main body: contains input, script editor, and right-side column for resize/output -->
+      <div class="script-node-body">
+        <!-- Left side: Input connector -->
+        <div class="script-node-input">
+          <div class="script-input-row">
+            <div class="input-circle"></div>
+            <div class="script-input-label">input</div>
+          </div>
+          <div class="script-input-row">
+            <div class="input-circle" data-connector="run-queue-input">
+              <span class="connector-inner"></span>
+            </div>
+            <div class="script-input-label label-accent">run queue</div>
+          </div>
+        </div>
+        
+        <!-- Script editor block: line numbers + editable code area -->
+          <div class="script-block">
+          <div class="line-numbers"></div> <!-- Auto-generated line numbers (1, 2, 3...) -->
+          <div class="script-content" data-node-id="node5"><span class="code-line"><span class="token-comment">// Default Plexus run queue script</span></span><span class="code-line"><span class="token-keyword">using</span> <span class="token-namespace">System.Collections.Generic</span>;</span><span class="code-line"><span class="token-keyword">public</span> <span class="token-keyword">class</span> <span class="token-type">RunQueue</span></span><span class="code-line">{</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">private</span> <span class="token-keyword">readonly</span> <span class="token-type">Queue&lt;string&gt;</span> <span class="token-field">_jobs</span> = <span class="token-keyword">new</span> <span class="token-type">Queue&lt;string&gt;</span>();</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">public</span> <span class="token-keyword">void</span> <span class="token-method">Enqueue</span>(<span class="token-type">string</span> job)</span><span class="code-line">&nbsp;&nbsp;{</span><span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-field">_jobs</span>.<span class="token-method">Enqueue</span>(job);</span><span class="code-line">&nbsp;&nbsp;}</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">public</span> <span class="token-type">string</span> <span class="token-method">NextJob</span>()</span><span class="code-line">&nbsp;&nbsp;{</span><span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-keyword">return</span> <span class="token-field">_jobs</span>.Count &gt; <span class="token-value">0</span> ? <span class="token-field">_jobs</span>.<span class="token-method">Dequeue</span>() : <span class="token-string">&quot;idle&quot;</span>;</span><span class="code-line">&nbsp;&nbsp;}</span><span class="code-line">}</span><span class="code-line"><span class="token-keyword">var</span> queue = <span class="token-keyword">new</span> <span class="token-type">RunQueue</span>();</span><span class="code-line">queue.<span class="token-method">Enqueue</span>(<span class="token-string">&quot;RenderDraft&quot;</span>);</span><span class="code-line">queue.<span class="token-method">Enqueue</span>(<span class="token-string">&quot;PublishAssets&quot;</span>);</span><span class="code-line"><span class="token-keyword">var</span> currentJob = queue.<span class="token-method">NextJob</span>();</span></div> <!-- Editable script (double-click to edit) -->
+        </div>
+        
+        <!-- Right side column: vertical resize bar + output connector -->
+        <div class="script-side-column">
+          <!-- Vertical resize bar (drag to adjust node width) -->
+          <div class="script-resize-bar">
+            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize script node right edge"></div>
+          </div>
+          <!-- Output connector with label -->
+          <div class="script-node-output">
+            <div class="script-output-row">
+              <div class="script-output-label">output</div>
+              <div class="output-circle"></div>
+            </div>
+            <div class="script-output-row run-queue">
+              <div class="script-output-label label-accent">run queue</div>
+              <div class="output-circle"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Horizontal resize bar (drag bottom edge to adjust height) -->
+      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize script node bottom edge"></div>
+      <!-- Corner resize square (drag to resize both width and height) -->
+      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize script node corner"></div>
+    </div>
   </div>
 
   <script>
@@ -139,13 +213,22 @@
 
     // World/nodes setup
     const world = document.getElementById('world');
+    const connectionsSvg = document.getElementById('connections');
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const connectionDefs = [
+      {
+        id: 'start-to-runqueue',
+        fromSelector: '[data-connector="start-output"]',
+        toSelector: '[data-connector="run-queue-input"]'
+      }
+    ];
     const nodeEls = Array.from(document.querySelectorAll('.node'));
     // Store world-space positions for each node by id
     const nodePos = {};
 
-    // Enable inline editing for text nodes on double-click
+    // Enable inline editing for text and script nodes on double-click
     let editingTextBlock = false;
-    const textEditors = Array.from(document.querySelectorAll('.text-content'));
+    const textEditors = Array.from(document.querySelectorAll('.text-content, .script-content'));
     textEditors.forEach(editor => {
       editor.setAttribute('contenteditable', 'false');
       editor.addEventListener('dblclick', (e) => {
@@ -166,7 +249,7 @@
 
     function startEditingTextBlock(editor) {
       editingTextBlock = true;
-      const block = editor.closest('.text-block');
+      const block = editor.closest('.text-block, .script-block');
       if (block) block.classList.add('editing');
       editor.classList.add('editing');
       editor.setAttribute('contenteditable', 'true');
@@ -182,7 +265,7 @@
 
     function endEditingTextBlock(editor) {
       if (!editingTextBlock) return;
-      const block = editor.closest('.text-block');
+      const block = editor.closest('.text-block, .script-block');
       if (block) block.classList.remove('editing');
       editor.classList.remove('editing');
       editor.setAttribute('contenteditable', 'false');
@@ -194,19 +277,42 @@
     }
 
     function updateLineNumbers(editor) {
-      const block = editor.closest('.text-block');
+      const block = editor.closest('.text-block, .script-block');
       if (!block) return;
       const column = block.querySelector('.line-numbers');
       if (!column) return;
       const text = editor.innerText.replace(/\u00a0/g, ' ');
       const lines = text.split(/\n/);
-      const count = Math.max(1, lines.length);
+      const cs = window.getComputedStyle(editor);
+      const lineHeight = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) || 16;
+      const measure = document.createElement('div');
+      measure.style.position = 'absolute';
+      measure.style.visibility = 'hidden';
+      measure.style.pointerEvents = 'none';
+      measure.style.whiteSpace = cs.whiteSpace;
+      measure.style.wordBreak = cs.wordBreak;
+      measure.style.font = cs.font || `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+      measure.style.lineHeight = cs.lineHeight;
+      measure.style.width = `${editor.clientWidth || editor.offsetWidth || editor.scrollWidth}px`;
+      measure.style.boxSizing = cs.boxSizing;
+      measure.style.padding = cs.padding;
+      document.body.appendChild(measure);
+
       column.innerHTML = '';
-      for (let i = 1; i <= count; i++) {
-        const line = document.createElement('div');
-        line.textContent = i;
-        column.appendChild(line);
-      }
+      lines.forEach((lineText, index) => {
+        measure.textContent = lineText || '\u200B';
+        const rows = Math.max(1, Math.round(measure.scrollHeight / lineHeight));
+        const numberDiv = document.createElement('div');
+        numberDiv.textContent = index + 1;
+        column.appendChild(numberDiv);
+        for (let r = 1; r < rows; r++) {
+          const spacer = document.createElement('div');
+          spacer.innerHTML = '&nbsp;';
+          column.appendChild(spacer);
+        }
+      });
+
+      measure.remove();
     }
 
     // Boolean node state persistence
@@ -243,6 +349,7 @@
 
     function updateWorldTransform() {
       world.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
+      updateConnections();
     }
 
     function updateAllNodePositions() {
@@ -253,6 +360,7 @@
         el.style.top  = p.y + 'px';
       });
       publishNodesState();
+      updateConnections();
     }
 
     // Drag handling in screen space, convert to world space by dividing by scale
@@ -273,7 +381,7 @@
         // Only left or middle button
         if (e.button !== 0 && e.button !== 1) return;
         // Don't start dragging when interacting with controls (e.g., buttons inside node)
-        if (e.target.closest('button, input, textarea, select, .text-block, .text-content')) return;
+        if (e.target.closest('button, input, textarea, select, .text-block, .text-content, .script-block, .script-content')) return;
         e.preventDefault();
         // Bring clicked node to front
         nodeEls.forEach(n => n.style.zIndex = '1');
@@ -313,6 +421,7 @@
         const newHeight = Math.max(95, resizeStartHeight + dSY / scale);
         resizingNode.style.height = newHeight + 'px';
       }
+      updateConnections();
     });
     window.addEventListener('mouseup', () => {
       dragging = false;
@@ -324,12 +433,14 @@
       resizingNode = null;
     });
 
+    window.addEventListener('resize', () => updateConnections());
+
     const resizeHandles = Array.from(document.querySelectorAll('.resize-handle'));
     resizeHandles.forEach(handle => {
       handle.addEventListener('mousedown', (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const node = handle.closest('.text-node');
+        const node = handle.closest('.text-node, .script-node');
         if (!node) return;
         resizing = true;
         resizingNode = node;
@@ -348,6 +459,35 @@
         const payload = Object.entries(nodePos).map(([id, p]) => ({ id, x: p.x, y: p.y }));
         window.top.postMessage({ type: 'nodes:state', nodes: payload }, '*');
       } catch (_) {}
+    }
+
+    function getConnectorCenter(el) {
+      if (!el || !world) return null;
+      const inner = el.querySelector('.connector-inner');
+      const target = inner || el;
+      const rect = target.getBoundingClientRect();
+      const worldRect = world.getBoundingClientRect();
+      const x = (rect.left + rect.width / 2 - worldRect.left) / scale;
+      const y = (rect.top + rect.height / 2 - worldRect.top) / scale;
+      return { x, y };
+    }
+
+    function updateConnections() {
+      if (!connectionsSvg) return;
+      connectionsSvg.innerHTML = '';
+      connectionDefs.forEach(def => {
+        const fromEl = document.querySelector(def.fromSelector);
+        const toEl = document.querySelector(def.toSelector);
+        if (!fromEl || !toEl) return;
+        const start = getConnectorCenter(fromEl);
+        const end = getConnectorCenter(toEl);
+        if (!start || !end) return;
+        const ctrlOffset = Math.max(40, Math.abs(end.x - start.x) * 0.35);
+        const path = document.createElementNS(svgNS, 'path');
+        path.setAttribute('d', `M${start.x},${start.y} C${start.x + ctrlOffset},${start.y} ${end.x - ctrlOffset},${end.y} ${end.x},${end.y}`);
+        path.setAttribute('class', 'connection-path');
+        connectionsSvg.appendChild(path);
+      });
     }
 
     // Request saved node state from top on load
@@ -388,7 +528,7 @@
     // Any click inside nodes iframe should route focus back to the command line in the top window
     document.addEventListener('click', (e) => {
       if (editingTextBlock) return;
-      if (e.target.closest('.text-block, .text-content')) return;
+      if (e.target.closest('.text-block, .text-content, .script-block, .script-content, .script-language-select')) return;
       try {
         window.top.postMessage({ type: 'focusCommand' }, '*');
       } catch (_) {}
@@ -396,7 +536,7 @@
 
     // Background double-click should prefill command input with "add: "
     document.addEventListener('dblclick', (e) => {
-      if (e.target.closest('.node, button, input, textarea, select, .text-block, .text-content')) return;
+      if (e.target.closest('.node, button, input, textarea, select, .text-block, .text-content, .script-block, .script-content')) return;
       try {
         window.top.postMessage({ type: 'command:prefill', value: 'add: ' }, '*');
       } catch (_) {}

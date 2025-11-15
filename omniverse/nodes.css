@@ -19,10 +19,31 @@ html, body {
 #world {
   position: absolute;
   top: 0; left: 0;
-  width: 0; height: 0; /* size not used; children positioned absolutely */
+  width: 100%;
+  height: 100%;
   transform-origin: 0 0;
   will-change: transform;
   pointer-events: none; /* allow only nodes to capture */
+}
+
+.connections-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+  z-index: 20;
+}
+
+.connection-path {
+  fill: none;
+  stroke: #5a64e8;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(90, 100, 232, 0.35));
 }
 
 /* Node style */
@@ -62,6 +83,54 @@ html, body {
   align-items: center;
   padding: 0 8px;
   flex-shrink: 0;
+}
+
+.script-header {
+  position: relative;
+  justify-content: flex-start;
+}
+
+.script-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.script-header-center {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.script-language-select {
+  background: #2a2a2a;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #ffffff;
+  font-size: 10px;
+  padding: 2px 16px 2px 6px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-align: center;
+  text-align-last: center;
+}
+
+.script-language-select:focus {
+  outline: 1px solid #76B900;
+  outline-offset: 1px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .node-logo {
@@ -137,17 +206,41 @@ html, body {
   position: relative; /* allow inner green dot positioning */
 }
 
+.connector-inner {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #5a64e8;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 4px rgba(90, 100, 232, 0.45);
+}
+
 /* Circle spacing differences by context */
 .input-circle { 
   margin-right: 8px; 
   margin-left: 0; /* rely on inputs margin-left to set exact edge distance */
 }
 
-.input-label {
-  flex: 1;
+/* Shared label styles for all node text labels */
+.input-label,
+.output-label,
+.script-input-label,
+.script-output-label {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 10px;
+}
+
+.input-label {
+  flex: 1;
+}
+
+.label-accent {
+  color: #5a64e8;
 }
 
 /* Output section */
@@ -164,14 +257,10 @@ html, body {
   align-items: center;
   justify-content: flex-end;
   margin: 0; /* spacing controlled by container gap */
-  font-size: 10px;
 }
 
 .output-label {
   margin-right: 8px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 /* Boolean Node Styles */
@@ -237,14 +326,17 @@ html, body {
   padding-right: 8px;
   border-right: 1px solid #333;
   min-width: 24px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.4;
   color: #aaaaaa;
   user-select: none;
 }
 
 .line-numbers div {
-  height: 1.4em;
+  line-height: 1.4;
+  min-height: 1.4em;
+  display: flex;
+  align-items: flex-start;
 }
 
 .text-content {
@@ -307,9 +399,9 @@ html, body {
 /* Horizontal resize bar: stops at the left edge of the corner square */
 .resize-handle-bottom {
   left: 4px;
-  right: calc(var(--edge-gap) + var(--text-output-width) + (var(--text-resize-bar-width) / 2) + (var(--text-corner-size) / 2) + 1px);
+  right: calc(var(--edge-gap) + var(--text-output-width) + (var(--text-resize-bar-width) / 2) + (var(--text-corner-size) / 2) + 16px);
   bottom: 2px; /* minimal buffer below text block */
-  height: 3px;
+  height: 2px;
   cursor: ns-resize;
 }
 
@@ -333,6 +425,193 @@ html, body {
 #node4 {
   left: 64px;
   top: 240px;
+}
+
+#node5 {
+  left: 520px;
+  top: 160px;
+}
+
+/* Script Node Styles */
+.script-node {
+  --script-gap: 6px;
+  --text-output-width: 52px;
+  --text-side-width: calc(var(--text-resize-bar-width) + var(--text-output-width) + var(--script-gap));
+  width: 600px;
+  height: auto;
+  min-height: 95px;
+  cursor: default;
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  padding-bottom: 14px;
+}
+
+.script-node .node-header {
+  height: 24px;
+  border-bottom: 1px solid #333;
+}
+
+.script-node-body {
+  flex: 1;
+  padding: 4px var(--edge-gap) 2px var(--edge-gap);
+  min-height: 60px;
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.script-node-input {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 12px;
+  min-width: 48px;
+  padding-left: 2px;
+  padding-top: 6px;
+}
+
+.script-input-label {
+  margin-left: 0;
+}
+
+.script-input-row,
+.script-output-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.script-input-row {
+  justify-content: flex-start;
+}
+
+.script-output-row {
+  justify-content: flex-end;
+}
+
+.script-block {
+  background: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 2px 0;
+  flex: 1;
+  min-width: 220px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: normal;
+  color: #ffffff;
+  cursor: default;
+  font-family: 'Courier New', monospace;
+}
+
+.script-block.editing,
+.script-content.editing {
+  border-color: #76B900;
+  box-shadow: 0 0 0 1px rgba(118,185,0,0.4);
+  cursor: text;
+}
+
+.script-content {
+  flex: 1;
+  min-height: 48px;
+  outline: none;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.4;
+  cursor: text;
+  font-family: 'Courier New', monospace;
+}
+
+.script-content .code-line {
+  display: block;
+}
+
+.script-content .token-comment {
+  color: #6a9955;
+}
+
+.script-content .token-keyword {
+  color: #569cd6;
+}
+
+.script-content .token-namespace,
+.script-content .token-type,
+.script-content .token-struct {
+  color: #4ec9b0;
+}
+
+.script-content .token-field,
+.script-content .token-method {
+  color: #dcdcaa;
+}
+
+.script-content .token-string {
+  color: #ce9178;
+}
+
+.script-content .token-value {
+  color: #b5cea8;
+}
+
+.script-side-column {
+  flex: 0 0 var(--text-side-width);
+  display: flex;
+  align-items: stretch;
+  gap: var(--script-gap);
+}
+
+.script-resize-bar {
+  flex: 0 0 var(--text-resize-bar-width);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* Script node: adjust handle offsets to include gap between output labels and resize bar */
+.script-node .resize-handle-bottom {
+  left: 4px;
+  right: calc(var(--edge-gap) + var(--text-output-width) + var(--script-gap) + (var(--text-resize-bar-width) / 2) + (var(--text-corner-size) / 2) + 16px);
+  bottom: 2px;
+  height: 2px;
+  cursor: ns-resize;
+}
+
+.script-node .resize-handle-corner {
+  width: var(--text-corner-size);
+  height: var(--text-corner-size);
+  right: calc(var(--edge-gap) + var(--text-output-width) + var(--script-gap) + var(--text-resize-bar-width) + 6px);
+  bottom: 2px;
+  cursor: se-resize;
+  border-color: #76B900;
+  background: rgba(118,185,0,0.25);
+}
+
+.script-node-output {
+  flex: 0 0 var(--text-output-width);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-start;
+  gap: 12px;
+  padding-top: 6px;
+  padding-right: 0;
+}
+
+.script-output-label {
+  margin-right: 8px;
+}
+
+.script-resize-bar .resize-handle-right {
+  position: static;
+  width: 100%;
+  height: 100%;
+  border-radius: 2px;
+  cursor: ew-resize;
 }
 
 
