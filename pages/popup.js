@@ -9,8 +9,9 @@
 		'omniverse': 'omniverse-logo.png',
 		'plexus': 'plexus-logo.png',
 		'apps': 'apps-logo.png',
+		'store': 'store-logo.png',
 		'nucleus': 'nucleus-logo.png',
-		'browser': 'browser-logo.png',
+		'market': 'market-logo.png',
 		'folders': 'folders-logo.png'
 	};
 
@@ -161,6 +162,17 @@
 						const iframe = document.createElement('iframe');
 						iframe.src = '../apps/apps.html';
 						iframe.title = 'Apps';
+						iframe.style.width = '100%';
+						iframe.style.height = '100%';
+						iframe.style.border = 'none';
+						iframe.style.display = 'block';
+						bodyEl.appendChild(iframe);
+					} else if (data.title.trim().toLowerCase() === 'store') {
+						clearBody();
+						// Embed the store interface into the popup body
+						const iframe = document.createElement('iframe');
+						iframe.src = '../apps/store.html';
+						iframe.title = 'Store';
 						iframe.style.width = '100%';
 						iframe.style.height = '100%';
 						iframe.style.border = 'none';

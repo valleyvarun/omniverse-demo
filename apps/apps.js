@@ -6,6 +6,7 @@
 let searchInput;
 let filterSelect;
 let appItems;
+let popupSwitchButtons = [];
 
 // Global data storage
 let appsDataGlobal = [];
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeElements() {
 	searchInput = document.querySelector('.apps-search');
 	filterSelect = document.querySelector('.apps-filter');
+	popupSwitchButtons = Array.from(document.querySelectorAll('.apps-store-button'));
 	
 	// Load apps from JSON file
 	loadAppsFromJSON().then(() => {
@@ -177,6 +179,18 @@ function setupEventListeners() {
 			applySorting(filterSelect.value);
 		}, 100); // Small delay to ensure apps are rendered
 	}
+
+	popupSwitchButtons.forEach(btn => {
+		btn.addEventListener('click', (event) => {
+			event.preventDefault();
+			const target = (btn.dataset.popupTarget || 'Store').trim();
+			try {
+				window.top.postMessage({ type: 'popup:open', title: target }, '*');
+			} catch (err) {
+				console.warn('Failed to open popup', err);
+			}
+		});
+	});
 }
 
 /* ===================================================

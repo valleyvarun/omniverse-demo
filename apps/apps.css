@@ -54,17 +54,29 @@ body {
 	display: flex;
 	align-items: center;
 	padding: 0 15px;                     /* Horizontal padding */
-	gap: 15px;                           /* Space between search and filter */
+	gap: 15px;                           /* Space between clusters */
+}
+
+.apps-header-left {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex: 1;
+	min-width: 0;
 }
 
 /* Search bar container - takes up specified width */
 .apps-search-container {
-	width: 40vw;                         /* 40% of viewport width */
+	flex: 1 1 40vw;                      /* Grow but prefer 40vw */
+	max-width: 40vw;
+	min-width: 0;                        /* Allow flexbox to shrink without overflow */
+	display: flex;
+	align-items: center;
 }
 
 /* Search input field styling */
 .apps-search {
-	width: 100%;                         /* Fill container width */
+	width: 100%;                         /* Base width when container wraps */
 	height: 32px;                        /* Fixed height for consistency */
 	background-color: #1a1a1a;           /* Dark input background */
 	border: 1px solid #555;              /* Gray border */
@@ -74,6 +86,7 @@ body {
 	padding: 4px 6px;                    /* Internal spacing */
 	outline: none;                       /* Remove default outline */
 	transition: all 0.2s ease;          /* Smooth hover/focus effects */
+	flex: 1;
 }
 
 /* Search input focus state - NVIDIA green highlight */
@@ -87,21 +100,45 @@ body {
 	color: #888;                         /* Lighter gray for placeholder */
 }
 
-/* Filter dropdown container - positioned at right end */
+.apps-store-button {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	background-color: #1a1a1a;
+	border: 1px solid #555;
+	border-radius: 4px;
+	color: #ffffff;
+	font-size: 12px;
+	padding: 0 10px;
+	height: 32px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.apps-store-button:hover,
+.apps-store-button:focus {
+	border-color: #76B900;
+	box-shadow: 0 0 4px rgba(118, 185, 0, 0.3);
+	outline: none;
+}
+
+.apps-store-icon {
+	height: 18px;
+	width: auto;
+}
+
+.apps-store-label {
+	font-size: 12px;
+	line-height: 1;
+}
+
+/* Filter dropdown container - sits beside search input */
 .apps-filter-container {
-	width: 18vw;                         /* 18% of viewport width - increased for "By Functionality" */
+	flex: 0 0 18vw;                      /* Consistent width next to search */
+	max-width: 18vw;
 	display: flex;
 	align-items: center;
 	gap: 6px;                            /* Space between icon and dropdown */
-	margin-left: auto;                   /* Push to right end of header */
-}
-
-/* Filter icon - decorative arrow before dropdown */
-.apps-filter-icon {
-	font-size: 12px;                     /* Icon size */
-	color: #76B900;                      /* NVIDIA green color */
-	user-select: none;                   /* Prevent text selection */
-	pointer-events: none;                /* Icon not clickable */
 }
 
 /* Filter dropdown styling */
@@ -117,6 +154,10 @@ body {
 	outline: none;                       /* Remove default outline */
 	cursor: pointer;                     /* Show clickable cursor */
 	transition: all 0.2s ease;          /* Smooth hover/focus effects */
+}
+
+.apps-header .apps-store-button {
+	margin-left: auto;                   /* Push button to right edge */
 }
 
 /* Filter dropdown focus state - NVIDIA green highlight */

@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Apps</title>
+	<title>Store</title>
 	<link rel="stylesheet" href="apps.css">
 	<style>html,body{height:100%;margin:0;padding:0;}</style>
 	<script defer src="apps.js"></script>
@@ -11,9 +11,9 @@
 </head>
 <body>
 	<!-- ================================
-	     MAIN APPS CONTAINER
+	     MAIN STORE CONTAINER
 	     ================================ -->
-	<div class="apps-root" id="appsRoot">
+	<div class="apps-root" id="storeRoot">
 		
 		<!-- ================================
 		     FIXED HEADER - SEARCH & FILTER
@@ -21,25 +21,25 @@
 		<div class="apps-header">
 			<div class="apps-header-left">
 				<div class="apps-search-container">
-					<input type="text" class="apps-search" placeholder="🔍 Search apps..." aria-label="Search apps">
+					<input type="text" class="apps-search" placeholder="🔍 Search store..." aria-label="Search store">
 				</div>
 				<div class="apps-filter-container">
-					<select class="apps-filter" aria-label="Filter apps">
+					<select class="apps-filter" aria-label="Filter store">
 						<option value="a-to-z">A to Z</option>
 						<option value="by-company">By Company</option>
-							<option value="by-functionality" selected>By Functionality</option>
+						<option value="by-functionality" selected>By Functionality</option>
 						<option value="by-industry">By Industry</option>
 					</select>
 				</div>
 			</div>
-			<button type="button" class="apps-store-button" data-popup-target="Store">
-				<img src="../logo/store-logo.png" alt="Store" class="apps-store-icon">
-				<span class="apps-store-label">Go to Store</span>
+			<button type="button" class="apps-store-button" data-popup-target="Apps">
+				<img src="../logo/apps-logo.png" alt="Apps" class="apps-store-icon">
+				<span class="apps-store-label">Go to Apps</span>
 			</button>
 		</div>
 		
 		<!-- ================================
-		     SCROLLABLE BODY - APP GRID
+		     SCROLLABLE BODY - STORE GRID
 		     ================================ -->
 		<div class="apps-body">
 			<div class="apps-grid">
