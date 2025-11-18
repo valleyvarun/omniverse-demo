@@ -67,6 +67,10 @@
 // 1. GLOBAL KEYBOARD CONTROL
 // =============================================================================
 
+window.omniverseWorkspaceState = window.omniverseWorkspaceState || { scale: 1, offsetX: 40, offsetY: 40 };
+window.omniverseWorkspaceTransform = window.omniverseWorkspaceTransform || { scale: 1, offsetX: 0, offsetY: 0 };
+window.omniverseNodeState = window.omniverseNodeState || {};
+
 // Global state for keyboard capture control
 window.chatbotActive = false;
 
@@ -603,6 +607,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Persist Omniverse world transform per tab and restore on request
         if (data.type === 'world:state') {
             try {
+                if (typeof data.scale === 'number') window.omniverseWorkspaceState.scale = data.scale;
+                if (typeof data.offsetX === 'number') window.omniverseWorkspaceState.offsetX = data.offsetX;
+                if (typeof data.offsetY === 'number') window.omniverseWorkspaceState.offsetY = data.offsetY;
                 // Save state on the currently active tab element
                 const activeTab = document.querySelector('.content-tabs-list .content-tab.active');
                 if (activeTab) {
@@ -620,9 +627,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 const contentFrame = document.getElementById('contentFrame');
                 const win = contentFrame?.contentWindow;
                 if (activeTab && win) {
-                    const scale = parseFloat(activeTab.dataset.worldScale || '') || null;
-                    const offsetX = parseFloat(activeTab.dataset.worldOffsetX || '') || null;
-                    const offsetY = parseFloat(activeTab.dataset.worldOffsetY || '') || null;
+                    let scale = parseFloat(activeTab.dataset.worldScale || '') || null;
+                    let offsetX = parseFloat(activeTab.dataset.worldOffsetX || '') || null;
+                    let offsetY = parseFloat(activeTab.dataset.worldOffsetY || '') || null;
+                    if (scale == null || offsetX == null || offsetY == null) {
+                        scale = window.omniverseWorkspaceState.scale ?? null;
+                        offsetX = window.omniverseWorkspaceState.offsetX ?? null;
+                        offsetY = window.omniverseWorkspaceState.offsetY ?? null;
+                    }
                     if (scale != null && offsetX != null && offsetY != null) {
                         win.postMessage({ type: 'world:restore', scale, offsetX, offsetY }, '*');
                     }
@@ -648,6 +660,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 let nodes = [];
                 if (activeTab && activeTab.dataset.nodesState) {
                     try { nodes = JSON.parse(activeTab.dataset.nodesState) || []; } catch(_) { nodes = []; }
+                } else {
+                    const globalNodes = window.omniverseNodeState;
+                    if (globalNodes && typeof globalNodes === 'object') {
+                        nodes = Object.entries(globalNodes)
+                            .filter(([, value]) => value && typeof value === 'object')
+                            .map(([key, value]) => ({ key, ...value }));
+                    }
                 }
                 // Reply directly to the requesting window (nodes iframe)
                 const src = ev?.source;

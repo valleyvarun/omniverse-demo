@@ -1,0 +1,18 @@
+// Default Plexus run queue script
+using System.Collections.Generic;
+public class RunQueue
+{
+  private readonly Queue<string> _jobs = new Queue<string>();
+  public void Enqueue(string job)
+  {
+    _jobs.Enqueue(job);
+  }
+  public string NextJob()
+  {
+    return _jobs.Count > 0 ? _jobs.Dequeue() : "idle";
+  }
+}
+var queue = new RunQueue();
+queue.Enqueue("RenderDraft");
+queue.Enqueue("PublishAssets");
+var currentJob = queue.NextJob();

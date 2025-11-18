@@ -15,7 +15,7 @@
 	// Keep a simple list of connections defined by CSS selectors inside the nodes iframe
 	// Each item: { from: string, to: string }
 	const connections = [
-		{ from: '#node2 .output-circle', to: '#node1 .inputs .input-item:nth-child(1) .input-circle' },
+		{ from: '#script-node .output-circle', to: '#node1 .inputs .input-item:nth-child(1) .input-circle' },
 		{ from: '#node3 .output-circle', to: '#node1 .inputs .input-item:nth-child(2) .input-circle' },
 		{ from: '#node4 .output-circle', to: '#node1 .inputs .input-item:nth-child(3) .input-circle' }
 	];
@@ -164,4 +164,3 @@
 		}
 	});
 })();
-

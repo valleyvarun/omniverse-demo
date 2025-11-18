@@ -1,592 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nodes</title>
-  <link rel="stylesheet" href="nodes.css" />
+  <link rel="stylesheet" href="nodes.css">
 </head>
 <body>
-  <div id="world">
-    <svg id="connections" class="connections-layer" xmlns="http://www.w3.org/2000/svg"></svg>
-    <!--============================ NODE 1: PLEXUS ============================-->
-    <div id="node1" class="node">
-      <!-- Header with Omniverse logo -->
+
+
+
+
+
+  <!--================================== NODE TEMPLATE ==================================-->
+  <div id="node-generic" class="generic-node">
+
+      <!--===== node header =====-->
       <div class="node-header">
-        <img src="../logo/omniverse-logo.png" alt="Omniverse" class="node-logo">
-        <span class="node-header-text">Plexus</span>
+
+        <!-- node header left side -->
+        <div class="node-header-left">
+          <img class ="node-header-logo" src="" alt="logo">
+          <div class="node-header-text"></div>
+        </div>
+
+        <!-- node header center -->
+        <div class="node-header-center">
+          
+        </div>
+
+        <!-- node header right side -->
+        <div class="node-header-right">
+
+        </div>
+
       </div>
-      
-      <!-- Content area -->
-      <div class="node-content">
-        <!-- Left side - Inputs -->
-        <div class="inputs">
-          <div class="input-item">
-            <div class="input-circle"></div>
-            <div class="input-label label-accent">RUN</div>
-          </div>
-          <div class="input-item">
-            <div class="input-circle"></div>
-            <div class="input-label">file name</div>
-          </div>
-          <div class="input-item">
-            <div class="input-circle"></div>
-            <div class="input-label">folder</div>
-          </div>
-          <div class="input-item">
-            <div class="input-circle"></div>
-            <div class="input-label">version</div>
-          </div>
-        </div>
-        
-        <!-- Center - Node Name -->
-        <div class="node-name">
-          <img src="../logo/plexus-logo.png" alt="Plexus" class="center-logo">
-        </div>
-        
-        <!-- Right side - Outputs -->
-        <div class="outputs">
-          <div class="output-item">
-            <div class="output-label">work</div>
-            <div class="output-circle"></div>
-          </div>
-          <div class="output-item">
-            <div class="output-label">users</div>
-            <div class="output-circle"></div>
-          </div>
-          <div class="output-item">
-            <div class="output-label label-accent">START</div>
-            <div class="output-circle" data-connector="start-output">
-              <span class="connector-inner"></span>
+      <!--===== end of node header =====-->
+
+      <!--===== node body =====-->
+      <div class="node-body">
+
+        <!-- node input block -->
+        <div class="node-input-block">
+
+          <!-- node inputs -->
+           <div class="node-inputs">
+
+            <!-- input name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-circle"></div>
+              <div class="node-name">input</div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!--============================ NODE 2: BOOLEAN ============================-->
-    <div id="node2" class="node boolean-node">
-      <!-- Content area -->
-      <div class="boolean-content">
-        <!-- Left side - Toggle Button -->
-        <div class="boolean-left">
-          <button type="button" class="boolean-toggle" onclick="toggleBoolean(event, this)">false</button>
+           </div>
+           <!-- end of node inputs -->
         </div>
-        
-        <!-- Right side - Output Circle -->
-        <div class="boolean-right">
-          <div class="output-circle"></div>
-        </div>
-      </div>
-    </div>
+        <!-- end of node input block -->
 
-    <!--============================ NODE 3: TEXT ============================-->
-    <div id="node3" class="node text-node" data-node-type="text">
-      <!-- Header bar with node type label -->
+        <!-- node middle block -->
+        <div class="node-middle-block">
+          <!-- content depends on the types of node -->
+        </div>
+
+        <!-- node output block -->
+        <div class="node-output-block">
+
+          <!-- node outputs -->
+           <div class="node-outputs">
+
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name">output</div>
+              <div class="node-circle"></div>
+            </div>
+
+           </div>
+           <!-- end of node outputs -->
+
+          <!-- node width resize bar -->
+           <div class="node-width-resize-bar resize-handle" data-direction="e"></div>
+        </div>
+        <!-- end of node output block -->
+      </div>
+      <!--===== end of node body =====-->
+
+      <!--===== node footer =====-->
+      <div class="node-footer">
+
+        <!-- node height resize bar -->
+         <div class="node-height-resize-bar resize-handle" data-direction="s"></div>
+      </div>
+      <!--===== end of node footer =====-->
+  </div>
+  <!--===================================================================================-->
+
+
+
+
+
+
+
+
+
+
+  <!--===================================================================================-->
+  <!--================================== PLEXUS NODE ==================================-->
+  <!--===================================================================================-->
+  <div id="plexus-node" class="generic-node">
+
+      <!--===== node header =====-->
       <div class="node-header">
-        <span class="node-header-text">Text</span>
-      </div>
-      
-      <!-- Main body: contains text editor and right-side column for resize/output -->
-      <div class="text-node-body">
-        <!-- Text editor block: line numbers + editable content area -->
-        <div class="text-block">
-          <div class="line-numbers"></div> <!-- Auto-generated line numbers (1, 2, 3...) -->
-          <div class="text-content" data-node-id="node3">ProjectWorkflow.cs</div> <!-- Editable text (double-click to edit) -->
-        </div>
-        
-        <!-- Right side column: vertical resize bar + output connector -->
-        <div class="text-side-column">
-          <!-- Vertical resize bar (drag to adjust node width) -->
-          <div class="text-resize-bar">
-            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize text node right edge"></div>
-          </div>
-          <!-- Output connector circle (aligned to right edge, consistent spacing) -->
-          <div class="text-node-output">
-            <div class="output-circle"></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Horizontal resize bar (drag bottom edge to adjust height) -->
-      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize text node bottom edge"></div>
-      <!-- Corner resize square (drag to resize both width and height) -->
-      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
-    </div>
 
-    <!--============================ NODE 4: TEXT ============================-->
-    <div id="node4" class="node text-node" data-node-type="text">
+        <!-- node header left side -->
+        <div class="node-header-left">
+          <img class ="node-header-logo" src="../logo/omniverse-logo.png" alt="logo">
+          <div class="node-header-text">Plexus</div>
+        </div>
+
+        <!-- node header center -->
+        <div class="node-header-center">
+          
+        </div>
+
+        <!-- node header right side -->
+        <div class="node-header-right">
+
+        </div>
+
+      </div>
+      <!--===== end of node header =====-->
+
+      <!--===== node body =====-->
+      <div class="node-body">
+
+        <!-- node input block -->
+        <div class="node-input-block">
+
+          <!-- node inputs -->
+           <div class="node-inputs">
+
+            <!-- input name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-circle" data-connector="plexus-run-input"></div>
+              <div class="node-name"><h1>RUN</h1></div>
+            </div>
+            <div class="node-group">
+              <div class="node-circle"></div>
+              <div class="node-name">file</div>
+            </div>
+            <div class="node-group">
+              <div class="node-circle"></div>
+              <div class="node-name">folder</div>
+            </div>
+
+           </div>
+           <!-- end of node inputs -->
+        </div>
+        <!-- end of node input block -->
+
+        <!-- ++++++ node middle block +++++ -->
+        <div class="node-middle-block">
+
+          <img src="../logo/plexus-logo.png" alt="plexus logo" class="node-middle-block-logo">
+
+        </div>
+
+        <!-- node output block -->
+        <div class="node-output-block">
+
+          <!-- !!! node width resize bar !!! -->
+           <div class="node-width-resize-bar"></div>
+
+          <!-- node outputs -->
+           <div class="node-outputs">
+
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name">output</div>
+              <div class="node-circle"></div>
+            </div>
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name">work</div>
+              <div class="node-circle"></div>
+            </div>
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name">users</div>
+              <div class="node-circle"></div>
+            </div>
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name"><h1>START</h1></div>
+              <div class="node-circle"></div>
+            </div>
+
+           </div>
+           <!-- end of node outputs -->
+
+          
+        </div>
+        <!-- end of node output block -->
+      </div>
+      <!--===== end of node body =====-->
+
+      <!--===== node footer =====-->
+      <div class="node-footer">
+
+        <!-- !!! node height resize bar !!! -->
+         <div class="node-height-resize-bar"></div>
+      </div>
+      <!--===== end of node footer =====-->
+  </div>
+  <!--===================================================================================-->
+  <!--===================================================================================-->
+
+
+  <!--===================================================================================-->
+  <!--================================== SCRIPT NODE ==================================-->
+  <!--===================================================================================-->
+  <div id="script-node" class="generic-node">
+
+      <!--===== node header =====-->
       <div class="node-header">
-        <span class="node-header-text">Text</span>
-      </div>
-      <div class="text-node-body">
-        <div class="text-block">
-          <div class="line-numbers"></div>
-          <div class="text-content" data-node-id="node4">O:\Projects\2025\Workflow\Release</div>
-        </div>
-        <div class="text-side-column">
-          <div class="text-resize-bar">
-            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize text node right edge"></div>
-          </div>
-          <div class="text-node-output">
-            <div class="output-circle"></div>
-          </div>
-        </div>
-      </div>
-      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize text node bottom edge"></div>
-      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize text node corner"></div>
-    </div>
 
-    <!--============================ NODE 5: SCRIPT ============================-->
-    <div id="node5" class="node script-node" data-node-type="script">
-      <!-- Header bar with node type label -->
-      <div class="node-header script-header">
-        <div class="script-header-left">
-          <img src="../logo/plexus-logo.png" alt="Plexus" class="node-logo">
-          <span class="node-header-text">Script</span>
+        <!-- node header left side -->
+        <div class="node-header-left">
+          <img class ="node-header-logo" src="../logo/plexus-logo.png" alt="logo">
+          <div class="node-header-text">Script</div>
         </div>
-        <div class="script-header-center">
+
+        <!-- node header center -->
+        <div class="node-header-center">
           <label class="visually-hidden" for="script-language-select">Script language</label>
-          <select id="script-language-select" class="script-language-select" aria-label="Script language">
+          <select id="script-language-select" class="node-language-select">
             <option value="csharp" selected>C#</option>
             <option value="cpp">C++</option>
             <option value="python">Python</option>
             <option value="javascript">JavaScript</option>
           </select>
         </div>
-      </div>
-      
-      <!-- Main body: contains input, script editor, and right-side column for resize/output -->
-      <div class="script-node-body">
-        <!-- Left side: Input connector -->
-        <div class="script-node-input">
-          <div class="script-input-row">
-            <div class="input-circle"></div>
-            <div class="script-input-label">input</div>
-          </div>
-          <div class="script-input-row">
-            <div class="input-circle" data-connector="run-queue-input">
-              <span class="connector-inner"></span>
-            </div>
-            <div class="script-input-label label-accent">run queue</div>
-          </div>
+
+        <!-- node header right side -->
+        <div class="node-header-right">
+
         </div>
-        
-        <!-- Script editor block: line numbers + editable code area -->
+
+      </div>
+      <!--===== end of node header =====-->
+
+      <!--===== node body =====-->
+      <div class="node-body">
+
+        <!-- node input block -->
+        <div class="node-input-block">
+
+          <!-- node inputs -->
+           <div class="node-inputs">
+
+            <!-- input name text and their connection circle are grouped together -->
+             <div class="node-group">
+              <div class="node-circle"></div>
+              <div class="node-name"><h1>queue</h1></div>
+            </div>
+            <div class="node-group">
+              <div class="node-circle"></div>
+              <div class="node-name">input</div>
+            </div>
+            
+
+           </div>
+           <!-- end of node inputs -->
+        </div>
+        <!-- end of node input block -->
+
+        <!-- ++++++ node middle block +++++ -->
+        <div class="node-middle-block">
           <div class="script-block">
-          <div class="line-numbers"></div> <!-- Auto-generated line numbers (1, 2, 3...) -->
-          <div class="script-content" data-node-id="node5"><span class="code-line"><span class="token-comment">// Default Plexus run queue script</span></span><span class="code-line"><span class="token-keyword">using</span> <span class="token-namespace">System.Collections.Generic</span>;</span><span class="code-line"><span class="token-keyword">public</span> <span class="token-keyword">class</span> <span class="token-type">RunQueue</span></span><span class="code-line">{</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">private</span> <span class="token-keyword">readonly</span> <span class="token-type">Queue&lt;string&gt;</span> <span class="token-field">_jobs</span> = <span class="token-keyword">new</span> <span class="token-type">Queue&lt;string&gt;</span>();</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">public</span> <span class="token-keyword">void</span> <span class="token-method">Enqueue</span>(<span class="token-type">string</span> job)</span><span class="code-line">&nbsp;&nbsp;{</span><span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-field">_jobs</span>.<span class="token-method">Enqueue</span>(job);</span><span class="code-line">&nbsp;&nbsp;}</span><span class="code-line">&nbsp;&nbsp;<span class="token-keyword">public</span> <span class="token-type">string</span> <span class="token-method">NextJob</span>()</span><span class="code-line">&nbsp;&nbsp;{</span><span class="code-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="token-keyword">return</span> <span class="token-field">_jobs</span>.Count &gt; <span class="token-value">0</span> ? <span class="token-field">_jobs</span>.<span class="token-method">Dequeue</span>() : <span class="token-string">&quot;idle&quot;</span>;</span><span class="code-line">&nbsp;&nbsp;}</span><span class="code-line">}</span><span class="code-line"><span class="token-keyword">var</span> queue = <span class="token-keyword">new</span> <span class="token-type">RunQueue</span>();</span><span class="code-line">queue.<span class="token-method">Enqueue</span>(<span class="token-string">&quot;RenderDraft&quot;</span>);</span><span class="code-line">queue.<span class="token-method">Enqueue</span>(<span class="token-string">&quot;PublishAssets&quot;</span>);</span><span class="code-line"><span class="token-keyword">var</span> currentJob = queue.<span class="token-method">NextJob</span>();</span></div> <!-- Editable script (double-click to edit) -->
-        </div>
-        
-        <!-- Right side column: vertical resize bar + output connector -->
-        <div class="script-side-column">
-          <!-- Vertical resize bar (drag to adjust node width) -->
-          <div class="script-resize-bar">
-            <div class="resize-handle resize-handle-right" data-direction="e" aria-label="Resize script node right edge"></div>
-          </div>
-          <!-- Output connector with label -->
-          <div class="script-node-output">
-            <div class="script-output-row">
-              <div class="script-output-label">output</div>
-              <div class="output-circle"></div>
-            </div>
-            <div class="script-output-row run-queue">
-              <div class="script-output-label label-accent">run queue</div>
-              <div class="output-circle"></div>
-            </div>
+            <div class="line-numbers"></div>
+            <div class="script-content" data-node-id="node5" data-source="dummy-script-cs.txt" spellcheck="false"></div>
           </div>
         </div>
+
+        <!-- node output block -->
+        <div class="node-output-block">
+
+          <!-- !!! node width resize bar !!! -->
+           <div class="node-width-resize-bar"></div>
+
+          <!-- node outputs -->
+           <div class="node-outputs">
+
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name">output</div>
+              <div class="node-circle"></div>
+            </div>
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name"><h1>queue</h1></div>
+              <div class="node-circle"></div>
+            </div>
+
+           </div>
+           <!-- end of node outputs -->
+
+          
+        </div>
+        <!-- end of node output block -->
       </div>
-      
-      <!-- Horizontal resize bar (drag bottom edge to adjust height) -->
-      <div class="resize-handle resize-handle-bottom" data-direction="s" aria-label="Resize script node bottom edge"></div>
-      <!-- Corner resize square (drag to resize both width and height) -->
-      <div class="resize-handle resize-handle-corner" data-direction="se" aria-label="Resize script node corner"></div>
-    </div>
+      <!--===== end of node body =====-->
+
+      <!--===== node footer =====-->
+      <div class="node-footer">
+
+        <!-- !!! node height resize bar !!! -->
+         <div class="node-height-resize-bar"></div>
+      </div>
+      <!--===== end of node footer =====-->
   </div>
+  <!--===================================================================================-->
+  <!--===================================================================================-->
 
-  <script>
-  // Current world transform (provided by parent)
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
 
-    // World/nodes setup
-    const world = document.getElementById('world');
-    const connectionsSvg = document.getElementById('connections');
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const connectionDefs = [
-      {
-        id: 'start-to-runqueue',
-        fromSelector: '[data-connector="start-output"]',
-        toSelector: '[data-connector="run-queue-input"]'
-      }
-    ];
-    const nodeEls = Array.from(document.querySelectorAll('.node'));
-    // Store world-space positions for each node by id
-    const nodePos = {};
 
-    // Enable inline editing for text and script nodes on double-click
-    let editingTextBlock = false;
-    const textEditors = Array.from(document.querySelectorAll('.text-content, .script-content'));
-    textEditors.forEach(editor => {
-      editor.setAttribute('contenteditable', 'false');
-      editor.addEventListener('dblclick', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        startEditingTextBlock(editor);
-      });
-      editor.addEventListener('blur', () => endEditingTextBlock(editor));
-      editor.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          e.preventDefault();
-          editor.blur();
-        }
-      });
-      editor.addEventListener('input', () => updateLineNumbers(editor));
-      updateLineNumbers(editor);
-    });
 
-    function startEditingTextBlock(editor) {
-      editingTextBlock = true;
-      const block = editor.closest('.text-block, .script-block');
-      if (block) block.classList.add('editing');
-      editor.classList.add('editing');
-      editor.setAttribute('contenteditable', 'true');
-      editor.focus();
-      // move caret to end
-      const range = document.createRange();
-      range.selectNodeContents(editor);
-      range.collapse(false);
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(range);
-    }
 
-    function endEditingTextBlock(editor) {
-      if (!editingTextBlock) return;
-      const block = editor.closest('.text-block, .script-block');
-      if (block) block.classList.remove('editing');
-      editor.classList.remove('editing');
-      editor.setAttribute('contenteditable', 'false');
-      editingTextBlock = false;
-      updateLineNumbers(editor);
-      try {
-        window.top.postMessage({ type: 'focusCommand' }, '*');
-      } catch (_) {}
-    }
+  <!--===================================================================================-->
+  <!--================================== BOOLEAN NODE ==================================-->
+  <!--===================================================================================-->
+  <div id="boolean-node" class="generic-node">
 
-    function updateLineNumbers(editor) {
-      const block = editor.closest('.text-block, .script-block');
-      if (!block) return;
-      const column = block.querySelector('.line-numbers');
-      if (!column) return;
-      const text = editor.innerText.replace(/\u00a0/g, ' ');
-      const lines = text.split(/\n/);
-      const cs = window.getComputedStyle(editor);
-      const lineHeight = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) || 16;
-      const measure = document.createElement('div');
-      measure.style.position = 'absolute';
-      measure.style.visibility = 'hidden';
-      measure.style.pointerEvents = 'none';
-      measure.style.whiteSpace = cs.whiteSpace;
-      measure.style.wordBreak = cs.wordBreak;
-      measure.style.font = cs.font || `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
-      measure.style.lineHeight = cs.lineHeight;
-      measure.style.width = `${editor.clientWidth || editor.offsetWidth || editor.scrollWidth}px`;
-      measure.style.boxSizing = cs.boxSizing;
-      measure.style.padding = cs.padding;
-      document.body.appendChild(measure);
+      <!--===== node body =====-->
+      <div class="node-body">
 
-      column.innerHTML = '';
-      lines.forEach((lineText, index) => {
-        measure.textContent = lineText || '\u200B';
-        const rows = Math.max(1, Math.round(measure.scrollHeight / lineHeight));
-        const numberDiv = document.createElement('div');
-        numberDiv.textContent = index + 1;
-        column.appendChild(numberDiv);
-        for (let r = 1; r < rows; r++) {
-          const spacer = document.createElement('div');
-          spacer.innerHTML = '&nbsp;';
-          column.appendChild(spacer);
-        }
-      });
+        <!-- node input block -->
+        <div class="node-input-block">
+          <!-- True/False button -->
+            <button class="boolean-toggle" data-state="false" data-boolean-key="value" type="button" aria-pressed="false">False</button>
+        </div>
+        <!-- end of node input block -->
 
-      measure.remove();
-    }
 
-    // Boolean node state persistence
-    const booleanButton = document.querySelector('#node2 .boolean-toggle');
-    function readBooleanState() {
-      try {
-        const val = localStorage.getItem('boolean:node2');
-        if (val === 'true') return true;
-        if (val === 'false') return false;
-      } catch (_) {}
-      return null;
-    }
-    function applyBooleanState(state) {
-      if (!booleanButton) return;
-      if (state === true) {
-        booleanButton.textContent = 'true';
-        booleanButton.classList.add('true');
-      } else if (state === false) {
-        booleanButton.textContent = 'false';
-        booleanButton.classList.remove('true');
-      }
-    }
+        <!-- node output block -->
+        <div class="node-output-block">
 
-    // Initialize node positions from computed styles (left/top from CSS) or defaults
-    nodeEls.forEach(el => {
-      const cs = getComputedStyle(el);
-      const wx = parseFloat(cs.left) || 0;
-      const wy = parseFloat(cs.top) || 0;
-      nodePos[el.id] = { x: wx, y: wy };
-      // Ensure positions are applied inline so future updates are consistent
-      el.style.left = wx + 'px';
-      el.style.top  = wy + 'px';
-    });
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-name"></div>
+              <div class="node-circle" data-connector="boolean-output"></div>
+            </div>
 
-    function updateWorldTransform() {
-      world.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(${scale})`;
-      updateConnections();
-    }
+      </div>
+      <!--===== end of node body =====-->
 
-    function updateAllNodePositions() {
-      nodeEls.forEach(el => {
-        const p = nodePos[el.id];
-        if (!p) return;
-        el.style.left = p.x + 'px';
-        el.style.top  = p.y + 'px';
-      });
-      publishNodesState();
-      updateConnections();
-    }
+  </div>
+  <!--===================================================================================-->
 
-    // Drag handling in screen space, convert to world space by dividing by scale
-    let dragging = false;
-    let draggingNodeId = null;
-    let dragStartSX = 0, dragStartSY = 0; // screen
-    let startWX = 0, startWY = 0; // world
-    // Resize handling
-    let resizing = false;
-    let resizingNode = null;
-    let resizeStartSX = 0, resizeStartSY = 0;
-    let resizeStartWidth = 0, resizeStartHeight = 0;
-    let resizeDirection = 'se';
 
-    // Attach drag handlers to all nodes
-    nodeEls.forEach(el => {
-      el.addEventListener('mousedown', (e) => {
-        // Only left or middle button
-        if (e.button !== 0 && e.button !== 1) return;
-        // Don't start dragging when interacting with controls (e.g., buttons inside node)
-        if (e.target.closest('button, input, textarea, select, .text-block, .text-content, .script-block, .script-content')) return;
-        e.preventDefault();
-        // Bring clicked node to front
-        nodeEls.forEach(n => n.style.zIndex = '1');
-        el.style.zIndex = '10';
-        dragging = true;
-        draggingNodeId = el.id;
-        dragStartSX = e.clientX;
-        dragStartSY = e.clientY;
-        const p = nodePos[draggingNodeId] || { x: 0, y: 0 };
-        startWX = p.x;
-        startWY = p.y;
-      });
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (!dragging) return;
-      const dSX = e.clientX - dragStartSX;
-      const dSY = e.clientY - dragStartSY;
-      const nx = startWX + dSX / scale; // convert screen delta to world delta
-      const ny = startWY + dSY / scale;
-      if (draggingNodeId && nodePos[draggingNodeId]) {
-        nodePos[draggingNodeId].x = nx;
-        nodePos[draggingNodeId].y = ny;
-        updateAllNodePositions();
-      }
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (!resizing || !resizingNode) return;
-      const dSX = e.clientX - resizeStartSX;
-      const dSY = e.clientY - resizeStartSY;
-      if (resizeDirection.includes('e')) {
-        // Min width accounts for text block (100px) + side column (38px) + padding (10px) + border (2px)
-        const newWidth = Math.max(150, resizeStartWidth + dSX / scale);
-        resizingNode.style.width = newWidth + 'px';
-      }
-      if (resizeDirection.includes('s')) {
-        // Min height: header (24px) + body padding top/bottom (4+2=6px) + text-block margins (4px) + text content min (48px) + buffers (13px) = 95px
-        const newHeight = Math.max(95, resizeStartHeight + dSY / scale);
-        resizingNode.style.height = newHeight + 'px';
-      }
-      updateConnections();
-    });
-    window.addEventListener('mouseup', () => {
-      dragging = false;
-      draggingNodeId = null;
-      if (resizing && resizingNode) {
-        resizingNode.classList.remove('resizing');
-      }
-      resizing = false;
-      resizingNode = null;
-    });
 
-    window.addEventListener('resize', () => updateConnections());
 
-    const resizeHandles = Array.from(document.querySelectorAll('.resize-handle'));
-    resizeHandles.forEach(handle => {
-      handle.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        const node = handle.closest('.text-node, .script-node');
-        if (!node) return;
-        resizing = true;
-        resizingNode = node;
-        resizeStartSX = e.clientX;
-        resizeStartSY = e.clientY;
-        const cs = getComputedStyle(node);
-        resizeStartWidth = parseFloat(cs.width) || node.offsetWidth;
-        resizeStartHeight = parseFloat(cs.height) || node.offsetHeight;
-        resizeDirection = handle.dataset.direction || 'se';
-        node.classList.add('resizing');
-      });
-    });
 
-    function publishNodesState() {
-      try {
-        const payload = Object.entries(nodePos).map(([id, p]) => ({ id, x: p.x, y: p.y }));
-        window.top.postMessage({ type: 'nodes:state', nodes: payload }, '*');
-      } catch (_) {}
-    }
 
-    function getConnectorCenter(el) {
-      if (!el || !world) return null;
-      const inner = el.querySelector('.connector-inner');
-      const target = inner || el;
-      const rect = target.getBoundingClientRect();
-      const worldRect = world.getBoundingClientRect();
-      const x = (rect.left + rect.width / 2 - worldRect.left) / scale;
-      const y = (rect.top + rect.height / 2 - worldRect.top) / scale;
-      return { x, y };
-    }
+  <!--===================================================================================-->
+  <!--================================== TEXT NODE ==================================-->
+  <!--===================================================================================-->
+  <div id="text-node" class="generic-node">
 
-    function updateConnections() {
-      if (!connectionsSvg) return;
-      connectionsSvg.innerHTML = '';
-      connectionDefs.forEach(def => {
-        const fromEl = document.querySelector(def.fromSelector);
-        const toEl = document.querySelector(def.toSelector);
-        if (!fromEl || !toEl) return;
-        const start = getConnectorCenter(fromEl);
-        const end = getConnectorCenter(toEl);
-        if (!start || !end) return;
-        const ctrlOffset = Math.max(40, Math.abs(end.x - start.x) * 0.35);
-        const path = document.createElementNS(svgNS, 'path');
-        path.setAttribute('d', `M${start.x},${start.y} C${start.x + ctrlOffset},${start.y} ${end.x - ctrlOffset},${end.y} ${end.x},${end.y}`);
-        path.setAttribute('class', 'connection-path');
-        connectionsSvg.appendChild(path);
-      });
-    }
+      <!--===== node header =====-->
+      <div class="node-header">
 
-    // Request saved node state from top on load
-    try { window.top.postMessage({ type: 'nodes:requestState' }, '*'); } catch (_) {}
+        <!-- node header left side -->
+        <div class="node-header-left">
+          <div class="node-header-text">Text</div>
+        </div>
 
-    // Apply restored nodes positions
-    window.addEventListener('message', (ev) => {
-      const data = ev.data || {};
-      if (data.type === 'nodes:restore' && Array.isArray(data.nodes)) {
-        data.nodes.forEach(n => {
-          if (!n || typeof n.id !== 'string') return;
-          if (typeof n.x === 'number' && typeof n.y === 'number') {
-            nodePos[n.id] = { x: n.x, y: n.y };
-          }
-        });
-        updateAllNodePositions();
-      }
-    });
+        <!-- node header center -->
+        <div class="node-header-center">
+          
+        </div>
 
-    // Receive world transform from parent
-    window.addEventListener('message', (ev) => {
-      const data = ev.data || {};
-      if (data.type === 'world:transform') {
-        scale = data.scale;
-        offsetX = data.offsetX;
-        offsetY = data.offsetY;
-        updateWorldTransform();
-      }
-    });
+        <!-- node header right side -->
+        <div class="node-header-right">
 
-    // Forward wheel events to parent so zoom works over the nodes layer too
-    window.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      // Send to parent (plexus.html), not top, so it can handle zoom
-      window.parent.postMessage({ type: 'world:wheel', clientX: e.clientX, clientY: e.clientY, deltaY: e.deltaY }, '*');
-    }, { passive: false });
+        </div>
 
-    // Any click inside nodes iframe should route focus back to the command line in the top window
-    document.addEventListener('click', (e) => {
-      if (editingTextBlock) return;
-      if (e.target.closest('.text-block, .text-content, .script-block, .script-content, .script-language-select')) return;
-      try {
-        window.top.postMessage({ type: 'focusCommand' }, '*');
-      } catch (_) {}
-    });
+      </div>
+      <!--===== end of node header =====-->
 
-    // Background double-click should prefill command input with "add: "
-    document.addEventListener('dblclick', (e) => {
-      if (e.target.closest('.node, button, input, textarea, select, .text-block, .text-content, .script-block, .script-content')) return;
-      try {
-        window.top.postMessage({ type: 'command:prefill', value: 'add: ' }, '*');
-      } catch (_) {}
-    });
+      <!--===== node body =====-->
+      <div class="node-body">
 
-    // Background panning support: when clicking NOT on a node, pan the world via parent
-    let bgPanning = false;
-    document.addEventListener('mousedown', (e) => {
-      // Ignore if starting on a node (node dragging takes priority)
-      if (e.target.closest('.node')) return;
-      // Only left or middle button
-      if (e.button !== 0 && e.button !== 1) return;
-      e.preventDefault();
-      bgPanning = true;
-      window.parent.postMessage({ type: 'world:panStart', clientX: e.clientX, clientY: e.clientY }, '*');
-    });
-    window.addEventListener('mousemove', (e) => {
-      if (!bgPanning) return;
-      window.parent.postMessage({ type: 'world:panMove', clientX: e.clientX, clientY: e.clientY }, '*');
-    });
-    window.addEventListener('mouseup', () => {
-      if (!bgPanning) return;
-      bgPanning = false;
-      window.parent.postMessage({ type: 'world:panEnd' }, '*');
-    });
+        <!-- node input block -->
+        <div class="node-input-block">
 
-    // Initial paint
-  // Restore boolean state from storage before first paint
-  const storedBool = readBooleanState();
-  if (storedBool !== null) applyBooleanState(storedBool);
+          <!-- node inputs -->
+           <div class="node-inputs">
 
-  updateWorldTransform();
-  updateAllNodePositions();
+            <!-- input name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-circle"></div>
+            </div>
 
-    // Boolean toggle function
-    function toggleBoolean(e, button) {
-      if (e) { e.preventDefault(); e.stopPropagation(); }
-      if ((button.textContent || '').trim().toLowerCase() === 'false') {
-        button.textContent = 'true';
-        button.classList.add('true');
-      } else {
-        button.textContent = 'false';
-        button.classList.remove('true');
-      }
-      // Persist state
-      try {
-        const isTrue = button.classList.contains('true');
-        localStorage.setItem('boolean:node2', isTrue ? 'true' : 'false');
-      } catch (_) {}
-    }
-  </script>
+           </div>
+           <!-- end of node inputs -->
+        </div>
+        <!-- end of node input block -->
+
+        <!-- node middle block -->
+        <div class="node-middle-block">
+          <!-- content depends on the types of node -->
+        </div>
+
+        <!-- node output block -->
+        <div class="node-output-block">
+
+          <!-- node width resize bar -->
+           <div class="node-width-resize-bar resize-handle" data-direction="e"></div>
+
+          <!-- node outputs -->
+           <div class="node-outputs">
+
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-circle"></div>
+            </div>
+
+           </div>
+           <!-- end of node outputs -->
+
+        </div>
+        <!-- end of node output block -->
+      </div>
+      <!--===== end of node body =====-->
+
+      <!--===== node footer =====-->
+      <div class="node-footer">
+
+        <!-- node height resize bar -->
+         <div class="node-height-resize-bar resize-handle" data-direction="s"></div>
+      </div>
+      <!--===== end of node footer =====-->
+  </div>
+  <!--===================================================================================-->
+
+
 </body>
+
+<script defer src="nodes.js"></script>
+
 </html>
