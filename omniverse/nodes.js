@@ -23,6 +23,10 @@
     const BOOLEAN_OUTPUT_LABEL = 'output';
     const BOOLEAN_OUTPUT_CONNECTOR = '[data-connector="boolean-output"]';
     const RUN_INPUT_CONNECTOR = '[data-connector="plexus-run-input"]';
+    const TEXT_NODE1_OUTPUT_CONNECTOR = '#text-node1 [data-connector="text-node1-output"]';
+    const TEXT_NODE2_OUTPUT_CONNECTOR = '#text-node2 [data-connector="text-node2-output"]';
+    const PLEXUS_FILE_INPUT_CONNECTOR = '[data-connector="plexus-file-input"]';
+    const PLEXUS_FOLDER_INPUT_CONNECTOR = '[data-connector="plexus-folder-input"]';
     const START_QUEUE_LINE_COLOR = '#4c34eb';
     const BOOLEAN_LINE_COLOR = '#76B900';
     const CONNECTOR_INNER_RADIUS = 3;
@@ -106,6 +110,7 @@
     const editorResizeObservers = new WeakMap();
     const externalTextCache = new Map();
     const booleanToggleButtons = Array.from(document.querySelectorAll('.boolean-toggle'));
+    const headerNameInputs = Array.from(document.querySelectorAll('.node-header-name'));
 
     function fetchExternalEditorText(path) {
       const normalized = (path || '').trim();
@@ -219,6 +224,13 @@
       return lines;
     }
 
+    function refreshEditorContent(editor) {
+      if (!editor) return;
+      const textContent = (editor.innerText || '').replace(/\u00a0/g, ' ');
+      renderHighlightedText(editor, textContent);
+      updateLineNumbers(editor);
+    }
+
     function setBooleanToggleState(button, nextState) {
       const normalized = !!nextState;
       button.dataset.state = normalized ? 'true' : 'false';
@@ -305,9 +317,11 @@
         }
       });
       editor.addEventListener('input', () => {
-        const textContent = editor.innerText.replace(/\u00a0/g, ' ');
-        renderHighlightedText(editor, textContent);
-        updateLineNumbers(editor);
+        if (editor.isContentEditable && editor.classList.contains('editing')) {
+          updateLineNumbers(editor);
+        } else {
+          refreshEditorContent(editor);
+        }
       });
       observeEditorSize(editor);
       initializeEditorContent(editor);
@@ -333,6 +347,19 @@
       });
     });
 
+    headerNameInputs.forEach(input => {
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          input.blur();
+          try {
+            window.top.postMessage({ type: 'focusCommand' }, '*');
+          } catch (_) {}
+        }
+      });
+    });
+
     window.addEventListener('resize', () => {
       textEditors.forEach(editor => updateLineNumbers(editor));
     });
@@ -343,6 +370,9 @@
       if (block) block.classList.add('editing');
       editor.classList.add('editing');
       editor.setAttribute('contenteditable', 'true');
+      const plainText = (editor.innerText || '').replace(/\u00a0/g, ' ');
+      editor.textContent = plainText;
+      updateLineNumbers(editor);
       editor.focus();
       // move caret to end
       const range = document.createRange();
@@ -359,6 +389,8 @@
       if (block) block.classList.remove('editing');
       editor.classList.remove('editing');
       editor.setAttribute('contenteditable', 'false');
+      const textContent = (editor.innerText || '').replace(/\u00a0/g, ' ');
+      renderHighlightedText(editor, textContent);
       editingTextBlock = false;
       updateLineNumbers(editor);
       try {
@@ -835,6 +867,16 @@
             from: { selector: BOOLEAN_OUTPUT_CONNECTOR },
             to: { selector: RUN_INPUT_CONNECTOR },
             color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { selector: TEXT_NODE1_OUTPUT_CONNECTOR },
+            to: { selector: PLEXUS_FILE_INPUT_CONNECTOR },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { selector: TEXT_NODE2_OUTPUT_CONNECTOR },
+            to: { selector: PLEXUS_FOLDER_INPUT_CONNECTOR },
+            color: BOOLEAN_LINE_COLOR
           }
         ];
 
@@ -938,7 +980,7 @@
     // Any click inside nodes iframe should route focus back to the command line in the top window
     document.addEventListener('click', (e) => {
       if (editingTextBlock) return;
-      if (e.target.closest('.text-block, .text-content, .script-block, .script-content, .script-language-select, .node-language-select')) return;
+      if (e.target.closest('.text-block, .text-content, .script-block, .script-content, .script-language-select, .node-language-select, .node-header-name')) return;
       try {
         window.top.postMessage({ type: 'focusCommand' }, '*');
       } catch (_) {}

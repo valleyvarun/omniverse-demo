@@ -145,11 +145,11 @@
               <div class="node-name"><h1>RUN</h1></div>
             </div>
             <div class="node-group">
-              <div class="node-circle"></div>
+              <div class="node-circle" data-connector="plexus-file-input"></div>
               <div class="node-name">file</div>
             </div>
             <div class="node-group">
-              <div class="node-circle"></div>
+              <div class="node-circle" data-connector="plexus-folder-input"></div>
               <div class="node-name">folder</div>
             </div>
 
@@ -362,10 +362,15 @@
 
 
 
+
+
+
+
   <!--===================================================================================-->
-  <!--================================== TEXT NODE ==================================-->
+  <!--================================== TEXT NODE - 1 ==================================-->
   <!--===================================================================================-->
-  <div id="text-node" class="generic-node">
+  <div id="text-node1" class="generic-node">
+    <div class="text-node">
 
       <!--===== node header =====-->
       <div class="node-header">
@@ -377,7 +382,7 @@
 
         <!-- node header center -->
         <div class="node-header-center">
-          
+          <input class="node-header-name" type="text" value="file name">
         </div>
 
         <!-- node header right side -->
@@ -398,7 +403,7 @@
            <div class="node-inputs">
 
             <!-- input name text and their connection circle are grouped together -->
-            <div class="node-group">
+             <div class="node-group">
               <div class="node-circle"></div>
             </div>
 
@@ -407,28 +412,32 @@
         </div>
         <!-- end of node input block -->
 
-        <!-- node middle block -->
+        <!-- ++++++ node middle block +++++ -->
         <div class="node-middle-block">
-          <!-- content depends on the types of node -->
+          <div class="script-block">
+            <div class="line-numbers"></div>
+            <div class="script-content" data-node-id="node5" data-source="text1.txt" spellcheck="false"></div>
+          </div>
         </div>
 
         <!-- node output block -->
         <div class="node-output-block">
 
-          <!-- node width resize bar -->
-           <div class="node-width-resize-bar resize-handle" data-direction="e"></div>
+          <!-- !!! node width resize bar !!! -->
+           <div class="node-width-resize-bar"></div>
 
           <!-- node outputs -->
            <div class="node-outputs">
 
             <!-- output name text and their connection circle are grouped together -->
             <div class="node-group">
-              <div class="node-circle"></div>
+              <div class="node-circle" data-connector="text-node1-output"></div>
             </div>
 
            </div>
            <!-- end of node outputs -->
 
+          
         </div>
         <!-- end of node output block -->
       </div>
@@ -437,12 +446,113 @@
       <!--===== node footer =====-->
       <div class="node-footer">
 
-        <!-- node height resize bar -->
-         <div class="node-height-resize-bar resize-handle" data-direction="s"></div>
+        <!-- !!! node height resize bar !!! -->
+         <div class="node-height-resize-bar"></div>
       </div>
       <!--===== end of node footer =====-->
+      </div>
   </div>
   <!--===================================================================================-->
+  <!--===================================================================================-->
+
+  <!--===================================================================================-->
+  <!--================================== TEXT NODE - 2 ==================================-->
+  <!--===================================================================================-->
+  <div id="text-node2" class="generic-node">
+    <div class="text-node">
+
+      <!--===== node header =====-->
+      <div class="node-header">
+
+        <!-- node header left side -->
+        <div class="node-header-left">
+          <div class="node-header-text">Text</div>
+        </div>
+
+        <!-- node header center -->
+        <div class="node-header-center">
+          <input class="node-header-name" type="text" value="folder path">
+        </div>
+
+        <!-- node header right side -->
+        <div class="node-header-right">
+
+        </div>
+
+      </div>
+      <!--===== end of node header =====-->
+
+      <!--===== node body =====-->
+      <div class="node-body">
+
+        <!-- node input block -->
+        <div class="node-input-block">
+
+          <!-- node inputs -->
+           <div class="node-inputs">
+
+            <!-- input name text and their connection circle are grouped together -->
+             <div class="node-group">
+              <div class="node-circle"></div>
+            </div>
+
+           </div>
+           <!-- end of node inputs -->
+        </div>
+        <!-- end of node input block -->
+
+        <!-- ++++++ node middle block +++++ -->
+        <div class="node-middle-block">
+          <div class="script-block">
+            <div class="line-numbers"></div>
+            <div class="script-content" data-node-id="node5" data-source="text2.txt" spellcheck="false"></div>
+          </div>
+        </div>
+
+        <!-- node output block -->
+        <div class="node-output-block">
+
+          <!-- !!! node width resize bar !!! -->
+           <div class="node-width-resize-bar"></div>
+
+          <!-- node outputs -->
+           <div class="node-outputs">
+
+            <!-- output name text and their connection circle are grouped together -->
+            <div class="node-group">
+              <div class="node-circle" data-connector="text-node2-output"></div>
+            </div>
+
+           </div>
+           <!-- end of node outputs -->
+
+          
+        </div>
+        <!-- end of node output block -->
+      </div>
+      <!--===== end of node body =====-->
+
+      <!--===== node footer =====-->
+      <div class="node-footer">
+
+        <!-- !!! node height resize bar !!! -->
+         <div class="node-height-resize-bar"></div>
+      </div>
+      <!--===== end of node footer =====-->
+      </div>
+  </div>
+  <!--===================================================================================-->
+  <!--===================================================================================-->
+
+
+
+
+
+
+
+
+
+
 
 
 </body>
