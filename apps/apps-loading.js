@@ -4,6 +4,7 @@ let modalAppIcon;
 let modalAppName;
 let modalOpenButton;
 let modalCancelButton;
+let modalPreviewImage;
 let currentSelectedApp = null;
 
 // Initialize when DOM is loaded
@@ -17,6 +18,7 @@ function initializeModal() {
 	modalAppName = document.getElementById('modalAppName');
 	modalOpenButton = document.getElementById('modalOpenButton');
 	modalCancelButton = document.getElementById('modalCancelButton');
+	modalPreviewImage = document.getElementById('modalPreviewImage');
 	
 	// Add event listeners
 	modalOpenButton.addEventListener('click', handleModalOpen);
@@ -67,6 +69,12 @@ function showAppModal(appData) {
 		modalAppIcon.innerHTML = `<img src="${appData.icon}" alt="${appData.name}" style="width: 20px; height: 20px; object-fit: contain;">`;
 	} else {
 		modalAppIcon.textContent = appData.icon;
+	}
+	
+	const coverSrc = getAppCoverImage(appData.name);
+	if (modalPreviewImage) {
+		modalPreviewImage.src = coverSrc;
+		modalPreviewImage.alt = `${appData.name} preview`;
 	}
 	
 	// Reset loading state
@@ -128,4 +136,48 @@ function resetLoadingState() {
 	if (loadingText) {
 		loadingText.remove();
 	}
+}
+
+function getAppCoverImage(appName) {
+	const normalized = (appName || '').trim().toLowerCase();
+	if (normalized === 'd5 render') {
+		return '../logo/d5render-cover.png';
+	}
+	if (normalized === 'rhino 8' || normalized === 'rhino8') {
+		return '../logo/rhino-cover.png';
+	}
+	if (normalized === 'midjourney') {
+		return '../logo/midjourney-cover.png';
+	}
+	if (normalized === 'blender') {
+		return '../logo/blender-cover.png';
+	}
+	if (normalized === 'autocad') {
+		return '../logo/autocad-cover.png';
+	}
+	if (normalized === 'revit') {
+		return '../logo/revit-cover.png';
+	}
+	if (normalized === 'chatgpt') {
+		return '../logo/chatgpt-cover.png';
+	}
+	if (normalized === 'photoshop') {
+		return '../logo/photoshop-cover.png';
+	}
+	if (normalized === 'sketchup') {
+		return '../logo/sketchup-cover.png';
+	}
+	if (normalized === 'indesign') {
+		return '../logo/indesign-cover.png';
+	}
+	if (normalized === 'visual studio code' || normalized === 'vs code' || normalized === 'vscode') {
+		return '../logo/vscode-cover.png';
+	}
+	if (normalized === 'fusion 360' || normalized === 'fusion360') {
+		return '../logo/fusion360-cover.png';
+	}
+	if (normalized === '3ds max' || normalized === '3dsmax') {
+		return '../logo/3dsmax-cover.png';
+	}
+	return '../logo/dummy-cover1.png';
 }

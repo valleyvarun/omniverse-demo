@@ -127,12 +127,14 @@ function getAppIcon(productName) {
 		'Midjourney': '../logo/midjourney-logo.png',
 	'ChatGPT': '../logo/chatgpt-logo.png',
 	'OpenUSD': '../logo/openusd-logo.png',
+		'Isaac Sim': '../logo/isaac-sim-logo.png',
+		'Fusion 360': '../logo/fusion360-logo.png',
 		'After Effects': '🎞️',
 		'ArchiCAD': '🏗️',
 		'Illustrator': '🖌️',
 		'InDesign': '../logo/indesign-logo.png',
 		'Maya': '🎭',
-		'SolidWorks': '⚙️',
+		'SolidWorks': '../logo/solidworks-logo.png',
 		'ANSYS': '🔬',
 		'MATLAB': '📊',
 		'Unity': '🎮',
@@ -444,7 +446,7 @@ function createAlphabeticalGrouping(visibleItems) {
 
 function createFavoritesSection(grid, visibleItems) {
 	// Define favorite app names based on user's preferences
-	const favoriteAppNames = ['AutoCAD', 'Rhino 8', 'SketchUp', 'Revit', 'D5 Render', 'Photoshop', 'InDesign', 'ChatGPT', 'Midjourney', 'Blender', 'Visual Studio Code', 'OpenUSD'];
+	const favoriteAppNames = ['Isaac Sim', 'AutoCAD', 'Rhino 8', 'SketchUp', 'Revit', '3ds Max', 'Fusion 360', 'D5 Render', 'Photoshop', 'InDesign', 'ChatGPT', 'Midjourney', 'Blender', 'SolidWorks', 'Visual Studio Code', 'OpenUSD'];
 	
 	// Find favorite apps from visible items
 	const favoriteApps = [];

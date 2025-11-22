@@ -33,6 +33,29 @@ html, body {
 }
 
 
+#sketchup-file-node {
+  top: 800px;
+  left: 400px;
+}
+
+#revit-file-node {
+  top: 800px;
+  left: 1000px;
+}
+
+#autocad-file-node {
+  top: 800px;
+  left: 100px;
+}
+
+
+
+
+
+
+
+
+
 
 
 

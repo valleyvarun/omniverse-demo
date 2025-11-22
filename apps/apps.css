@@ -294,6 +294,10 @@ body {
 	word-wrap: break-word;               /* Break long words if needed */
 }
 
+.app-item[data-product-name="Isaac Sim"] .app-name {
+	color: #76B900;
+}
+
 /* ===================================================================
    6. UTILITY CLASSES - HIDDEN STATES AND SPECIAL CASES
    ================================================================= */

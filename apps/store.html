@@ -5,8 +5,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Store</title>
 	<link rel="stylesheet" href="apps.css">
+	<link rel="stylesheet" href="store.css">
 	<style>html,body{height:100%;margin:0;padding:0;}</style>
 	<script defer src="apps.js"></script>
+	<script defer src="store.js"></script>
 	<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self';">
 </head>
 <body>
@@ -18,11 +20,11 @@
 		<!-- ================================
 		     FIXED HEADER - SEARCH & FILTER
 		     ================================ -->
-		<div class="apps-header">
-			<div class="apps-header-left">
-				<div class="apps-search-container">
-					<input type="text" class="apps-search" placeholder="🔍 Search store..." aria-label="Search store">
-				</div>
+			<div class="apps-header">
+				<div class="apps-header-left">
+					<div class="apps-search-container">
+						<input type="text" class="apps-search" placeholder="🔍 Search store..." aria-label="Search store" autocomplete="off">
+					</div>
 				<div class="apps-filter-container">
 					<select class="apps-filter" aria-label="Filter store">
 						<option value="a-to-z">A to Z</option>
@@ -41,115 +43,288 @@
 		<!-- ================================
 		     SCROLLABLE BODY - STORE GRID
 		     ================================ -->
-		<div class="apps-body">
-			<div class="apps-grid">
-				
-				<!-- Creative Apps -->
-				<div class="app-item" data-category="creative">
-					<div class="app-icon">🎨</div>
-					<div class="app-name">Photoshop</div>
-				</div>
-				
-				<div class="app-item" data-category="creative">
-					<div class="app-icon">📐</div>
-					<div class="app-name">Illustrator</div>
-				</div>
-				
-				<div class="app-item" data-category="creative">
-					<div class="app-icon">🎬</div>
-					<div class="app-name">Premiere Pro</div>
-				</div>
-				
-				<div class="app-item" data-category="creative">
-					<div class="app-icon">🎞️</div>
-					<div class="app-name">After Effects</div>
-				</div>
-				
-				<!-- Productivity Apps -->
-				<div class="app-item" data-category="productivity">
-					<div class="app-icon">📄</div>
-					<div class="app-name">Word</div>
-				</div>
-				
-				<div class="app-item" data-category="productivity">
-					<div class="app-icon">📊</div>
-					<div class="app-name">Excel</div>
-				</div>
-				
-				<div class="app-item" data-category="productivity">
-					<div class="app-icon">📽️</div>
-					<div class="app-name">PowerPoint</div>
-				</div>
-				
-				<div class="app-item" data-category="productivity">
-					<div class="app-icon">📝</div>
-					<div class="app-name">OneNote</div>
-				</div>
-				
-				<!-- Development Apps -->
-				<div class="app-item" data-category="development">
-					<div class="app-icon">💻</div>
-					<div class="app-name">VS Code</div>
-				</div>
-				
-				<div class="app-item" data-category="development">
-					<div class="app-icon">🐙</div>
-					<div class="app-name">GitHub Desktop</div>
-				</div>
-				
-				<div class="app-item" data-category="development">
-					<div class="app-icon">🐳</div>
-					<div class="app-name">Docker</div>
-				</div>
-				
-				<div class="app-item" data-category="development">
-					<div class="app-icon">⚡</div>
-					<div class="app-name">Postman</div>
-				</div>
-				
-				<!-- Entertainment Apps -->
-				<div class="app-item" data-category="entertainment">
-					<div class="app-icon">🎵</div>
-					<div class="app-name">Spotify</div>
-				</div>
-				
-				<div class="app-item" data-category="entertainment">
-					<div class="app-icon">📺</div>
-					<div class="app-name">Netflix</div>
-				</div>
-				
-				<div class="app-item" data-category="entertainment">
-					<div class="app-icon">🎮</div>
-					<div class="app-name">Steam</div>
-				</div>
-				
-				<div class="app-item" data-category="entertainment">
-					<div class="app-icon">📻</div>
-					<div class="app-name">Discord</div>
-				</div>
-				
-				<!-- Utilities Apps -->
-				<div class="app-item" data-category="utilities">
-					<div class="app-icon">🗜️</div>
-					<div class="app-name">WinRAR</div>
-				</div>
-				
-				<div class="app-item" data-category="utilities">
-					<div class="app-icon">🧹</div>
-					<div class="app-name">CCleaner</div>
-				</div>
-				
-				<div class="app-item" data-category="utilities">
-					<div class="app-icon">🔒</div>
-					<div class="app-name">BitLocker</div>
-				</div>
-				
-				<div class="app-item" data-category="utilities">
-					<div class="app-icon">📱</div>
-					<div class="app-name">Phone Link</div>
-				</div>
-				
+		<div id="apps-store" class="apps-body">
+
+			<!-- row 1 -->
+			<div class="store-row">
+
+				<article class="store-app-container" data-app-name="Isaac Sim">
+					<header class="store-app-top-group">
+						<img src="../logo/isaac-sim-logo.png" alt="Isaac Sim" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Isaac Sim <span class="store-app-version">v.2024.3</span></h2>
+							<p class="store-app-meta">Robotics Simulation • <span class="store-app-company">NVIDIA</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Build and validate robotics workflows with photorealistic rendering, Omniverse-native USD pipelines,
+						and fully simulated sensors for faster iteration.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="D5 Render">
+					<header class="store-app-top-group">
+						<img src="../logo/D5Render-logo.png" alt="D5 Render" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">D5 Render <span class="store-app-version">v.2.8.1</span></h2>
+							<p class="store-app-meta">Visualization • <span class="store-app-company">D5</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Create cinematic visualizations in minutes using real-time ray tracing, massive asset libraries,
+						and a workflow tuned for architectural storytelling.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Fusion 360">
+					<header class="store-app-top-group">
+						<img src="../logo/fusion360-logo.png" alt="Fusion 360" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Fusion 360 <span class="store-app-version">2025</span></h2>
+							<p class="store-app-meta">Product Design • <span class="store-app-company">Autodesk</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Collaborate across CAD, CAM, and CAE in a single environment with cloud-based versioning and
+						automated manufacturing prep.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
 			</div>
+
+			<!-- row 2 -->
+			<div class="store-row">
+
+				<article class="store-app-container" data-app-name="Photoshop">
+					<header class="store-app-top-group">
+						<img src="../logo/photoshop-logo.png" alt="Photoshop" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Photoshop <span class="store-app-version">2025</span></h2>
+							<p class="store-app-meta">Imaging • <span class="store-app-company">Adobe</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Blend raster editing, AI-powered selections, and USD-ready exports to craft marketing visuals and
+						texture libraries that drop straight into Omniverse pipelines.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Blender">
+					<header class="store-app-top-group">
+						<img src="../logo/blender-logo.png" alt="Blender" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Blender <span class="store-app-version">v.4.1</span></h2>
+							<p class="store-app-meta">3D Creation • <span class="store-app-company">Blender Foundation</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Open-source modeling, sculpting, and animation with Cycles rendering and USD export so assets can
+						flow seamlessly between Blender scenes and Omniverse stages.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Revit">
+					<header class="store-app-top-group">
+						<img src="../logo/revit-logo.png" alt="Revit" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Revit <span class="store-app-version">2025</span></h2>
+							<p class="store-app-meta">AEC BIM • <span class="store-app-company">Autodesk</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Coordinate architectural, structural, and MEP models with parametric families and direct connectors
+						into Omniverse for real-time BIM reviews.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+			</div>
+
+			<!-- row 3 -->
+			<div class="store-row">
+
+				<article class="store-app-container" data-app-name="SketchUp Pro">
+					<header class="store-app-top-group">
+						<img src="../logo/sketchup-logo.png" alt="SketchUp" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">SketchUp Pro <span class="store-app-version">v.2024.2</span></h2>
+							<p class="store-app-meta">Concept Modeling • <span class="store-app-company">Trimble</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Block out concepts with push/pull modeling, iterate on space planning, then export USD or DWG sets to
+						continue detailing inside Omniverse.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Rhino 8">
+					<header class="store-app-top-group">
+						<img src="../logo/rhino8-logo.png" alt="Rhino" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Rhino 8 <span class="store-app-version">v.8.4</span></h2>
+							<p class="store-app-meta">NURBS Modeling • <span class="store-app-company">McNeel</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Precision surfacing, Grasshopper parametrics, and USD connectors give Rhino users a direct bridge to
+						Omniverse for fabrication-ready workflows.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="3ds Max">
+					<header class="store-app-top-group">
+						<img src="../logo/3dsmax-logo.png" alt="3ds Max" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">3ds Max <span class="store-app-version">2025</span></h2>
+							<p class="store-app-meta">Visualization • <span class="store-app-company">Autodesk</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						From poly modeling to Arnold rendering, 3ds Max artists can live-link scenes into Omniverse for real-time
+						look-dev and review sessions.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+			</div>
+
+			<!-- row 4 -->
+			<div class="store-row">
+
+				<article class="store-app-container" data-app-name="AutoCAD">
+					<header class="store-app-top-group">
+						<img src="../logo/autocad-logo.png" alt="AutoCAD" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">AutoCAD <span class="store-app-version">2025</span></h2>
+							<p class="store-app-meta">Drafting • <span class="store-app-company">Autodesk</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Industry-standard 2D/3D drafting with DWG interoperability so construction sets and schematics stay
+						synchronized with Omniverse design reviews.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Trezi">
+					<header class="store-app-top-group">
+						<img src="../logo/trezi-logo.png" alt="Trezi" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Trezi <span class="store-app-version">v.3.5</span></h2>
+							<p class="store-app-meta">VR Collaboration • <span class="store-app-company">SmartVizX</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Immersive walkthroughs with client-ready VR sessions and direct Omniverse connectors keep stakeholders
+						aligned on finishes and spatial intent.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Midjourney">
+					<header class="store-app-top-group">
+						<img src="../logo/midjourney-logo.png" alt="Midjourney" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Midjourney <span class="store-app-version">v.6.1</span></h2>
+							<p class="store-app-meta">AI Imagery • <span class="store-app-company">Midjourney</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Dream up concept boards and mood imagery with AI prompts, then convert the outputs into materials and
+						storyboards for Omniverse productions.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+			</div>
+
+			<!-- row 5 -->
+			<div class="store-row">
+
+				<article class="store-app-container" data-app-name="QGIS">
+					<header class="store-app-top-group">
+						<img src="../logo/qgis-logo.png" alt="QGIS" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">QGIS <span class="store-app-version">v.3.34</span></h2>
+							<p class="store-app-meta">Geospatial • <span class="store-app-company">QGIS Community</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Analyze GIS layers, style terrain meshes, and stream vector data directly into Omniverse for scientific
+						visualization and digital twin overlays.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Omniverse Code">
+					<header class="store-app-top-group">
+						<img src="../logo/omniverse-logo.png" alt="Omniverse Code" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Omniverse Code <span class="store-app-version">v.2024.4</span></h2>
+							<p class="store-app-meta">USD Dev • <span class="store-app-company">NVIDIA</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Professional IDE for USD scene development, extension authoring, and real-time debugging of Omniverse
+						applications.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+				<article class="store-app-container" data-app-name="Cesium">
+					<header class="store-app-top-group">
+						<img src="../logo/cesium-logo.png" alt="Cesium" class="store-app-logo">
+						<div class="store-app-title-block">
+							<h2 class="store-app-name">Cesium <span class="store-app-version">v.2.0</span></h2>
+							<p class="store-app-meta">3D Geospatial • <span class="store-app-company">Cesium</span></p>
+						</div>
+					</header>
+					<p class="store-app-description">
+						Stream global 3D tilesets, terrain, and photogrammetry for digital twinning projects that seamlessly
+						blend with Omniverse scenes.
+					</p>
+					<div class="store-app-actions">
+						<button type="button" class="store-app-install-button">Install</button>
+					</div>
+				</article>
+
+			</div>
+
 		</div>
 	</div>
 </body>

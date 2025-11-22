@@ -1920,7 +1920,7 @@ function blurAgentChatInput() {
 // =============================================================================
 
 let appsCurrentSelectedApp = null;
-let appsLoadingTimerId = null; // ensures modal auto-hides after 5s regardless of clicks
+let appsLoadingTimerId = null;
 
 function showAppsLoadingModal(appData) {
     appsCurrentSelectedApp = appData;
@@ -1930,8 +1930,9 @@ function showAppsLoadingModal(appData) {
     const appName = document.getElementById('appsModalAppName');
     const openButton = document.getElementById('appsModalOpenButton');
     const cancelButton = document.getElementById('appsModalCancelButton');
+    const previewImage = document.getElementById('appsModalPreviewImage');
     
-    if (!overlay || !appIcon || !appName || !openButton || !cancelButton) {
+    if (!overlay || !appIcon || !appName || !openButton || !cancelButton || !previewImage) {
         console.error('Apps modal elements not found');
         return;
     }
@@ -1945,6 +1946,9 @@ function showAppsLoadingModal(appData) {
     } else {
         appIcon.textContent = appData.icon || appData.name.charAt(0).toUpperCase();
     }
+    const coverSrc = getAppCoverImage(appData.name);
+    previewImage.src = coverSrc;
+    previewImage.alt = `${appData.name} preview`;
     
     // Reset loading state
     resetAppsLoadingState();
@@ -1964,11 +1968,11 @@ function showAppsLoadingModal(appData) {
         openButton.focus();
     }, 100);
 
-    // Start or restart the auto-hide timer (max lifetime 5s)
-    try { if (appsLoadingTimerId) { clearTimeout(appsLoadingTimerId); } } catch(_) {}
-    appsLoadingTimerId = setTimeout(() => {
-        hideAppsLoadingModal();
-    }, 5000);
+    // Ensure any prior loading timer is cleared so the prompt stays open indefinitely
+    if (appsLoadingTimerId) {
+        try { clearTimeout(appsLoadingTimerId); } catch(_) {}
+        appsLoadingTimerId = null;
+    }
 
     // Handle keyboard shortcuts
     document.addEventListener('keydown', handleAppsModalKeyboard);
@@ -1990,6 +1994,14 @@ function handleAppsModalOpen() {
     
     // Enter loading state
     enterAppsLoadingState();
+
+        // Auto-hide the loading indicator after a short delay
+        if (appsLoadingTimerId) {
+            try { clearTimeout(appsLoadingTimerId); } catch(_) {}
+        }
+        appsLoadingTimerId = setTimeout(() => {
+            hideAppsLoadingModal();
+        }, 5000);
 
     // Create a new tab for this app
     createAppTab(appsCurrentSelectedApp);
@@ -2267,7 +2279,9 @@ function getTabIcon(appName, appIcon) {
         'VS Code': 'logo/vscode-logo.png',
         'Omniverse': 'logo/omniverse-logo.png',
         'Plexus': 'logo/plexus-logo.png',
-        'OpenUSD': 'logo/openusd-logo.png'
+        'OpenUSD': 'logo/openusd-logo.png',
+        'Isaac Sim': 'logo/isaac-sim-logo.png',
+        'Fusion 360': 'logo/fusion360-logo.png'
     };
     
     // Check if we have a specific logo for this app
@@ -2459,7 +2473,6 @@ function hideAppsLoadingModal() {
         overlay.classList.remove('show');
         overlay.setAttribute('aria-hidden', 'true');
     }
-    // Clear auto-hide timer if any
     if (appsLoadingTimerId) {
         try { clearTimeout(appsLoadingTimerId); } catch(_) {}
         appsLoadingTimerId = null;
@@ -2578,4 +2591,48 @@ function collapseAgentPanel() {
             setTimeout(() => { commandInput.focus(); }, 10);
         }
     } catch(_) {}
+}
+
+function getAppCoverImage(appName) {
+    const normalized = (appName || '').trim().toLowerCase();
+    if (normalized === 'd5 render') {
+        return 'logo/d5render-cover.png';
+    }
+    if (normalized === 'rhino 8' || normalized === 'rhino8') {
+        return 'logo/rhino-cover.png';
+    }
+    if (normalized === 'midjourney') {
+        return 'logo/midjourney-cover.png';
+    }
+    if (normalized === 'blender') {
+        return 'logo/blender-cover.png';
+    }
+    if (normalized === 'autocad') {
+        return 'logo/autocad-cover.png';
+    }
+    if (normalized === 'revit') {
+        return 'logo/revit-cover.png';
+    }
+    if (normalized === 'chatgpt') {
+        return 'logo/chatgpt-cover.png';
+    }
+    if (normalized === 'photoshop') {
+        return 'logo/photoshop-cover.png';
+    }
+    if (normalized === 'sketchup') {
+        return 'logo/sketchup-cover.png';
+    }
+    if (normalized === 'indesign') {
+        return 'logo/indesign-cover.png';
+    }
+    if (normalized === 'visual studio code' || normalized === 'vs code' || normalized === 'vscode') {
+        return 'logo/vscode-cover.png';
+    }
+    if (normalized === 'fusion 360' || normalized === 'fusion360') {
+        return 'logo/fusion360-cover.png';
+    }
+    if (normalized === '3ds max' || normalized === '3dsmax') {
+        return 'logo/3dsmax-cover.png';
+    }
+    return 'logo/dummy-cover1.png';
 }
