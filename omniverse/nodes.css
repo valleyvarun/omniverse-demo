@@ -33,19 +33,62 @@ html, body {
 }
 
 
+/** app nodes defualt positions **/
+#autocad-file-node {
+  top: 1400px;
+  left: 100px;
+}
+
+#autocad-layers-node {
+  top: 1600px;
+  left: 500px;
+}
+
 #sketchup-file-node {
-  top: 800px;
-  left: 400px;
+  top: 900px;
+  left: 900px;
+}
+
+#rhino8-file-node {
+  top: 1300px;
+  left: 900px;
 }
 
 #revit-file-node {
-  top: 800px;
-  left: 1000px;
+  top: 1700px;
+  left: 1300px;
 }
 
-#autocad-file-node {
-  top: 800px;
-  left: 100px;
+#solidworks-file-node {
+  top: 900px;
+  left: 1700px;
+}
+
+#python-process-node {
+  top: 1300px;
+  left: 1700px;
+}
+
+#isaac-sim-node {
+  top: 900px;
+  left: 2100px;
+}
+
+#unreal-engine-node {
+  top: 1200px;
+  left: 2400px;
+}
+
+#premiere-pro-node {
+  top: 1500px;
+  left: 2700px;
+}
+
+
+
+#autocad-layers-node .node-outputs .node-group:not(:first-child) .node-name {
+  color: #d3d3d3;
+  font-style: italic;
 }
 
 

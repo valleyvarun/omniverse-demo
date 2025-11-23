@@ -564,6 +564,24 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch(_) {}
         }
 
+        // Handle project opening from Folders popup
+        if (data.type === 'folders:open-project') {
+            try {
+                // Close the popup first
+                const modalOverlay = document.getElementById('contentModalOverlay');
+                if (modalOverlay) {
+                    modalOverlay.classList.remove('show');
+                    modalOverlay.setAttribute('aria-hidden', 'true');
+                }
+                
+                // Forward to PM iframe
+                const pmFrame = document.getElementById('pmFrame');
+                if (pmFrame && pmFrame.contentWindow) {
+                    pmFrame.contentWindow.postMessage({ type: 'pm:load-project', projectName: data.projectName }, '*');
+                }
+            } catch(_) {}
+        }
+
         // Show apps loading modal
         if (data.type === 'showAppsModal') {
             try {

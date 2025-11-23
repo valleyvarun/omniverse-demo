@@ -1,74 +1,235 @@
-  // Current world transform (provided by parent)
-    let scale = 1;
-    let offsetX = 0;
-    let offsetY = 0;
+/* ==========================================================================
+   DYNAMIC NODE CREATION
+   ========================================================================== */
 
-    // World/nodes setup
-    let world = document.getElementById('world');
-    let connectionsSvg = document.getElementById('connections');
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const connectionDefs = [
+    /**
+     * Creates a text node HTML structure and appends it to the document body.
+     * @param {string} id - The ID of the node element.
+     * @param {string} headerText - The text to display in the header.
+     * @param {string} inputValue - The default value for the header input.
+     * @param {string} dataSource - The data-source attribute for the script content.
+     * @param {string} connectorName - The data-connector attribute for the output circle.
+     */
+    function createTextNode(id, headerText, inputValue, dataSource, connectorName) {
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = 'generic-node';
+      div.innerHTML = `
+        <div class="text-node">
+          <div class="node-header">
+            <div class="node-header-left">
+              <div class="node-header-text">${headerText}</div>
+            </div>
+            <div class="node-header-center">
+              <input class="node-header-name" type="text" value="${inputValue}">
+            </div>
+            <div class="node-header-right"></div>
+          </div>
+          <div class="node-body">
+            <div class="node-input-block">
+               <div class="node-inputs">
+                 <div class="node-group">
+                  <div class="node-circle"></div>
+                </div>
+               </div>
+            </div>
+            <div class="node-middle-block">
+              <div class="script-block">
+                <div class="line-numbers"></div>
+                <div class="script-content" data-node-id="${id}" data-source="${dataSource}" spellcheck="false"></div>
+              </div>
+            </div>
+            <div class="node-output-block">
+               <div class="node-width-resize-bar"></div>
+               <div class="node-outputs">
+                <div class="node-group">
+                  <div class="node-circle" data-connector="${connectorName}"></div>
+                </div>
+               </div>
+            </div>
+          </div>
+          <div class="node-footer">
+             <div class="node-height-resize-bar"></div>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(div);
+    }
+
+    // Instantiate Text Nodes
+    createTextNode('text-node1', 'Text', 'file name', 'text1.txt', 'text-node1-output');
+    createTextNode('text-node2', 'Text', 'folder path', 'text2.txt', 'text-node2-output');
+
+    /**
+     * Creates an app node HTML structure and appends it to the document body.
+     * @param {string} id - The ID of the node element.
+     * @param {string} headerText - The text to display in the header.
+     * @param {string} logoSrc - The source URL for the logo image.
+     * @param {string[]} inputs - Array of input names (excluding 'queue').
+     * @param {string[]} outputs - Array of output names (excluding 'output' and 'queue').
+     * @param {string} [headerCenterHtml=''] - Optional HTML for the center of the header.
+     * @param {boolean} [hasQueue=true] - Whether to include queue inputs/outputs.
+     * @param {string} [middleLogoSrc=null] - Optional source URL for the middle block image.
+     */
+    function createAppNode(id, headerText, logoSrc, inputs, outputs, headerCenterHtml = '', hasQueue = true, middleLogoSrc = null) {
+      const inputHtml = inputs.map(name => `
+        <div class="node-group"><div class="node-circle"></div><div class="node-name">${name}</div></div>
+      `).join('');
+
+      const outputHtml = outputs.map(name => `
+        <div class="node-group"><div class="node-name">${name}</div><div class="node-circle"></div></div>
+      `).join('');
+
+      const queueInputHtml = hasQueue ? '<div class="node-group"><div class="node-circle"></div><div class="node-name"><h1>queue</h1></div></div>' : '';
+      const queueOutputHtml = hasQueue ? '<div class="node-group"><div class="node-name"><h1>queue</h1></div><div class="node-circle"></div></div>' : '';
+      
+      const actualMiddleLogo = middleLogoSrc || logoSrc;
+
+      const div = document.createElement('div');
+      div.id = id;
+      div.className = 'generic-node';
+      div.innerHTML = `
+          <div class="node-header">
+            <div class="node-header-left">
+              <img class="node-header-logo" src="${logoSrc}" alt="logo">
+              <div class="node-header-text">${headerText}</div>
+            </div>
+            <div class="node-header-center">
+              ${headerCenterHtml}
+            </div>
+            <div class="node-header-right"></div>
+          </div>
+
+          <div class="node-body">
+            <div class="node-input-block">
+               <div class="node-inputs">
+                ${queueInputHtml}
+                <div class="node-group"><div class="node-circle"></div><div class="node-name">input</div></div>
+                ${inputHtml}
+               </div>
+            </div>
+
+            <div class="node-middle-block">
+              <img src="${actualMiddleLogo}" alt="${headerText} logo" class="node-middle-block-logo">
+            </div>
+
+            <div class="node-output-block">
+               <div class="node-width-resize-bar resize-handle" data-direction="e"></div>
+               <div class="node-outputs">
+                <div class="node-group"><div class="node-name">output</div><div class="node-circle"></div></div>
+                ${outputHtml}
+                ${queueOutputHtml}
+               </div>
+            </div>
+          </div>
+
+          <div class="node-footer">
+             <div class="node-height-resize-bar resize-handle" data-direction="s"></div>
+          </div>
+      `;
+      document.body.appendChild(div);
+    }
+
+    const appNodesConfig = [
       {
-        id: 'start-to-runqueue',
-        fromSelector: '[data-connector="start-output"]',
-        toSelector: '[data-connector="run-queue-input"]'
+        id: 'revit-file-node',
+        text: 'Revit File',
+        logo: '../logo/revit-logo.png',
+        inputs: ['file', 'folder', 'script', 'geometry', 'data', 'sheet'],
+        outputs: ['BIM', 'geometry', 'schedules', 'sheets']
+      },
+      {
+        id: 'sketchup-file-node',
+        text: 'Sketchup File',
+        logo: '../logo/sketchup-logo.png',
+        inputs: ['file', 'folder', 'script', 'geometry', 'layout'],
+        outputs: ['geometry', 'tags', 'groups', 'layout']
+      },
+      {
+        id: 'autocad-file-node',
+        text: 'AutoCAD File',
+        logo: '../logo/autocad-logo.png',
+        inputs: ['file', 'folder', 'script', 'geometry', 'layers', 'layout'],
+        outputs: ['geometry', 'layers', 'groups', 'layout']
+      },
+      {
+        id: 'rhino8-file-node',
+        text: 'Rhino 8 File',
+        logo: '../logo/rhino8-logo.png',
+        inputs: ['file', 'folder', 'script', 'geometry', 'layers', 'layout'],
+        outputs: ['geometry', 'layers', 'groups', 'layout']
+      },
+      {
+        id: 'solidworks-file-node',
+        text: 'SolidWorks File',
+        logo: '../logo/solidworks-logo.png',
+        inputs: ['file', 'folder', 'script', 'parts', 'assemblies', 'drawings'],
+        outputs: ['geometry', 'BOM', 'metadata', 'sheet']
+      },
+      {
+        id: 'python-process-node',
+        text: ' ',
+        logo: '../logo/python-logo.png',
+        inputs: ['script', 'modules', 'data', 'env'],
+        outputs: ['logs', 'artifacts'],
+        headerCenter: `
+          <label class="visually-hidden" for="python-env-select">Python Environment</label>
+          <select id="python-env-select" class="node-language-select">
+            <option value="3-11">Python 3.11</option>
+            <option value="3-10">Python 3.10</option>
+            <option value="3-9">Python 3.9</option>
+          </select>
+        `
+      },
+      {
+        id: 'isaac-sim-node',
+        text: 'Isaac Sim',
+        logo: '../logo/isaac-sim-logo.png',
+        inputs: ['scenario', 'robot', 'sensors', 'USD', 'script'],
+        outputs: ['telemetry', 'synthetic data', 'robot state']
+      },
+      {
+        id: 'unreal-engine-node',
+        text: 'Unreal Engine',
+        logo: '../logo/unrealengine-logo.png',
+        inputs: ['project', 'assets', 'blueprints', 'USD', 'plugins'],
+        outputs: ['levels', 'render', 'assets']
+      },
+      {
+        id: 'premiere-pro-node',
+        text: 'Premiere Pro',
+        logo: '../logo/premierpro-logo.png',
+        inputs: ['project', 'media', 'timeline', 'effects'],
+        outputs: ['render', 'sequence', 'metadata']
+      },
+      {
+        id: 'autocad-layers-node',
+        text: 'layers',
+        logo: '../logo/autocad-logo.png',
+        inputs: [],
+        outputs: ['layer1', 'layer2', 'layer3'],
+        hasQueue: false,
+        middleLogo: '../logo/layers-icon.png'
       }
     ];
-    const START_NODE_SELECTOR = '#plexus-node';
-    const QUEUE_NODE_SELECTOR = '#script-node';
-    const BOOLEAN_NODE_SELECTOR = '#boolean-node';
-    const START_LABEL = 'start';
-    const QUEUE_LABEL = 'queue';
-    const RUN_INPUT_LABEL = 'run';
-    const BOOLEAN_OUTPUT_LABEL = 'output';
-    const BOOLEAN_OUTPUT_CONNECTOR = '[data-connector="boolean-output"]';
-    const RUN_INPUT_CONNECTOR = '[data-connector="plexus-run-input"]';
-    const TEXT_NODE1_OUTPUT_CONNECTOR = '#text-node1 [data-connector="text-node1-output"]';
-    const TEXT_NODE2_OUTPUT_CONNECTOR = '#text-node2 [data-connector="text-node2-output"]';
-    const PLEXUS_FILE_INPUT_CONNECTOR = '[data-connector="plexus-file-input"]';
-    const PLEXUS_FOLDER_INPUT_CONNECTOR = '[data-connector="plexus-folder-input"]';
-    const START_QUEUE_LINE_COLOR = '#4c34eb';
-    const BOOLEAN_LINE_COLOR = '#76B900';
-    const CONNECTOR_INNER_RADIUS = 3;
-    let startQueueSketchInstance = null;
-    let p5LoadingPromise = null;
-    const nodeEls = Array.from(document.querySelectorAll('.generic-node')).filter(el => el.id !== 'node-generic');
 
-    if (!world) {
-      world = document.createElement('div');
-      world.id = 'world';
-      world.style.position = 'absolute';
-      world.style.left = '0';
-      world.style.top = '0';
-      world.style.width = '100%';
-      world.style.height = '100%';
-      world.style.transformOrigin = '0 0';
-      document.body.insertBefore(world, document.body.firstChild || null);
-    }
-
-    nodeEls.forEach(el => {
-      if (el.parentElement !== world) {
-        world.appendChild(el);
-      }
+    appNodesConfig.forEach(config => {
+      createAppNode(config.id, config.text, config.logo, config.inputs, config.outputs, config.headerCenter, config.hasQueue, config.middleLogo);
     });
 
-    if (!connectionsSvg) {
-      connectionsSvg = document.createElementNS(svgNS, 'svg');
-      connectionsSvg.setAttribute('id', 'connections');
-      connectionsSvg.setAttribute('xmlns', svgNS);
-      connectionsSvg.style.position = 'absolute';
-      connectionsSvg.style.left = '0';
-      connectionsSvg.style.top = '0';
-      connectionsSvg.style.width = '100%';
-      connectionsSvg.style.height = '100%';
-      connectionsSvg.style.pointerEvents = 'none';
-      world.appendChild(connectionsSvg);
-    }
 
-    initializeStartQueueLine();
+
+/* ==========================================================================
+   LAYOUT SYNCHRONIZATION
+   ========================================================================== */
 
     const headerFooterSyncById = {};
 
+    /**
+     * Ensures that a node's header and footer widths match its body width.
+     * This is necessary because the body width can change based on content or resizing.
+     * @param {HTMLElement} node - The node element to synchronize.
+     */
     function ensureHeaderFooterSync(node) {
       if (!node || !node.id || headerFooterSyncById[node.id]) return;
       const header = node.querySelector('.node-header');
@@ -83,14 +244,19 @@
         footer.style.width = bodyWidth + 'px';
       };
 
+      // Initial sync
       sync();
 
+      // Observe body resize to keep header/footer in sync
       const observer = new ResizeObserver(() => sync());
       observer.observe(body);
       window.addEventListener('resize', sync);
       headerFooterSyncById[node.id] = sync;
     }
 
+    /**
+     * Force synchronization of all registered nodes.
+     */
     function syncAllHeadersFooters() {
       Object.values(headerFooterSyncById).forEach(syncFn => {
         if (typeof syncFn === 'function') {
@@ -98,20 +264,145 @@
         }
       });
     }
-    // Track layout state for each node by id
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   GLOBAL VARIABLES & CONFIGURATION
+   ========================================================================== */
+
+    // Current world transform (provided by parent via postMessage)
+    // These track the zoom level and pan offset of the node canvas
+    let scale = 1;
+    let offsetX = 0;
+    let offsetY = 0;
+
+    // DOM Elements for the node world and connection layer
+    let world = document.getElementById('world');
+    let connectionsSvg = document.getElementById('connections');
+    const svgNS = 'http://www.w3.org/2000/svg';
+
+    // Configuration for static connections (SVG based)
+    const connectionDefs = [
+      {
+        id: 'start-to-runqueue',
+        fromSelector: '[data-connector="start-output"]',
+        toSelector: '[data-connector="run-queue-input"]'
+      }
+    ];
+
+    // Constants for Node Selectors and Labels used in dynamic connections (P5.js)
+    const START_NODE_SELECTOR = '#plexus-node';
+    const QUEUE_NODE_SELECTOR = '#script-node';
+    const BOOLEAN_NODE_SELECTOR = '#boolean-node';
+    
+    // Connector Labels (used to find specific connection points within nodes)
+    const START_LABEL = 'start';
+    const QUEUE_LABEL = 'queue';
+    const RUN_INPUT_LABEL = 'run';
+    const BOOLEAN_OUTPUT_LABEL = 'output';
+
+    // Specific Connector Selectors
+    const BOOLEAN_OUTPUT_CONNECTOR = '[data-connector="boolean-output"]';
+    const RUN_INPUT_CONNECTOR = '[data-connector="plexus-run-input"]';
+    const TEXT_NODE1_OUTPUT_CONNECTOR = '#text-node1 [data-connector="text-node1-output"]';
+    const TEXT_NODE2_OUTPUT_CONNECTOR = '#text-node2 [data-connector="text-node2-output"]';
+    const PLEXUS_FILE_INPUT_CONNECTOR = '[data-connector="plexus-file-input"]';
+    const PLEXUS_FOLDER_INPUT_CONNECTOR = '[data-connector="plexus-folder-input"]';
+
+    // Visual Styling Constants
+    const START_QUEUE_LINE_COLOR = '#4c34eb';
+    const BOOLEAN_LINE_COLOR = '#76B900';
+    const CONNECTOR_INNER_RADIUS = 3;
+
+    // P5.js Instance Management
+    let startQueueSketchInstance = null;
+    let p5LoadingPromise = null;
+
+    // Collect all node elements, excluding the template
+    const nodeEls = Array.from(document.querySelectorAll('.generic-node')).filter(el => el.id !== 'node-generic');
+
+/* ==========================================================================
+   INITIALIZATION
+   ========================================================================== */
+
+    // Ensure the 'world' container exists. This container holds all nodes and transforms them.
+    if (!world) {
+      world = document.createElement('div');
+      world.id = 'world';
+      world.style.position = 'absolute';
+      world.style.left = '0';
+      world.style.top = '0';
+      world.style.width = '100%';
+      world.style.height = '100%';
+      world.style.transformOrigin = '0 0';
+      document.body.insertBefore(world, document.body.firstChild || null);
+    }
+
+    // Move all nodes into the world container if they aren't already there
+    nodeEls.forEach(el => {
+      if (el.parentElement !== world) {
+        world.appendChild(el);
+      }
+    });
+
+    // Ensure the SVG layer for connections exists
+    if (!connectionsSvg) {
+      connectionsSvg = document.createElementNS(svgNS, 'svg');
+      connectionsSvg.setAttribute('id', 'connections');
+      connectionsSvg.setAttribute('xmlns', svgNS);
+      connectionsSvg.style.position = 'absolute';
+      connectionsSvg.style.left = '0';
+      connectionsSvg.style.top = '0';
+      connectionsSvg.style.width = '100%';
+      connectionsSvg.style.height = '100%';
+      connectionsSvg.style.pointerEvents = 'none'; // Let clicks pass through to nodes
+      connectionsSvg.style.overflow = 'visible';
+      world.appendChild(connectionsSvg);
+    }
+
+    // Initialize the P5.js sketch for drawing dynamic bezier curves
+    initializeStartQueueLine();
+
+
+/* ==========================================================================
+   STATE MANAGEMENT & EDITOR LOGIC
+   ========================================================================== */
+
+    // Track layout state for each node by id (position, size, values)
     const nodeState = {};
     const nodeById = {};
     const middleBlockById = {};
     const middleBlockDefaultHeights = {};
 
-        // Enable inline editing for text and script nodes on double-click
-    let editingTextBlock = false;
+    // Editor State
+    let editingTextBlock = false; // Flag to check if user is currently editing text
     const textEditors = Array.from(document.querySelectorAll('.text-content, .script-content'));
     const editorResizeObservers = new WeakMap();
     const externalTextCache = new Map();
+    
+    // UI Controls
     const booleanToggleButtons = Array.from(document.querySelectorAll('.boolean-toggle'));
     const headerNameInputs = Array.from(document.querySelectorAll('.node-header-name'));
 
+    /**
+     * Fetches text content from an external file (e.g., for script nodes).
+     * Caches the result to avoid redundant network requests.
+     */
     function fetchExternalEditorText(path) {
       const normalized = (path || '').trim();
       if (!normalized) return Promise.resolve(null);
@@ -133,8 +424,10 @@
       return request;
     }
 
+    // Helper to escape HTML characters for safe rendering
     const escapeHtml = (value) => (value || '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 
+    // Configuration for syntax highlighting (currently supports C#)
     const languageTokenConfigs = {
       csharp: {
         keywords: new Set(['using','namespace','class','struct','enum','interface','public','private','protected','internal','static','readonly','const','void','int','string','var','new','return','true','false','if','else','for','foreach','while','do','switch','case','default','try','catch','finally','throw','this','bool','queue']),
@@ -142,6 +435,12 @@
       }
     };
 
+    /**
+     * Tokenizes and highlights a single line of code.
+     * @param {string} text - The line of code.
+     * @param {string} language - The language to highlight (default: csharp).
+     * @returns {string} HTML string with syntax highlighting spans.
+     */
     function highlightLine(text, language = 'csharp') {
       if (text === undefined || text === null) return '';
       const config = languageTokenConfigs[language] || languageTokenConfigs.csharp;
@@ -231,6 +530,33 @@
       updateLineNumbers(editor);
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   BOOLEAN TOGGLE LOGIC
+   ========================================================================== */
+
+    /**
+     * Updates the visual state of a boolean toggle button.
+     */
     function setBooleanToggleState(button, nextState) {
       const normalized = !!nextState;
       button.dataset.state = normalized ? 'true' : 'false';
@@ -244,6 +570,9 @@
       return (button?.dataset?.state || '').toLowerCase() === 'true';
     }
 
+    /**
+     * Persists the boolean state to the node's state object and optionally publishes it.
+     */
     function storeBooleanToggleState(button, value, { publish = true } = {}) {
       const node = button.closest('.generic-node');
       if (!node || !node.id) return;
@@ -256,6 +585,9 @@
       }
     }
 
+    /**
+     * Initializes a boolean toggle button based on stored state or default DOM state.
+     */
     function initializeBooleanToggle(button) {
       const node = button.closest('.generic-node');
       const key = button.dataset.booleanKey || 'value';
@@ -265,6 +597,9 @@
       storeBooleanToggleState(button, initialValue, { publish: false });
     }
 
+    /**
+     * Refreshes all boolean toggles from the current nodeState.
+     */
     function refreshBooleanToggleUI() {
       booleanToggleButtons.forEach(button => {
         const node = button.closest('.generic-node');
@@ -277,6 +612,23 @@
       });
     }
 
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   EDITOR INITIALIZATION & EVENTS
+   ========================================================================== */
+
+    /**
+     * Loads content into an editor, either from the DOM or an external source.
+     */
     function initializeEditorContent(editor) {
       const sourcePath = editor?.dataset?.source || editor?.dataset?.src;
       if (!sourcePath) {
@@ -302,20 +654,29 @@
       editorResizeObservers.set(editor, observer);
     }
 
+    // Attach event listeners to all text editors
     textEditors.forEach(editor => {
       editor.setAttribute('contenteditable', 'false');
+      
+      // Double click to start editing
       editor.addEventListener('dblclick', (e) => {
         e.preventDefault();
         e.stopPropagation();
         startEditingTextBlock(editor);
       });
+      
+      // Blur to stop editing
       editor.addEventListener('blur', () => endEditingTextBlock(editor));
+      
+      // Escape to cancel editing
       editor.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           e.preventDefault();
           editor.blur();
         }
       });
+      
+      // Input handling for live updates
       editor.addEventListener('input', () => {
         if (editor.isContentEditable && editor.classList.contains('editing')) {
           updateLineNumbers(editor);
@@ -323,6 +684,7 @@
           refreshEditorContent(editor);
         }
       });
+      
       observeEditorSize(editor);
       initializeEditorContent(editor);
     });
@@ -444,21 +806,41 @@
       });
     }
 
+
+
+
+
+
+
+
+
+
+
+/* ==========================================================================
+   NODE POSITIONING & LAYOUT
+   ========================================================================== */
+
     // Initialize node positions from computed styles (left/top from CSS) or defaults
     nodeEls.forEach(el => {
       if (!el.id) return;
       nodeById[el.id] = el;
       ensureHeaderFooterSync(el);
+      
+      // Read initial position from CSS
       const cs = getComputedStyle(el);
       const wx = parseFloat(cs.left) || 0;
       const wy = parseFloat(cs.top) || 0;
+      
+      // Store in state
       const state = nodeState[el.id] || (nodeState[el.id] = {});
       state.x = wx;
       state.y = wy;
+      
       // Ensure positions are applied inline so future updates are consistent
       el.style.left = wx + 'px';
       el.style.top  = wy + 'px';
 
+      // Handle middle block sizing (for resizable nodes)
       const middleBlock = el.querySelector('.node-middle-block');
       if (middleBlock) {
         middleBlockById[el.id] = middleBlock;
@@ -466,13 +848,16 @@
         const rect = middleBlock.getBoundingClientRect();
         const defaultHeight = middleBlock.offsetHeight || parseFloat(middleCs.height) || rect.height || 0;
         middleBlockDefaultHeights[el.id] = defaultHeight;
+        
         if (defaultHeight > 0) {
           middleBlock.style.minHeight = defaultHeight + 'px';
         }
+        
         const initialWidth = parseFloat(middleCs.width);
         const initialHeight = parseFloat(middleCs.height);
         const widthVal = Number.isFinite(initialWidth) && initialWidth > 0 ? initialWidth : rect.width;
         const heightVal = Number.isFinite(initialHeight) && initialHeight > 0 ? initialHeight : rect.height;
+        
         if (Number.isFinite(widthVal) && widthVal > 0) {
           state.width = widthVal;
         }
@@ -482,6 +867,9 @@
       }
     });
 
+    /**
+     * Updates the world container's transform based on current scale and offset.
+     */
     function updateWorldTransform() {
       if (world) {
         world.style.transformOrigin = '0 0';
@@ -530,12 +918,17 @@
       updateConnections();
     }
 
-    // Drag handling in screen space, convert to world space by dividing by scale
+/* ==========================================================================
+   INTERACTION: DRAG & DROP
+   ========================================================================== */
+
+    // Drag State
     let dragging = false;
     let draggingNodeId = null;
-    let dragStartSX = 0, dragStartSY = 0; // screen
-    let startWX = 0, startWY = 0; // world
-    // Resize handling
+    let dragStartSX = 0, dragStartSY = 0; // Screen coordinates
+    let startWX = 0, startWY = 0; // World coordinates
+
+    // Resize State
     let resizing = false;
     let resizingNode = null;
     let resizeStartSX = 0, resizeStartSY = 0;
@@ -562,20 +955,27 @@
       el.addEventListener('mousedown', (e) => {
         // Only left or middle button
         if (e.button !== 0 && e.button !== 1) return;
+        
         // Don't start dragging when interacting with controls (e.g., buttons inside node)
         if (e.target.closest('button, input, textarea, select, .text-block, .text-content, .script-block, .script-content')) return;
+        
         e.preventDefault();
         if (!el.id) return;
+        
         // Bring clicked node to front
         nodeEls.forEach(n => n.style.zIndex = '1');
         el.style.zIndex = '10';
+        
+        // Initialize drag state
         dragging = true;
         draggingNodeId = el.id;
         dragStartSX = e.clientX;
         dragStartSY = e.clientY;
+        
         const state = nodeState[draggingNodeId] || (nodeState[draggingNodeId] = {});
         startWX = Number.isFinite(state.x) ? state.x : 0;
         startWY = Number.isFinite(state.y) ? state.y : 0;
+        
         setDraggingCursor(true, el);
       });
     });
@@ -705,6 +1105,14 @@
       });
     });
 
+/* ==========================================================================
+   STATE PERSISTENCE
+   ========================================================================== */
+
+    /**
+     * Collects the current state of all nodes (position, size, values)
+     * and sends it to the parent window for saving/persistence.
+     */
     function publishNodesState() {
       try {
         const payload = Object.entries(nodeState).map(([id, state]) => {
@@ -742,12 +1150,19 @@
       return { x, y };
     }
 
-    function getLabeledConnectorCircle(nodeSelector, label) {
+    function getLabeledConnectorCircle(nodeSelector, label, type) {
       const node = document.querySelector(nodeSelector);
       if (!node || !label) return null;
       const searchValue = String(label).trim().toLowerCase();
       if (!searchValue) return null;
-      const groups = node.querySelectorAll('.node-group');
+      
+      let container = node;
+      if (type === 'input') container = node.querySelector('.node-inputs');
+      else if (type === 'output') container = node.querySelector('.node-outputs');
+      
+      if (!container) return null;
+
+      const groups = container.querySelectorAll('.node-group');
       for (const group of groups) {
         const nameEl = group.querySelector('.node-name');
         const text = (nameEl?.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
@@ -764,7 +1179,7 @@
         return document.querySelector(def.selector);
       }
       if (def.nodeSelector && def.label) {
-        return getLabeledConnectorCircle(def.nodeSelector, def.label);
+        return getLabeledConnectorCircle(def.nodeSelector, def.label, def.type);
       }
       if (def.element instanceof Element) {
         return def.element;
@@ -783,6 +1198,13 @@
       };
     }
 
+/* ==========================================================================
+   CONNECTIONS (SVG & P5.JS)
+   ========================================================================== */
+
+    /**
+     * Updates the static SVG connections based on current node positions.
+     */
     function updateConnections() {
       if (!connectionsSvg) return;
       connectionsSvg.innerHTML = '';
@@ -793,6 +1215,8 @@
         const start = getConnectorCenter(fromEl);
         const end = getConnectorCenter(toEl);
         if (!start || !end) return;
+        
+        // Calculate bezier control points
         const ctrlOffset = Math.max(40, Math.abs(end.x - start.x) * 0.35);
         const path = document.createElementNS(svgNS, 'path');
         path.setAttribute('d', `M${start.x},${start.y} C${start.x + ctrlOffset},${start.y} ${end.x - ctrlOffset},${end.y} ${end.x},${end.y}`);
@@ -825,6 +1249,7 @@
       if (!window.p5 || startQueueSketchInstance || !world) return;
       const sketch = (p) => {
         let canvas;
+        let canvasBounds = { x: 0, y: 0, w: 0, h: 0 };
 
         function placeCanvasAtWorldRoot(element) {
           element.style.position = 'absolute';
@@ -837,13 +1262,6 @@
           world.appendChild(element);
         }
 
-        function resizeCanvasToViewport() {
-          const { width, height } = getCanvasViewportSize();
-          if (canvas) {
-            p.resizeCanvas(width, height);
-          }
-        }
-
         p.setup = () => {
           const { width, height } = getCanvasViewportSize();
           canvas = p.createCanvas(width, height);
@@ -853,9 +1271,13 @@
           p.pixelDensity(window.devicePixelRatio || 1);
           p.noFill();
           p.strokeCap(p.ROUND);
+          
+          // Initialize bounds
+          canvasBounds = { x: 0, y: 0, w: width, h: height };
         };
 
-        p.windowResized = () => resizeCanvasToViewport();
+        // We handle resizing manually in draw loop based on node positions
+        // p.windowResized = () => resizeCanvasToViewport();
 
         const bezierConnections = [
           {
@@ -877,17 +1299,141 @@
             from: { selector: TEXT_NODE2_OUTPUT_CONNECTOR },
             to: { selector: PLEXUS_FOLDER_INPUT_CONNECTOR },
             color: BOOLEAN_LINE_COLOR
+          },
+          
+          {
+            from: { nodeSelector: '#autocad-file-node', label: 'layers', type: 'output' },
+            to: { nodeSelector: '#autocad-layers-node', label: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#autocad-layers-node', label: 'layer1' },
+            to: { nodeSelector: '#sketchup-file-node', label: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#autocad-layers-node', label: 'layer2' },
+            to: { nodeSelector: '#rhino8-file-node', label: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#autocad-layers-node', label: 'layer3' },
+            to: { nodeSelector: '#revit-file-node', label: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#sketchup-file-node', label: 'geometry', type: 'output' },
+            to: { nodeSelector: '#revit-file-node', label: 'geometry', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#rhino8-file-node', label: 'geometry', type: 'output' },
+            to: { nodeSelector: '#revit-file-node', label: 'geometry', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#revit-file-node', label: 'output', type: 'output' },
+            to: { nodeSelector: '#isaac-sim-node', label: 'scenario', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#python-process-node', label: 'output', type: 'output' },
+            to: { nodeSelector: '#isaac-sim-node', label: 'script', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#solidworks-file-node', label: 'output', type: 'output' },
+            to: { nodeSelector: '#isaac-sim-node', label: 'robot', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#isaac-sim-node', label: 'output', type: 'output' },
+            to: { nodeSelector: '#unreal-engine-node', label: 'input', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
+          },
+          {
+            from: { nodeSelector: '#unreal-engine-node', label: 'render', type: 'output' },
+            to: { nodeSelector: '#premiere-pro-node', label: 'media', type: 'input' },
+            color: BOOLEAN_LINE_COLOR
           }
         ];
 
         p.draw = () => {
           if (!canvas) return;
+          
+          // Calculate required bounds based on all nodes
+          let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+          const ids = Object.keys(nodeState);
+          
+          // If no nodes, default to viewport
+          if (ids.length === 0) {
+             minX = 0; minY = 0; 
+             const vp = getCanvasViewportSize();
+             maxX = vp.width; maxY = vp.height;
+          } else {
+             ids.forEach(id => {
+                 const s = nodeState[id];
+                 const x = s.x || 0;
+                 const y = s.y || 0;
+                 const w = s.width || 200; 
+                 const h = s.height || 100;
+                 if (x < minX) minX = x;
+                 if (y < minY) minY = y;
+                 if (x + w > maxX) maxX = x + w;
+                 if (y + h > maxY) maxY = y + h;
+             });
+          }
+          
+          // Add padding
+          const padding = 500;
+          minX -= padding;
+          minY -= padding;
+          maxX += padding;
+          maxY += padding;
+          
+          // Check if we need to expand canvas
+          const curX = canvasBounds.x;
+          const curY = canvasBounds.y;
+          const curW = canvasBounds.w;
+          const curH = canvasBounds.h;
+          
+          let needsResize = false;
+          if (minX < curX || minY < curY || maxX > curX + curW || maxY > curY + curH) {
+              needsResize = true;
+          }
+          
+          if (needsResize) {
+              // Expand to cover new area + extra buffer
+              const buffer = 500;
+              const newX = Math.min(minX, curX) - (minX < curX ? buffer : 0);
+              const newY = Math.min(minY, curY) - (minY < curY ? buffer : 0);
+              const newRight = Math.max(maxX, curX + curW) + (maxX > curX + curW ? buffer : 0);
+              const newBottom = Math.max(maxY, curY + curH) + (maxY > curY + curH ? buffer : 0);
+              
+              const newW = newRight - newX;
+              const newH = newBottom - newY;
+              
+              p.resizeCanvas(newW, newH);
+              canvas.elt.style.left = newX + 'px';
+              canvas.elt.style.top = newY + 'px';
+              
+              canvasBounds = { x: newX, y: newY, w: newW, h: newH };
+          }
+
           p.clear();
+          
+          // Translate drawing context to align with world coordinates
+          p.push();
+          p.translate(-canvasBounds.x, -canvasBounds.y);
+          
           bezierConnections.forEach(def => {
             const startCircle = resolveConnectorEndpoint(def.from);
             const endCircle = resolveConnectorEndpoint(def.to);
             const startPoint = getConnectorCenter(startCircle);
             const endPoint = getConnectorCenter(endCircle);
+            
+            if (!startPoint || !endPoint) return;
+            
             const controls = computeBezierControls(startPoint, endPoint);
             if (!controls) return;
             p.stroke(def.color || START_QUEUE_LINE_COLOR);
@@ -909,6 +1455,8 @@
             p.circle(startPoint.x, startPoint.y, diameter);
             p.circle(endPoint.x, endPoint.y, diameter);
           });
+          
+          p.pop();
         };
       };
 
@@ -922,6 +1470,10 @@
       const height = Math.max(window.innerHeight || 0, docEl?.clientHeight || 0, body?.clientHeight || 0);
       return { width, height };
     }
+
+/* ==========================================================================
+   MESSAGING & GLOBAL EVENTS
+   ========================================================================== */
 
     // Request saved node state from top on load
     try { window.top.postMessage({ type: 'nodes:requestState' }, '*'); } catch (_) {}

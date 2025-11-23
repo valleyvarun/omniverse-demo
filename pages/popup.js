@@ -184,6 +184,16 @@
 			}
 		}
 		
+		// Forward open request from folders iframe to main window
+		if (data.type === 'folders:open-project') {
+			try {
+				parent.postMessage({ type: 'folders:open-project', projectName: data.projectName }, '*');
+			} catch (_) {}
+			try {
+				parent.postMessage({ type: 'popup:close' }, '*');
+			} catch (_) {}
+		}
+
 		// Forward close request from folders iframe to main window
 		if (data.type === 'folders:close') {
 			try {

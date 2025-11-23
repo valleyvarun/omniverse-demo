@@ -138,9 +138,10 @@ function getAppIcon(productName) {
 		'ANSYS': '🔬',
 		'MATLAB': '📊',
 		'Unity': '🎮',
-		'Unreal Engine': '🎮',
+		'Unreal Engine': '../logo/unrealengine-logo.png',
 		'Visual Studio': '💻',
 		'Visual Studio Code': '../logo/vscode-logo.png',
+		'Premiere Pro': '../logo/premierpro-logo.png',
 		'Excel': '📊',
 		'Word': '📝',
 		'PowerPoint': '📽️'

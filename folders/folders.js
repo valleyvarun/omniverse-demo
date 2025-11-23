@@ -79,5 +79,18 @@
 			item.classList.remove('selected');
 		});
 	});
+
+	// Open button functionality
+	const openBtn = document.querySelector('.folders-open-btn');
+	if (openBtn) {
+		openBtn.addEventListener('click', () => {
+			const selectedItem = document.querySelector('.folders-item.selected');
+			if (selectedItem) {
+				const name = selectedItem.querySelector('.folders-col-name').textContent.replace('📁 ', '').trim();
+				// Send message to parent to open this project
+				window.parent.postMessage({ type: 'folders:open-project', projectName: name }, '*');
+			}
+		});
+	}
 })();
 
