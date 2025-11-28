@@ -788,7 +788,7 @@ body {
     background: transparent;         /* Replaced red background with transparent */
     /* Mirror agent's 2px separator: create gap between Explorer and handle */
     border-right: 2px solid #333;    /* Separator line matching agent side */
-    min-width: 150px;                /* Updated minimum */
+    min-width: 100px;                /* Updated minimum */
     max-width: 20vw;                 /* Responsive maximum based on viewport width */
 }
 

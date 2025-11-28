@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Track last expanded width across collapse/reopen cycles (initialized conservatively)
     let lastExpandedPMWidth = 160;
     if (pmContainer && pmHandle) {
-        const MIN_W = 150; // updated min width
+        const MIN_W = 100; // updated min width
         lastExpandedPMWidth = pmContainer.getBoundingClientRect().width || 160;
         let dragging = false;
         let startX = 0;
@@ -2251,6 +2251,14 @@ function createAppTab(appData) {
             }, { once: true });
         } catch(_) {}
         contentFrame.src = targetSrc;
+        // Place collapse button in parent header when not Home
+        try { updateAgentHeaderPlacement(false); } catch(_) {}
+        // Show agent sub-header with app name
+        try {
+            const appName = newTab.getAttribute('data-app-name');
+            const agentWin = document.getElementById('agentFrame')?.contentWindow;
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: appName }, '*');
+        } catch(_) {}
     }
 }
 
@@ -2436,6 +2444,11 @@ function setActiveTab(tabElement) {
         contentFrame.src = 'pages/home.html';
         // Place collapse button inside agent header on Home
         try { updateAgentHeaderPlacement(true); } catch(_) {}
+        // Hide agent sub-header
+        try {
+            const agentWin = document.getElementById('agentFrame')?.contentWindow;
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: null }, '*');
+        } catch(_) {}
     } else {
         // Load per-tab content if set, else default software page
         const targetSrc = tabElement.getAttribute('data-content-src') || 'software/software.html';
@@ -2458,6 +2471,12 @@ function setActiveTab(tabElement) {
         contentFrame.src = targetSrc;
         // Place collapse button in parent header when not Home
         try { updateAgentHeaderPlacement(false); } catch(_) {}
+        // Show agent sub-header with app name
+        try {
+            const appName = tabElement.getAttribute('data-app-name');
+            const agentWin = document.getElementById('agentFrame')?.contentWindow;
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: appName }, '*');
+        } catch(_) {}
     }
 }
 

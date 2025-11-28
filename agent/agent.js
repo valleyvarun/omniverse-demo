@@ -223,4 +223,116 @@
 			});
 		});
 	}
+
+	// ===============================================================
+	// PARENT COMMUNICATION & EVENTS
+	// ===============================================================
+
+	// View Switching Logic
+	const agentAppView = document.getElementById('agentAppView');
+	const agentAppImage = document.getElementById('agentAppImage');
+	const agentSubHeader = document.getElementById('agentSubHeader');
+	const agentAppNameBtn = document.getElementById('agentAppName');
+	const agentAppArrow = document.getElementById('agentAppArrow');
+	const agentStatusBtn = document.getElementById('agentStatus');
+	const agentInput = document.querySelector('.agent-input');
+
+	let currentAppName = null;
+
+	function showAgentView() {
+		if (agentAppView) agentAppView.style.display = 'none';
+		if (chat) chat.style.display = 'flex';
+		if (agentInput) agentInput.style.display = 'block';
+		if (agentAppArrow) agentAppArrow.classList.add('collapsed');
+		if (agentStatusBtn) agentStatusBtn.classList.add('active');
+		if (agentAppNameBtn) agentAppNameBtn.classList.remove('active');
+	}
+
+	function showAppView() {
+		if (!currentAppName) return;
+		if (agentAppView) agentAppView.style.display = 'flex';
+		if (chat) chat.style.display = 'none';
+		if (agentInput) agentInput.style.display = 'none';
+		if (agentAppArrow) agentAppArrow.classList.remove('collapsed');
+		if (agentStatusBtn) agentStatusBtn.classList.remove('active');
+		if (agentAppNameBtn) agentAppNameBtn.classList.add('active');
+		
+		// Update image source based on app name
+		if (agentAppImage) {
+			// Use the photoshop image for all apps for now as requested
+			agentAppImage.src = '../apps/apps-content/photoshop-sidebar.png';
+		}
+	}
+
+	if (agentStatusBtn) {
+		agentStatusBtn.addEventListener('click', () => {
+			showAgentView();
+		});
+	}
+
+	if (agentAppNameBtn) {
+		agentAppNameBtn.addEventListener('click', () => {
+			showAppView();
+		});
+	}
+
+	if (agentAppArrow) {
+		agentAppArrow.addEventListener('click', () => {
+			// Toggle between views if app is active
+			if (currentAppName) {
+				if (agentAppView && agentAppView.style.display === 'none') {
+					showAppView();
+				} else {
+					showAgentView();
+				}
+			}
+		});
+	}
+
+	// Communicate focus state to parent if needed (helps route global keyboard events)
+	window.addEventListener('focusin', () => { 
+		try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: document.activeElement?.id === 'chatInput' }; } catch(_) {} 
+	});
+	
+	window.addEventListener('focusout', () => { 
+		try { parent.window.chatbotState = { ...(parent.window.chatbotState||{}), inputFocused: false }; } catch(_) {} 
+	});
+
+	// Collapse button -> notify parent
+	const collapseBtn = document.getElementById('agentCollapseBtn');
+	if (collapseBtn) {
+		collapseBtn.addEventListener('click', () => {
+			try { parent.postMessage({ type: 'agent:collapse' }, '*'); } catch(_) {}
+		});
+	}
+
+	// Show/hide internal collapse button based on parent instruction
+	window.addEventListener('message', (ev) => {
+		try {
+			const data = ev.data || {};
+			if (data.type === 'agent:headerButtonVisibility') {
+				const btn = document.getElementById('agentCollapseBtn');
+				if (btn) {
+					btn.style.display = data.visible ? 'inline-flex' : 'none';
+				}
+			}
+			// Handle app change to show/hide sub-header
+			if (data.type === 'agent:app-changed') {
+				currentAppName = data.appName;
+				if (agentSubHeader && agentAppNameBtn) {
+					if (data.appName) {
+						agentAppNameBtn.textContent = data.appName;
+						agentSubHeader.style.display = 'flex';
+						// Switch to App View by default when app opens
+						showAppView();
+					} else {
+						agentSubHeader.style.display = 'none';
+						// Switch back to Agent View when on Home
+						showAgentView();
+					}
+				}
+			}
+		} catch(_) {}
+	});
+
 })();
