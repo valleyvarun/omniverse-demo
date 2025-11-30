@@ -802,7 +802,12 @@ function initializeCommandLine() {
                 });
                 
                 // Prevent iframe from capturing focus when clicked
-                iframeDoc.addEventListener('click', function() {
+                iframeDoc.addEventListener('click', function(event) {
+                    // Allow inputs to keep focus
+                    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                        return;
+                    }
+
                     // Explicitly re-enable global keyboard routing to command line
                     try {
                         blurAgentChatInput();
@@ -844,6 +849,17 @@ function initializeCommandLine() {
                             // Extract the name shown in the icon (fallback to alt text)
                             const name = el.querySelector('.icon-name')?.textContent?.trim() ||
                                          el.querySelector('img.icon-image')?.alt || 'Item';
+                            
+                            if (name.toLowerCase() === 'market') {
+                                // Open Market as a tab
+                                createAppTab({
+                                    name: 'Market',
+                                    icon: 'logo/market-logo.png',
+                                    contentSrc: 'market/market.html'
+                                });
+                                return;
+                            }
+
                             showModal();
                             // Pass the title into the popup iframe
                             try {
@@ -1258,6 +1274,22 @@ function executeCommand(command) {
         pendingCommand = '';
         pendingFunction = '';
     }
+    // Immediate execution for Search mode
+    else if (document.querySelector('.command-label')?.textContent.includes('Search')) {
+        // Generate the search function string (e.g. Search("query"))
+        const funcStr = generateDummyFunction(command);
+        
+        // Create command entry with immediate result
+        currentCommandEntry = createCommandEntry(command, [
+            funcStr
+        ]);
+        
+        // Reset state immediately since no confirmation needed
+        currentState = 'INPUT';
+        currentCommandEntry = null;
+        pendingCommand = '';
+        pendingFunction = '';
+    }
     else {
         // Regular command handling with confirmation
         pendingFunction = generateDummyFunction(command);
@@ -1456,6 +1488,12 @@ function updateFunctionDisplay(lines, append = true) {
  * @returns {string} - A dummy function call
  */
 function generateDummyFunction(command) {
+    // Check for Search mode
+    const commandLabel = document.querySelector('.command-label');
+    if (commandLabel && commandLabel.textContent.includes('Search')) {
+        return `Search("${command}")`;
+    }
+
     // Simple function generation based on command keywords
     const lowerCommand = command.toLowerCase();
     
@@ -2126,6 +2164,10 @@ function createAppTab(appData) {
     const newTab = document.createElement('div');
     newTab.className = 'content-tab active';
     newTab.setAttribute('data-app-name', appData.name);
+    
+    // Update Menu Bar
+    updateMenuBar(appData.name);
+
     newTab.setAttribute('data-app-icon', appData.icon);
     newTab.setAttribute('data-instance-number', instanceCount + 1);
     if (appData.contentSrc) {
@@ -2251,13 +2293,20 @@ function createAppTab(appData) {
             }, { once: true });
         } catch(_) {}
         contentFrame.src = targetSrc;
-        // Place collapse button in parent header when not Home
-        try { updateAgentHeaderPlacement(false); } catch(_) {}
-        // Show agent sub-header with app name
+        
+        // Special handling for Market: treat like Home for headers (no sub-headers)
+        const isMarket = (appData.name || '').toLowerCase() === 'market';
+        
+        // Place collapse button in parent header when not Home (unless it's Market)
+        try { updateAgentHeaderPlacement(isMarket ? true : false); } catch(_) {}
+        
+        // Show agent sub-header with app name (unless it's Market)
         try {
             const appName = newTab.getAttribute('data-app-name');
             const agentWin = document.getElementById('agentFrame')?.contentWindow;
-            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: appName }, '*');
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: isMarket ? null : appName }, '*');
+            const pmWin = document.getElementById('pmFrame')?.contentWindow;
+            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: isMarket ? null : appName }, '*');
         } catch(_) {}
     }
 }
@@ -2442,16 +2491,24 @@ function setActiveTab(tabElement) {
     if (isHomeTab) {
         // Load home.html for Home tab
         contentFrame.src = 'pages/home.html';
+        // Update Menu Bar
+        updateMenuBar('Home');
         // Place collapse button inside agent header on Home
         try { updateAgentHeaderPlacement(true); } catch(_) {}
         // Hide agent sub-header
         try {
             const agentWin = document.getElementById('agentFrame')?.contentWindow;
             if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: null }, '*');
+            const pmWin = document.getElementById('pmFrame')?.contentWindow;
+            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: null }, '*');
         } catch(_) {}
     } else {
         // Load per-tab content if set, else default software page
         const targetSrc = tabElement.getAttribute('data-content-src') || 'software/software.html';
+        // Update Menu Bar
+        const appName = tabElement.getAttribute('data-app-name');
+        updateMenuBar(appName);
+
         try {
             contentFrame.addEventListener('load', function onLoadOnce() {
                 try {
@@ -2469,13 +2526,19 @@ function setActiveTab(tabElement) {
             }, { once: true });
         } catch(_) {}
         contentFrame.src = targetSrc;
-        // Place collapse button in parent header when not Home
-        try { updateAgentHeaderPlacement(false); } catch(_) {}
-        // Show agent sub-header with app name
+        
+        // Special handling for Market: treat like Home for headers (no sub-headers)
+        const isMarket = (appName || '').toLowerCase() === 'market';
+        
+        // Place collapse button in parent header when not Home (unless it's Market)
+        try { updateAgentHeaderPlacement(isMarket ? true : false); } catch(_) {}
+        
+        // Show agent sub-header with app name (unless it's Market)
         try {
-            const appName = tabElement.getAttribute('data-app-name');
             const agentWin = document.getElementById('agentFrame')?.contentWindow;
-            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: appName }, '*');
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: isMarket ? null : appName }, '*');
+            const pmWin = document.getElementById('pmFrame')?.contentWindow;
+            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: isMarket ? null : appName }, '*');
         } catch(_) {}
     }
 }
@@ -2672,4 +2735,131 @@ function getAppCoverImage(appName) {
         return 'logo/3dsmax-cover.png';
     }
     return 'logo/dummy-cover1.png';
+}
+
+/**
+ * Update the menu bar items based on the active app
+ */
+function updateMenuBar(appName) {
+    const menuList = document.querySelector('.menu-bar .menu-list');
+    if (!menuList) return;
+
+    const lowerName = (appName || '').toLowerCase();
+
+    // Update Command Label based on app
+    const commandLabel = document.querySelector('.command-label');
+    if (commandLabel) {
+        commandLabel.textContent = 'Command:';
+    }
+
+    if (lowerName === 'photoshop') {
+        // Photoshop Menu
+        menuList.innerHTML = `
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Edit</a></li>
+            <li><a href="#" class="menu-item">Image</a></li>
+            <li><a href="#" class="menu-item">Layer</a></li>
+            <li><a href="#" class="menu-item">Type</a></li>
+            <li><a href="#" class="menu-item">Select</a></li>
+            <li><a href="#" class="menu-item">Filter</a></li>
+            <li><a href="#" class="menu-item">View</a></li>
+            <li><a href="#" class="menu-item">Plugins</a></li>
+            <li><a href="#" class="menu-item">Window</a></li>
+            <li><a href="#" class="menu-item">Help</a></li>
+        `;
+    } else if (lowerName === 'revit') {
+        // Revit Menu
+        menuList.innerHTML = `
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Architecture</a></li>
+            <li><a href="#" class="menu-item">Structure</a></li>
+            <li><a href="#" class="menu-item">Steel</a></li>
+            <li><a href="#" class="menu-item">Precast</a></li>
+            <li><a href="#" class="menu-item">System</a></li>
+            <li><a href="#" class="menu-item">Insert</a></li>
+            <li><a href="#" class="menu-item">Annotate</a></li>
+            <li><a href="#" class="menu-item">Analyse</a></li>
+            <li><a href="#" class="menu-item">Massing & Site</a></li>
+            <li><a href="#" class="menu-item">Collaborate</a></li>
+            <li><a href="#" class="menu-item">View</a></li>
+            <li><a href="#" class="menu-item">Manage</a></li>
+            <li><a href="#" class="menu-item">Addins</a></li>
+            <li><a href="#" class="menu-item">Modify</a></li>
+        `;
+    } else if (lowerName === 'rhino 8') {
+        // Rhino 8 Menu
+        menuList.innerHTML = `
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Edit</a></li>
+            <li><a href="#" class="menu-item">View</a></li>
+            <li><a href="#" class="menu-item">Curve</a></li>
+            <li><a href="#" class="menu-item">Surface</a></li>
+            <li><a href="#" class="menu-item">SubD</a></li>
+            <li><a href="#" class="menu-item">Solid</a></li>
+            <li><a href="#" class="menu-item">Mesh</a></li>
+            <li><a href="#" class="menu-item">Drafting</a></li>
+            <li><a href="#" class="menu-item">Transform</a></li>
+            <li><a href="#" class="menu-item">Tools</a></li>
+            <li><a href="#" class="menu-item">Analyze</a></li>
+            <li><a href="#" class="menu-item">Render</a></li>
+            <li><a href="#" class="menu-item">Window</a></li>
+            <li><a href="#" class="menu-item">Help</a></li>
+        `;
+    } else if (lowerName === 'd5 render' || lowerName === 'd5render') {
+        // D5 Render Menu
+        menuList.innerHTML = `
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Edit</a></li>
+            <li><a href="#" class="menu-item">View</a></li>
+            <li><a href="#" class="menu-item">Insert</a></li>
+            <li><a href="#" class="menu-item">Tool</a></li>
+            <li><a href="#" class="menu-item">Window</a></li>
+            <li><a href="#" class="menu-item">Help</a></li>
+            <li><a href="#" class="menu-item">Preference</a></li>
+            <li><a href="#" class="menu-item">Assets</a></li>
+            <li><a href="#" class="menu-item">Terrain</a></li>
+        `;
+    } else {
+        // Default Menu
+        menuList.innerHTML = `
+            <li><a href="#" class="menu-item">Home</a></li>
+            <li><a href="#" class="menu-item">File</a></li>
+            <li><a href="#" class="menu-item">Apps</a></li>
+            <li class="menu-item-with-dropdown">
+                <a href="#" class="menu-item" onclick="toggleWindowDropdown()">Window</a>
+                <div class="window-dropdown" id="windowDropdown">
+                    <div class="window-dropdown-item" onclick="showHistory()">Command Line History</div>
+                </div>
+            </li>
+            <li><a href="#" class="menu-item">Settings</a></li>
+            <li><a href="#" class="menu-item">Learn</a></li>
+            <li><a href="#" class="menu-item">Help</a></li>
+        `;
+    }
+
+    // Re-attach event listeners
+    attachMenuListeners();
+}
+
+function attachMenuListeners() {
+    document.querySelectorAll('.menu-item').forEach(item => {
+        item.addEventListener('click', function(event) {
+            const menuText = this.textContent.trim();
+            
+            if (menuText === 'Apps') {
+                event.preventDefault();
+                window.postMessage({ type: 'popup:open', title: 'Apps' }, '*');
+            }
+            
+            if (menuText === 'Home') {
+                 event.preventDefault();
+                 const homeTab = document.querySelector('.content-tab.home-tab');
+                 if (homeTab) setActiveTab(homeTab);
+            }
+        });
+    });
 }

@@ -259,8 +259,22 @@
 		
 		// Update image source based on app name
 		if (agentAppImage) {
-			// Use the photoshop image for all apps for now as requested
-			agentAppImage.src = '../apps/apps-content/photoshop-sidebar.png';
+            const lowerName = (currentAppName || '').toLowerCase();
+            agentAppImage.style.display = 'block';
+            if (lowerName === 'photoshop') {
+                agentAppImage.src = '../apps/apps-content/photoshop-sidebar.png';
+            } else if (lowerName === 'd5 render') {
+                agentAppImage.src = '../apps/apps-content/d5render-sidebar.png';
+            } else if (lowerName === 'rhino 8') {
+                agentAppImage.src = '../apps/apps-content/rhino8-sidebar.png';
+            } else if (lowerName === 'revit') {
+                agentAppImage.src = '../apps/apps-content/revit-sidebar2.png';
+                agentAppImage.style.display = 'block';
+            } else {
+			    // Blank black space for others
+			    agentAppImage.src = '';
+                agentAppImage.style.display = 'none';
+            }
 		}
 	}
 

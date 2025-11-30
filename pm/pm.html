@@ -8,10 +8,26 @@
 </head>
 <body>
     <header class="pm-header">
-        <span class="pm-title">Explorer</span>
+        <button class="pm-title" id="pmStatus" type="button">Explorer</button>
         <button id="pmCollapseBtn" class="pm-collapse-btn" type="button" title="Collapse" aria-label="Collapse">−</button>
     </header>
-    <main class="pm-body">
+    
+    <!-- SUB-HEADER (APP NAME) -->
+    <div class="pm-sub-header" id="pmSubHeader" style="display:none">
+        <span id="pmAppArrow" class="pm-app-arrow">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </span>
+        <button class="pm-app-name" id="pmAppName" type="button">App Name</button>
+    </div>
+
+    <!-- APP VIEW (IMAGE) -->
+    <div class="pm-app-view" id="pmAppView" style="display:none">
+        <img id="pmAppImage" src="" alt="App Sidebar" />
+    </div>
+
+    <main class="pm-body" id="pmBody">
         <button class="pm-btn" id="openProjectBtn" type="button">Open Project Folder</button>
         <!-- Project Manager content will go here -->
     </main>

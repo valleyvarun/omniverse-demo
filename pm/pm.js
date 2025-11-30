@@ -205,4 +205,105 @@
 
         pmBody.appendChild(treeContainer);
     }
+
+    // ===============================================================
+    // VIEW SWITCHING LOGIC (Explorer vs App View)
+    // ===============================================================
+    const pmAppView = document.getElementById('pmAppView');
+    const pmAppImage = document.getElementById('pmAppImage');
+    const pmSubHeader = document.getElementById('pmSubHeader');
+    const pmAppNameBtn = document.getElementById('pmAppName');
+    const pmAppArrow = document.getElementById('pmAppArrow');
+    const pmStatusBtn = document.getElementById('pmStatus');
+    
+    let currentAppName = null;
+
+    function showExplorerView() {
+        if (pmAppView) pmAppView.style.display = 'none';
+        if (pmBody) {
+            // Restore display based on content
+            if (pmBody.querySelector('.file-tree') || (pmBody.textContent && pmBody.textContent.includes('Project:'))) {
+                pmBody.style.display = 'block';
+            } else {
+                pmBody.style.display = 'flex';
+            }
+        }
+        if (pmAppArrow) pmAppArrow.classList.add('collapsed');
+        if (pmStatusBtn) pmStatusBtn.classList.add('active');
+        if (pmAppNameBtn) pmAppNameBtn.classList.remove('active');
+    }
+
+    function showAppView() {
+        if (!currentAppName) return;
+        if (pmAppView) pmAppView.style.display = 'flex';
+        if (pmBody) pmBody.style.display = 'none';
+        if (pmAppArrow) pmAppArrow.classList.remove('collapsed');
+        if (pmStatusBtn) pmStatusBtn.classList.remove('active');
+        if (pmAppNameBtn) pmAppNameBtn.classList.add('active');
+        
+        // Update image source
+        if (pmAppImage) {
+            const lowerName = (currentAppName || '').toLowerCase();
+            pmAppImage.style.display = 'block';
+            if (lowerName === 'photoshop') {
+                pmAppImage.src = '../apps/apps-content/photoshop-sidebar2.png';
+            } else if (lowerName === 'd5 render') {
+                pmAppImage.src = '../apps/apps-content/d5render-sidebar2.png';
+            } else if (lowerName === 'rhino 8') {
+                pmAppImage.src = '../apps/apps-content/rhino8-sidebar2.png';
+            } else if (lowerName === 'revit') {
+                pmAppImage.src = '../apps/apps-content/revit-sidebar.png';
+                pmAppImage.style.display = 'block';
+            } else {
+                // Blank black space for others
+                pmAppImage.src = '';
+                pmAppImage.style.display = 'none';
+            }
+        }
+    }
+
+    if (pmStatusBtn) {
+        pmStatusBtn.addEventListener('click', () => {
+            showExplorerView();
+        });
+    }
+
+    if (pmAppNameBtn) {
+        pmAppNameBtn.addEventListener('click', () => {
+            showAppView();
+        });
+    }
+
+    if (pmAppArrow) {
+        pmAppArrow.addEventListener('click', () => {
+            if (currentAppName) {
+                if (pmAppView && pmAppView.style.display === 'none') {
+                    showAppView();
+                } else {
+                    showExplorerView();
+                }
+            }
+        });
+    }
+
+    // Listen for app-changed messages
+    window.addEventListener('message', function(event) {
+        const data = event.data;
+        if (!data) return;
+
+        if (data.type === 'pm:app-changed') {
+            currentAppName = data.appName;
+            if (pmSubHeader && pmAppNameBtn) {
+                if (data.appName) {
+                    pmAppNameBtn.textContent = data.appName;
+                    pmSubHeader.style.display = 'flex';
+                    showAppView();
+                } else {
+                    pmSubHeader.style.display = 'none';
+                    showExplorerView();
+                }
+            }
+        }
+    });
+
 })();

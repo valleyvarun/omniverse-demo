@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Market</title>
+    <link rel='stylesheet' href='market.css'>
+</head>
+<body>
+    <header class="market-header">
+        <input type="text" class="market-search" placeholder="Search" value="https://developer.nvidia.com/omniverse/legacy-tools">
+        <div class="tab active" onclick="switchTab(1)">
+            <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
+            Legacy Tools
+        </div>
+        <div class="tab" onclick="switchTab(2)">
+            <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
+            Omniverse Developer
+        </div>
+        <div class="tab" onclick="switchTab(3)">
+            <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
+            tab 3
+        </div>
+    </header>
+    <div class="content">
+        <div class="market-subheader">
+            <div class="brand-group">
+                <img src="../logo/NVIDIA-logo.png" alt="NVIDIA" class="nvidia-logo">
+                <img src="../logo/nvidia-text-logo.png" alt="NVIDIA Text" class="nvidia-text-logo">
+                <span class="developer-text">DEVELOPER</span>
+            </div>
+            <div class="subheader-nav">
+                <a href="#" class="subheader-link">Home</a>
+                <a href="#" class="subheader-link">Blog</a>
+                <a href="#" class="subheader-link">Forums</a>
+                <a href="#" class="subheader-link">Docs</a>
+                <a href="#" class="subheader-link">Downloads</a>
+                <a href="#" class="subheader-link">Training</a>
+                <a href="#" class="subheader-link">Assets</a>
+            </div>
+        </div>
+        <div id="tab-1-content" class="tab-pane active">
+            <div class="market-tabs">
+                <div class="market-tab active" onclick="switchMarketTab('applications')">Applications</div>
+                <div class="market-tab" onclick="switchMarketTab('connectors')">Connectors</div>
+                <div class="market-tab" onclick="switchMarketTab('extensions')">Extensions</div>
+                <div class="market-tab" onclick="switchMarketTab('content')">Content</div>
+            </div>
+            <div id="applications-view" class="market-view">
+                <div class="card-grid">
+                <!-- Card 1 -->
+                <div class="card">
+                    <h3>Blender 4.2 Alpha USD Branch</h3>
+                    <p>This is an experimental build of Blender 4.2 from the USD branch, which includes Omniverse connectors and add-ons.</p>
+                    <div class="card-links">
+                        <a href="#">Blender GitHub</a>
+                        <a href="#">NGC Catalog</a>
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="card">
+                    <h3>NVIDIA Isaac Sim</h3>
+                    <p>NVIDIA Isaac Sim™ is an open-source reference framework for robot simulation built on Omniverse.</p>
+                    <div class="card-links">
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="card">
+                    <h3>NVIDIA RTX Remix</h3>
+                    <p>NVIDIA RTX™ Remix enhances games with high-fidelity assets and physically accurate materials via RTX ray tracing, DLSS, and Reflex technologies.</p>
+                    <div class="card-links">
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="card">
+                    <h3>Omniverse Kit App Template</h3>
+                    <p>NVIDIA Omniverse Kit App Template is a repository of tools and templates to simplify the development of OpenUSD-based applications built on Omniverse..</p>
+                    <div class="card-links">
+                        <a href="#">GitHub</a>
+                    </div>
+                </div>
+                <!-- Card 5 -->
+                <div class="card">
+                    <h3>Omniverse Kit</h3>
+                    <p>NVIDIA Omniverse Kit is a toolkit for building Omniverse-based OpenUSD applications and microservices.</p>
+                    <div class="card-links">
+                        <a href="#">NGC Catalog</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 6 -->
+                <div class="card">
+                    <h3>Omniverse Farm Agent Services</h3>
+                    <p>This container provides all the services required to schedule Omniverse Farm workloads on top of a Kubernetes cluster.</p>
+                    <div class="card-links">
+                        <a href="#">NGC Catalog</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 7 -->
+                <div class="card">
+                    <h3>Omniverse Farm Management Services</h3>
+                    <p>This container provides all the services needed to manage an Omniverse Farm.</p>
+                    <div class="card-links">
+                        <a href="#">NGC Catalog</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 8 -->
+                <div class="card">
+                    <h3>Isaac Sim Compatibility Checker</h3>
+                    <p>Isaac Sim Compatibility Checker is a lightweight application that programmatically checks the system requirements and indicates which of them are valid, or not, for running Isaac Sim on the machine.</p>
+                    <div class="card-links">
+                        <a href="#">NGC Catalog</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 9 -->
+                <div class="card">
+                    <h3>USD Composer App Template</h3>
+                    <p>The USD Composer App Template provides a streamlined starting point for developers aiming to create complex OpenUSD scenes.</p>
+                    <div class="card-links">
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 10 -->
+                <div class="card">
+                    <h3>USD Explorer App Template</h3>
+                    <p>The USD Explorer App Template offers a robust starting point for developers seeking to visualize and interact with large-scale environments utilizing OpenUSD.</p>
+                    <div class="card-links">
+                        <a href="#">GitHub</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 11 -->
+                <div class="card">
+                    <h3>usdview</h3>
+                    <p>usdview is a light-weight application developed by Pixar Animation Studios for viewing, navigating and introspecting USD stages.</p>
+                    <div class="card-links">
+                        <a href="#">Download</a>
+                        <a href="#">Documentation</a>
+                    </div>
+                </div>
+                <!-- Card 12 -->
+                <div class="card">
+                    <h3>Audio2Face</h3>
+                    <p>NVIDIA Audio2Face is an AI technology that generates real-time, lifelike facial animation from audio input. It converts voice recordings into expressive facial movements, streamlining 3D character animation for games, film, and digital humans.<br><br>Exists within Audio2Face 3D SDK, training framework, training dataset, and microservices.</p>
+                    <div class="card-links">
+                        <a href="#">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            <div id="connectors-view" class="market-view" style="display: none;">
+                <div class="card-grid">
+                    <!-- Adobe Substance 3D Painter -->
+                    <div class="card">
+                        <h3>Adobe Substance 3D Painter</h3>
+                        <p>Adobe Substance 3D Painter and NVIDIA Omniverse connector export model and material data to OpenUSD.</p>
+                        <div class="card-links">
+                            <a href="#">Adobe USD for 3D Painter</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Autodesk 3ds Max -->
+                    <div class="card">
+                        <h3>Autodesk 3ds Max</h3>
+                        <p>Autodesk 3ds Max and NVIDIA Omniverse connector streamline workflows using OpenUSD.</p>
+                        <div class="card-links">
+                            <a href="#">Autodesk USD for 3ds Max</a>
+                            <a href="#">Autodesk MaxUSD GitHub</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Autodesk Alias -->
+                    <div class="card">
+                        <h3>Autodesk Alias</h3>
+                        <p>Autodesk Alias and NVIDIA Omniverse connector export model and material data to OpenUSD and MDL.</p>
+                        <div class="card-links">
+                            <a href="#">Autodesk USD for Alias</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Autodesk Maya -->
+                    <div class="card">
+                        <h3>Autodesk Maya</h3>
+                        <p>Autodesk Maya and NVIDIA Omniverse connector streamline workflows using OpenUSD.</p>
+                        <div class="card-links">
+                            <a href="#">Autodesk USD for Maya</a>
+                            <a href="#">Autodesk MayaUSD GitHub</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Autodesk Revit -->
+                    <div class="card">
+                        <h3>Autodesk Revit</h3>
+                        <p>Autodesk Revit and NVIDIA Omniverse connector export model and material data to OpenUSD and MDL.</p>
+                        <div class="card-links">
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Epic Games Unreal Engine -->
+                    <div class="card">
+                        <h3>Epic Games Unreal Engine</h3>
+                        <p>Epic Games Unreal Editor and NVIDIA Omniverse connector streamline workflows using USD.</p>
+                        <div class="card-links">
+                            <a href="#">Epic Games USD for Unreal</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Kitware Paraview -->
+                    <div class="card">
+                        <h3>Kitware Paraview</h3>
+                        <p>Kitware ParaView and NVIDIA Omniverse connector export model and material data to OpenUSD.</p>
+                        <div class="card-links">
+                            <a href="#">GitHub</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- McNeel Rhino/Grasshopper -->
+                    <div class="card">
+                        <h3>McNeel Rhino/Grasshopper</h3>
+                        <p>McNeel Rhino/Grasshopper and NVIDIA Omniverse connector export model and material data to OpenUSD and MDL.</p>
+                        <div class="card-links">
+                            <a href="#">McNeel USD for Rhino</a>
+                            <a href="#">McNeel RhinoUSD GitHub</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- PTC Creo -->
+                    <div class="card">
+                        <h3>PTC Creo</h3>
+                        <p>PTC Creo and NVIDIA Omniverse connector export model and material data to OpenUSD and MDL.</p>
+                        <div class="card-links">
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                            <a href="#">CAD Converter</a>
+                        </div>
+                    </div>
+                    <!-- SideFX Houdini -->
+                    <div class="card">
+                        <h3>SideFX Houdini</h3>
+                        <p>SideFX Houdini and NVIDIA Omniverse connector streamline workflows using Universal Scene Description (USD).</p>
+                        <div class="card-links">
+                            <a href="#">SideFX USD for Houdini</a>
+                            <a href="#">GitHub</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Trimble SketchUp -->
+                    <div class="card">
+                        <h3>Trimble SketchUp</h3>
+                        <p>Trimble SketchUp and NVIDIA Omniverse connector export model and material data to OpenUSD and MDL.</p>
+                        <div class="card-links">
+                            <a href="#">Trimble USD for SketchUp</a>
+                            <a href="#">NGC Catalog</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                    <!-- Unity -->
+                    <div class="card">
+                        <h3>Unity</h3>
+                        <p>Unity and NVIDIA Omniverse connector streamline workflows using USD.</p>
+                        <div class="card-links">
+                            <a href="#">Unity USD for Unity Editor</a>
+                            <a href="#">Download</a>
+                            <a href="#">Documentation</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="extensions-view" class="market-view" style="display: none;">
+                <div class="card-grid">
+                    <!-- ALPHA3D -->
+                    <div class="card">
+                        <h3>ALPHA3D</h3>
+                        <p>Alpha3D is a generative AI-powered platform that enables users to automatically transform 2D images of real-world objects into 3D digital assets.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Avataar -->
+                    <div class="card">
+                        <h3>Avataar</h3>
+                        <p>Avataar extension for NVIDIA Omniverse integrates 3D objects created using Avataar Incarnate application.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Avaturn -->
+                    <div class="card">
+                        <h3>Avaturn</h3>
+                        <p>Avaturn is enabled through the Avataar extension.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- BAYA3D -->
+                    <div class="card">
+                        <h3>BAYA3D</h3>
+                        <p>Baya3D extension for NVIDIA Omniverse integrates 3D modeling technology.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Convai -->
+                    <div class="card">
+                        <h3>Convai</h3>
+                        <p>Convai extension for NVIDIA Omniverse builds interactive AI characters.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Echo3D -->
+                    <div class="card">
+                        <h3>Echo3D</h3>
+                        <p>Echo3D extension for NVIDIA Omniverse easily imports assets into projects and enables easy search for new assets.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Edge Impulse Data Ingestion -->
+                    <div class="card">
+                        <h3>Edge Impulse Data Ingestion</h3>
+                        <p>Edge Impulse extension for NVIDIA Omniverse integrates synthetic datasets into computer vision tasks, enables trained model validation, and allows for viewing inference results.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Evermotion -->
+                    <div class="card">
+                        <h3>Evermotion</h3>
+                        <p>Evermotion extension for NVIDIA Omniverse enables the creation of 3D models, scenes, and textures.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Fabricator -->
+                    <div class="card">
+                        <h3>Fabricator</h3>
+                        <p>Fabricator extension for NVIDIA Omniverse leverages generated fabric assets to create unique and innovative materials.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- HDR Lightmap -->
+                    <div class="card">
+                        <h3>HDR Lightmap</h3>
+                        <p>HDR Lightmap extension for NVIDIA Omniverse leverages real-time HDR lighting tools and optimized creative lighting workflow.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- in3D -->
+                    <div class="card">
+                        <h3>in3D</h3>
+                        <p>in3D extension for NVIDIA Omniverse enables simplified character creation via automated scanning.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- KAEDIM -->
+                    <div class="card">
+                        <h3>KAEDIM</h3>
+                        <p>Kaedim extension for NVIDIA Omniverse enables 3D asset creation for immersive gaming experiences.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Moment Factory MPCDI -->
+                    <div class="card">
+                        <h3>Moment Factory MPCDI</h3>
+                        <p>Moment Factory MPCDI for NVIDIA Omniverse extension leverages AV and multimedia converters to build immersive environments.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Moment Factory NDI -->
+                    <div class="card">
+                        <h3>Moment Factory NDI</h3>
+                        <p>Moment Factory NFI for NVIDIA Omniverse extension leverages AV and multimedia experiences to build immersive environments.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Motionverse -->
+                    <div class="card">
+                        <h3>Motionverse</h3>
+                        <p>Motionverse Omniverse extension creates 3D full-body animation with text prompts.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Move.AI -->
+                    <div class="card">
+                        <h3>Move.AI</h3>
+                        <p>Move.AI Omniverse extension allows developers to test animations.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Nextspace -->
+                    <div class="card">
+                        <h3>Nextspace</h3>
+                        <p>Nextspace extension for Omniverse leverages Omniverse Create and View applications to create a digital twin.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- OctaneRender -->
+                    <div class="card">
+                        <h3>OctaneRender</h3>
+                        <p>OctaneRender Hydra and Omniverse extension help artists with scene layout, lighting, and final rendering.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- PBRMax -->
+                    <div class="card">
+                        <h3>PBRMax</h3>
+                        <p>PBRMax Omniverse extension helps artists speed up their digital art creation process.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Replica Studios -->
+                    <div class="card">
+                        <h3>Replica Studios</h3>
+                        <p>Replica Studios helps developers improve their production processes in games and films.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- SmartCow LP-SDG -->
+                    <div class="card">
+                        <h3>SmartCow LP-SDG</h3>
+                        <p>SmartCow LP-SDG and Omniverse extension create realistic variations of license plates.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Syntway -->
+                    <div class="card">
+                        <h3>Syntway</h3>
+                        <p>Syntway Model Exploder Omniverse extension helps developers separate a 3D model into its component parts.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- Timedomain AI Singer -->
+                    <div class="card">
+                        <h3>Timedomain AI Singer</h3>
+                        <p>Timedomain AI Singer Omniverse extension is a voice library that enables the development of singing synthesis.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                    <!-- VistoryBoard Omniverse -->
+                    <div class="card">
+                        <h3>VistoryBoard Omniverse</h3>
+                        <p>viStoryboard Omniverse extension converts text into visual storyboards.</p>
+                        <div class="card-links">
+                            <a href="#">Download</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="content-view" class="market-view" style="display: none;">
+                <div class="content-container">
+                    <p class="content-text">
+                        Access <a href="#">USD example datasets</a> and <a href="#">downloadable content packs</a> from the <a href="#">NVIDIA Documentation Hub</a>. Visit the <a href="#">NVIDIA Learning Library</a> for more OpenUSD resources
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="tab-2-content" class="tab-pane">
+            <div class="market-tabs">
+                <div class="market-tab" onclick="switchMarketTab('get started')">Get Started</div>
+                <div class="market-tab active" onclick="switchMarketTab('sdks')">SDKs</div>
+                <div class="market-tab" onclick="switchMarketTab('apis')">APIs</div>
+                <div class="market-tab" onclick="switchMarketTab('vdis')">VDIs</div>
+                <div class="market-tab" onclick="switchMarketTab('libraries')">Libraries</div>
+                <div class="market-tab" onclick="switchMarketTab('openusd')">OpenUSD</div>
+                <div class="market-tab" onclick="switchMarketTab('blueprints & workflows')">Blueprints & Workflows</div>
+                <div class="market-tab" onclick="switchMarketTab('deploy')">Deploy</div>
+                <div class="market-tab" onclick="switchMarketTab('support')">Support</div>
+            </div>
+            <div id="sdks-view" class="market-view">
+                <div class="text-content-container">
+                    <p class="intro-text">Develop custom applications and tools with Omniverse Kit SDK and OpenUSD Exchange SDK.</p>
+                    
+                    <h2 class="section-title">Kit SDK</h2>
+                    
+                    <p class="body-text">The Omniverse Kit SDK is a powerful framework for building applications in an OpenUSD ecosystem, accompanied by integrated tools for rendering, physics, user interfaces, and much more.</p>
+                    
+                    <p class="body-text">Additionally, the Kit SDK includes an extensive collection of custom extensions, written in Python and C++, that you can use to develop custom features and functions.</p>
+                    
+                    <div class="card-grid" style="margin-top: 40px;">
+                        <div class="card">
+                            <h3>Get Started with Kit SDK</h3>
+                            <p>Develop custom applications and tools with the Kit SDK.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit SDK on NGC</h3>
+                            <p>Access the enterprise-supported Kit SDK, available through the NGC Catalog.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit Application Templates</h3>
+                            <p>View the Omniverse Kit App Template repository on GitHub.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Extension Reference</h3>
+                            <p>List of Omniverse Kit-based application extensions for workflows customization.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Materials and Rendering</h3>
+                            <p>Information regarding materials and rendering relevant to all Omniverse Kit-based applications.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit Services</h3>
+                            <p>Create and deploy scalable services across various infrastructures.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>CSP Marketplaces</h3>
+                            <p>Use cloud-based scalable infrastructure for streaming Omniverse Kit-based Apps.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit Release Notes</h3>
+                            <p>Read about the latest changes in Omniverse KIT.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">OpenUSD Exchange SDK</h2>
+                    
+                    <p class="body-text">OpenUSD Exchange SDK allows you to design and develop your own USD I/O solutions that produce consistent and correct USD assets across diverse 3D ecosystems.</p>
+                    
+                    <div class="card-grid" style="margin-top: 40px;">
+                        <div class="card">
+                            <h3>Get Started With OpenUSD Exchange SDK</h3>
+                            <p>Develop your own USD I/O solution to produce USD assets across 3D ecosystems.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="apis-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">Build and deploy existing workflows with USD Search API, USD Code API, Application Streaming API, and Cloud Sensor RTX API</p>
+                    
+                    <h2 class="section-title">USD APIs</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>USD Search API</h3>
+                            <p>Locate and organize 3D data across Omniverse projects to streamline workflows and improve asset management.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>USD Code API</h3>
+                            <p>Incorporate tools for writing, editing, and testing USD scripts to automate tasks, enhance 3D content creation, and optimize pipelines.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">Kit App Streaming API</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Get Started With Kit App Streaming API</h3>
+                            <p>Stream a pre-built app with Kit App Streaming API.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit App Streaming API on NGC</h3>
+                            <p>Deploy Omniverse Kit-based applications from the cloud and stream into web-based solutions.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Kit App Streaming Deployment Guide</h3>
+                            <p>Kit App Streaming delivers cloud-based streaming of an Omniverse Kit App through a robust, Kubernetes-driven platform.</p>
+                            <div class="card-links">
+                                <a href="#">Browse</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="vdis-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">Deploy these pre-configured images from Cloud Service Provider (CSP) Marketplaces to quickly get started using and building Omniverse Kit-based applications and tools.</p>
+                    
+                    <h2 class="section-title">Cloud Service Providers</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Amazon Web Services</h3>
+                            <p>Deploy pre-configured Workstations with all the required tools using AWS’ most advanced NVIDIA RTX GPUs.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Microsoft Azure</h3>
+                            <p>Deploy pre-configured Workstations with all the required tools using Azure’s most advanced NVIDIA RTX GPUs.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Google Cloud Platform</h3>
+                            <p>Deploy pre-configured Workstations with all the required tools using Google Cloud's most advanced NVIDIA RTX GPUs.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="libraries-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">Manage applications using the Web RTC Streaming Library</p>
+                    
+                    <h2 class="section-title">Libraries</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Manage applications using the Web RTC Streaming Library</h3>
+                            <p>Manage Web RTC Streaming Library applications streaming from GeForce NOW (GFN), on a local machine, or from some container instance with a provided URL.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="openusd-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">NVIDIA Omniverse is built on OpenUSD (Universal Scene Description), the open-source framework developed by Pixar that enables interoperability between 3D software tools and applications.</p>
+                    <p class="body-text">Start developing with OpenUSD core documentation, resources, and sample datasets.</p>
+                    
+                    <h2 class="section-title">Core Documentation</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Technical Reference</h3>
+                            <p>Documentation regarding OpenUSD's architecture, APIs, and functionalities.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>USD Connections and Data Exchanges</h3>
+                            <p>Facilitate data transfer between existing workflows and OpenUSD.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>SimReady Specifications</h3>
+                            <p>Standards and protocols for preparing assets compatible with simulation-ready environments in OpenUSD.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">Learning and Resources</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Become an OpenUSD Developer</h3>
+                            <p>Begin your journey with OpenUSD through introductory guides and tutorials.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Learning</h3>
+                            <p>Self-paced resources to deepen your understanding of OpenUSD technologies.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>OpenUSD Terms and Concepts</h3>
+                            <p>Definitions and explanations of key terms used within the OpenUSD ecosystem.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>OpenUSD Frequently Asked Questions</h3>
+                            <p>Answers to common questions about using and implementing OpenUSD.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">Sample Datasets</h2>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Residential Lobby</h3>
+                            <p>The Residential Lobby project showcases the use of multiple USD composition arcs to help a multi-person design team create an architectural environment.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Da Vinci's Workshop</h3>
+                            <p>The da Vinci Workshop showcases how the NVIDIA creative team structured this amazing environment to develop a complete USD film production pipeline.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Download USD Asset Packs</h3>
+                            <p>Discover thousands of free OpenUSD files as well as libraries of useful materials and environments that you can download and use in all of your projects and simulation work.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="blueprints & workflows-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">Develop applications and workflows using NVIDIA Omniverse Blueprints and Workflow Guides.</p>
+                    
+                    <h2 class="section-title">Blueprints</h2>
+                    
+                    <p class="body-text">NVIDIA Blueprints are reference projects built using APIs, NIMs, and SDKs that help you build and customize complete end-to-end workflows.</p>
+                    
+                    <div class="card-grid" style="margin-top: 40px;">
+                        <div class="card">
+                            <h3>3D Conditioning for Precise Visual Generative AI</h3>
+                            <p>Omniverse Blueprint for integrating NVIDIA NIM microservices to build applications that leverage controllable generative AI for efficient 3D scene creation.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Synthetic Manipulation Motion Generation for Robotics</h3>
+                            <p>Generate exponentially large amounts of synthetic motion trajectories for robot manipulation from just a few human demonstrations.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>AI Weather Analytics with Earth-2</h3>
+                            <p>Develop AI powered weather analysis and forecasting application visualizing multi-layered geospatial data.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Digital Twin for Interactive Fluid Simulation</h3>
+                            <p>This NVIDIA Omniverse™ Blueprint demonstrates how commercial software vendors can create interactive digital twins.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">Workflows</h2>
+                    
+                    <p class="body-text">Workflows provide references and best practices that can be utilized when you develop new end-to-end solutions.</p>
+                    
+                    <div class="card-grid" style="margin-top: 40px;">
+                        <div class="card">
+                            <h3>Virtual Facility Integration Guide</h3>
+                            <p>Learn how to plan, author, validate, and optimize OpenUSD content for aggregation into virtual facilities, from CAD conversion to structure, validation, automation, and performance.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Synthetic Data Generation with Generative AI Reference Workflow</h3>
+                            <p>Learn how to use NVIDIA APIs to develop a virtual facility.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>3D Remote Monitoring for Industrial Digital Twins</h3>
+                            <p>Using Microsoft Azure, connect physically accurate 3D models of industrial systems and production environments to real-time data with the <a href="#">Azure Arc Jumpstart</a> reference architecture.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Spatial Streaming for Omniverse Digital Twin Workflow</h3>
+                            <p>Learn how to stream immersive OpenUSD-based Omniverse digital twins to the Apple Vision Pro.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Embedded Web Viewer Example</h3>
+                            <p>Integrate interactive 3D content directly into websites or applications for real-time viewing and manipulation of 3D scenes in a web browser.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Data Aggregation and Navigation Guide</h3>
+                            <p>Learn to manage complex 3D datasets by using these best practices for organizing, importing, and handling data across Omniverse platforms.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse Integration for CAE Data Workflows (kit-CAE)</h3>
+                            <p>Leverage the Omniverse Platform to work with large, complex CAE datasets. Learn how to create a USD schema, use the RTX renderer, and access data efficiently using Index and Warp.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>RTX Best Practices for Realtime Configurators</h3>
+                            <p>Learn how to optimize real-time ray tracing performance for 3D projects including lighting, materials, and rendering techniques to maximize high-quality visuals and performance.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Reference Architectures</h3>
+                            <p>High-level visual guides for implementing NVIDIA Omniverse workflows across various industry contexts, like generative AI, product configurators, and factory digital twins.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="deploy-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <p class="intro-text">NVIDIA Omniverse deployment guides to install and configure Omniverse core technologies, NIM microservices, and cloud APIs across various environments.</p>
+                    
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Kit App Streaming Deployment Guide</h3>
+                            <p>Kit App Streaming delivers cloud-based streaming of an Omniverse Kit App through a robust, Kubernetes-driven platform.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse on DGX Cloud</h3>
+                            <p>A fully managed platform that enables the simple and scalable deployment of application streaming, unlocking industrial digitalization and physical AI simulations.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="support-view" class="market-view" style="display: none;">
+                <div class="text-content-container">
+                    <div class="card-grid">
+                        <div class="card">
+                            <h3>Omniverse Formats</h3>
+                            <p>Standard formats used in Omniverse and information on asset conversion.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse Technical Requirements</h3>
+                            <p>Recommended technical specifications and drivers.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse Glossary of Terms</h3>
+                            <p>Definitions of commonly used Omniverse terms.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Feedback and Forums</h3>
+                            <p>Report issues and engage with the Omniverse community.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse Licenses</h3>
+                            <p>Licensing information including license agreement terms, licensing disclaimers, and redistributable software information.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Data Collection & Usage</h3>
+                            <p>Data collection and usage frequently asked questions.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Nucleus</h3>
+                            <p>The database and collaboration engine of Omniverse. With Nucleus, teams can have multiple users connected together live across several applications all at once.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Farm</h3>
+                            <p>A centralized system to run batch jobs like rendering, simulation, file conversion, or synthetic data generation on a cluster of computers.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <h3>Omniverse Releases</h3>
+                            <p>Learn about the different Omniverse branches, release cadence, content locations, and what levels of support exist.</p>
+                            <div class="card-links">
+                                <a href="#">Browse &gt;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 class="section-title" style="margin-top: 60px;">Legacy Documentation</h2>
+                    
+                    <p class="body-text">View documentation for products that are no longer supported.</p>
+                    
+                    <ul class="legacy-list">
+                        <li><a href="#" class="legacy-link">Legacy Extensions</a></li>
+                        <li><a href="#" class="legacy-link">Omniverse Launcher</a></li>
+                        <li><a href="#" class="legacy-link">Omniverse USD Composer</a></li>
+                        <li><a href="#" class="legacy-link">Omniverse USD Explorer</a></li>
+                        <li><a href="#" class="legacy-link">Omniverse Utilities</a></li>
+                        <li><a href="#" class="legacy-link">OpenUSD Connections</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div id="tab-3-content" class="tab-pane">
+            <h2>Tab 3 Content</h2>
+        </div>
+    </div>
+    <script src="market.js"></script>
+</body>
+</html>

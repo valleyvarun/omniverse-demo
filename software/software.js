@@ -3,9 +3,25 @@
 
 document.addEventListener('DOMContentLoaded', () => {
 	const appName = getActiveAppNameFromParent();
-	if (appName && appName.toLowerCase() === 'photoshop') {
-		showPhotoshopDemo();
-	}
+    if (!appName) return;
+    
+    const lowerName = appName.toLowerCase();
+	if (lowerName === 'photoshop') {
+		showDemoImage('../apps/apps-content/photoshop-demo.png');
+	} else if (lowerName === 'd5 render') {
+        showDemoImage('../apps/apps-content/d5render-demo.png');
+    } else if (lowerName === 'rhino 8') {
+        showDemoImage('../apps/apps-content/rhino8-demo.png');
+    } else if (lowerName === 'revit') {
+        showDemoImage('../apps/apps-content/revit-demo.png');
+    } else {
+        // For all other apps, show a blank black space
+        document.body.style.backgroundImage = 'none';
+        document.body.style.backgroundColor = '#000';
+        // Remove any fallback img element if present
+        const existingImg = document.querySelector('img[style*="position: absolute"]');
+        if (existingImg) existingImg.remove();
+    }
 });
 
 function getActiveAppNameFromParent() {
@@ -22,18 +38,18 @@ function getActiveAppNameFromParent() {
 	}
 }
 
-function showPhotoshopDemo() {
+function showDemoImage(src) {
 	try {
 		// Stretch background image to fill (distort aspect if needed)
 		document.body.style.backgroundColor = '#000';
-		document.body.style.backgroundImage = "url('../logo/photoshop-demo.png')";
+		document.body.style.backgroundImage = `url('${src}')`;
 		document.body.style.backgroundPosition = 'center center';
 		document.body.style.backgroundRepeat = 'no-repeat';
 		document.body.style.backgroundSize = '100% 100%'; // stretch to fill
 	} catch (_) {
 		// Fallback: append an <img>
 		const img = document.createElement('img');
-		img.src = "../logo/photoshop-demo.png";
+		img.src = src;
 		Object.assign(img.style, {
 			position: 'absolute',
 			inset: '0',
