@@ -9,6 +9,37 @@ function switchTab(tabIndex) {
     // Show selected tab pane
     document.getElementById(`tab-${tabIndex}-content`).classList.add('active');
 
+    // Toggle subheader visibility
+    const subheader = document.querySelector('.market-subheader');
+    if (tabIndex === 4) {
+        subheader.style.display = 'none';
+    } else {
+        subheader.style.display = 'flex';
+    }
+
+    // Update branding based on tab
+    const logoImg = document.querySelector('.nvidia-logo');
+    const textLogoImg = document.querySelector('.nvidia-text-logo');
+    const developerText = document.querySelector('.developer-text');
+    const subheaderNav = document.querySelector('.subheader-nav');
+    const brandGroup = document.querySelector('.brand-group');
+
+    if (tabIndex === 3) {
+        logoImg.src = '../logo/omniverse-logo.png';
+        textLogoImg.style.display = 'none';
+        developerText.textContent = 'OMNIVERSE ASSET MARKET';
+        if (subheaderNav) subheaderNav.style.display = 'none';
+        subheader.style.justifyContent = 'center';
+        if (brandGroup) brandGroup.style.marginRight = '0';
+    } else {
+        logoImg.src = '../logo/NVIDIA-logo.png';
+        textLogoImg.style.display = '';
+        developerText.textContent = 'DEVELOPER';
+        if (subheaderNav) subheaderNav.style.display = '';
+        subheader.style.justifyContent = '';
+        if (brandGroup) brandGroup.style.marginRight = '';
+    }
+
     // Update search input based on tab
     const searchInput = document.querySelector('.market-search');
     if (tabIndex === 1) {

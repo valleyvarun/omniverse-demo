@@ -371,3 +371,209 @@ body {
 .legacy-link:hover {
     color: #76b900;
 }
+
+.tab-close {
+    margin-left: 8px;
+    font-size: 14px;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    opacity: 1;
+    transition: color 0.2s;
+}
+
+.tab-close:hover {
+    color: #fff;
+}
+
+.new-tab-btn {
+    height: 23px;
+    width: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cccccc;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.new-tab-btn:hover {
+    color: #ffffff;
+}
+
+/* Asset Market Styles */
+.asset-market-container {
+    background-color: #1a1a1a;
+    color: #eeeeee;
+    font-family: 'Segoe UI', sans-serif;
+    padding: 30px;
+    height: auto;
+    box-sizing: border-box;
+    overflow-y: visible;
+}
+
+.am-top-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+    padding-bottom: 30px;
+}
+
+.am-search-container {
+    display: flex;
+    flex: 1;
+    background: #2d2d2d;
+    border-radius: 4px;
+    padding: 0;
+    max-width: 800px;
+    border: 1px solid #444;
+    overflow: hidden;
+}
+
+.am-search-dropdown {
+    padding: 12px 20px;
+    background: #2d2d2d;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-right: 1px solid #444;
+    color: #eeeeee;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.am-search-dropdown:hover {
+    background-color: #383838;
+}
+
+.am-search-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 16px;
+    font-size: 14px;
+    outline: none;
+    color: #ffffff;
+}
+
+.am-search-input::placeholder {
+    color: #888;
+}
+
+.am-search-btn {
+    background: #1a1a1a;
+    color: #76B900;
+    border: 1px solid #76B900;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
+}
+
+.am-search-btn:hover {
+    background-color: #333333;
+}
+
+/* Product Grid */
+.am-product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.am-product-card {
+    background-color: #2d2d2d; /* Dark card background */
+    border: 1px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.am-product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    border-color: #555;
+}
+
+.am-card-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    background-color: #2d2d2d; /* Placeholder background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.am-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.am-product-card:hover .am-card-image {
+    opacity: 1;
+}
+
+.am-card-details {
+    padding: 8px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.am-card-brand {
+    font-size: 10px;
+    color: #999;
+    font-weight: 400;
+}
+
+.am-card-title {
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.2;
+    margin-bottom: 4px;
+}
+
+.am-card-download-btn {
+    width: auto;
+    margin: 0 10px 10px;
+    padding: 3px 8px;
+    background: transparent;
+    color: #76B900;
+    border: 1px solid #76B900;
+    border-radius: 4px;
+    font-weight: normal;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 11px;
+}
+
+.am-card-download-btn:hover {
+    background-color: #333333;
+}
+
+#tab-3-content {
+    padding: 0;
+    height: auto;
+    overflow: visible;
+}

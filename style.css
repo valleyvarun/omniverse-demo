@@ -929,33 +929,26 @@ body {
 
 /* Tab Close Button */
 .tab-close-btn {
-    margin-left: 8px;                /* Space between tab text and close button */
-    font-size: 14px;                 /* Slightly larger for visibility */
-    font-weight: bold;               /* Bold X */
-    color: #888888;                  /* Grey color for close button */
-    cursor: pointer;                 /* Pointer cursor */
-    border-radius: 2px;              /* Small rounded corners */
-    width: 16px;                     /* Fixed width */
-    height: 16px;                    /* Fixed height */
-    display: flex;                   /* Center the X */
-    align-items: center;             /* Center vertically */
-    justify-content: center;         /* Center horizontally */
-    transition: all 0.2s ease;       /* Smooth transition */
+    margin-left: 8px;
+    font-size: 14px;
+    line-height: 1;
+    color: #888888;
+    cursor: pointer;
+    opacity: 1;
+    transition: color 0.2s;
 }
 
 .tab-close-btn:hover {
-    background-color: #444444;       /* Dark background on hover */
-    color: #ffffff;                  /* White X on hover */
+    color: #ffffff;
 }
 
 /* Active tab close button styling */
 .content-tab.active .tab-close-btn {
-    color: #cccccc;                  /* Lighter color for active tab */
+    color: #cccccc;
 }
 
 .content-tab.active .tab-close-btn:hover {
-    background-color: #555555;       /* Slightly lighter hover for active tab */
-    color: #ffffff;                  /* White X on hover */
+    color: #ffffff;
 }
 
 /* Overlay above the content iframe */

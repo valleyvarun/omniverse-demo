@@ -12,15 +12,23 @@
         <div class="tab active" onclick="switchTab(1)">
             <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
             Legacy Tools
+            <span class="tab-close" onclick="event.stopPropagation();">&times;</span>
         </div>
         <div class="tab" onclick="switchTab(2)">
             <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
             Omniverse Developer
+            <span class="tab-close" onclick="event.stopPropagation();">&times;</span>
         </div>
         <div class="tab" onclick="switchTab(3)">
             <img src="../logo/NVIDIA-logo.png" class="tab-icon" alt="icon">
-            tab 3
+            Asset Market
+            <span class="tab-close" onclick="event.stopPropagation();">&times;</span>
         </div>
+        <div class="tab" onclick="switchTab(4)">
+            New Tab
+            <span class="tab-close" onclick="event.stopPropagation();">&times;</span>
+        </div>
+        <div class="new-tab-btn" onclick="alert('New Tab Clicked')">+</div>
     </header>
     <div class="content">
         <div class="market-subheader">
@@ -993,7 +1001,257 @@
             </div>
         </div>
         <div id="tab-3-content" class="tab-pane">
-            <h2>Tab 3 Content</h2>
+            <div class="asset-market-container">
+                <!-- Top Bar -->
+                <div class="am-top-bar">
+                    <div class="am-search-container">
+                        <input type="text" class="am-search-input" placeholder="Search objects, categories or brands">
+                        <button class="am-search-btn">Search</button>
+                    </div>
+                </div>
+
+                
+
+            
+
+                <!-- Product Grid -->
+                <div class="am-product-grid">
+                    <!-- Card 6 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/43555.png" alt="Asset 43555" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 43555</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 7 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/488185.png" alt="Asset 488185" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 488185</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 8 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/510537.png" alt="Asset 510537" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 510537</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 9 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/548760.png" alt="Asset 548760" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 548760</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 10 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/554693.png" alt="Asset 554693" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 554693</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 11 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/684707.png" alt="Asset 684707" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 684707</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 12 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/690319.png" alt="Asset 690319" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 690319</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 13 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/777942.png" alt="Asset 777942" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 777942</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 14 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/796862.png" alt="Asset 796862" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 796862</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 15 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/797652.png" alt="Asset 797652" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 797652</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 16 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/828742.png" alt="Asset 828742" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 828742</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 17 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/865992.png" alt="Asset 865992" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 865992</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 18 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/876545.png" alt="Asset 876545" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 876545</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 19 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/894466.png" alt="Asset 894466" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 894466</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 20 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/896374.png" alt="Asset 896374" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 896374</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 21 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/896479.png" alt="Asset 896479" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 896479</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 1 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/251328.png" alt="Asset 251328" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 251328</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 2 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/298664.png" alt="Asset 298664" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 298664</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 3 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/298686.png" alt="Asset 298686" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 298686</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 4 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/298722.png" alt="Asset 298722" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 298722</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                    <!-- Card 5 -->
+                    <div class="am-product-card">
+                        <div class="am-card-image-wrapper">
+                            <img src="../market/imgs/299042.png" alt="Asset 299042" class="am-card-image">
+                        </div>
+                        <div class="am-card-details">
+                            <div class="am-card-brand">Brand Name</div>
+                            <div class="am-card-title">Asset 299042</div>
+                        </div>
+                        <button class="am-card-download-btn">Download</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tab-4-content" class="tab-pane">
+            <h2>New Tab Content</h2>
         </div>
     </div>
     <script src="market.js"></script>
