@@ -48,6 +48,8 @@ function switchTab(tabIndex) {
     } else if (tabIndex === 2) {
         searchInput.value = 'https://docs.nvidia.com/omniverse/index.html';
         switchMarketTab('sdks');
+    } else if (tabIndex === 3) {
+        searchInput.value = 'https://developer.nvidia.com/omniverse/asset-market';
     } else {
         searchInput.value = '';
     }

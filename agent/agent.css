@@ -128,6 +128,23 @@ body {
 	border-bottom: 1px solid var(--agent-border);
 }
 
+/* C Layers Header */
+.agent-c-layers-header {
+	flex: 0 0 auto;
+	height: 27px;
+	display: flex;
+	align-items: center;
+	padding: 0 16px;
+	background: var(--agent-surface);
+	border-bottom: 1px solid var(--agent-border);
+    font-size: 11px;
+    color: var(--agent-muted);
+}
+
+.agent-c-layers-header.expanded {
+    color: #ffffff;
+}
+
 .agent-app-name {
 	font-size: 11px;
 	color: var(--agent-muted);

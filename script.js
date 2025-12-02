@@ -608,7 +608,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const target = data.src || 'omniverse/plexus.html';
                     contentFrame.src = target;
                     // Toggle agent header placement based on whether Home is loaded
-                    const isHome = (target || '').includes('pages/home.html');
+                    const isHome = (target || '').includes('pages/home.html') || (target || '').includes('agent/c-layer.html');
                     updateAgentHeaderPlacement(isHome);
                 }
             } catch(_) {}
@@ -856,6 +856,16 @@ function initializeCommandLine() {
                                     name: 'Market',
                                     icon: 'logo/market-logo.png',
                                     contentSrc: 'market/market.html'
+                                });
+                                return;
+                            }
+
+                            if (name.toLowerCase() === 'nucleus') {
+                                // Open Nucleus as a tab
+                                createAppTab({
+                                    name: 'Nucleus',
+                                    icon: 'logo/nucleus-logo.png',
+                                    contentSrc: 'nucleus/nucleus.html'
                                 });
                                 return;
                             }
@@ -1686,8 +1696,8 @@ function showEmailPasswordForm() {
     
     // Create email/password form
     const formHTML = `
-        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">vas2154@columbia.edu</div>
+        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">2020barc020@spab.ac.in</div>
         <div class="dropdown-divider"></div>
         <div class="add-account-form">
@@ -1737,8 +1747,8 @@ function show2FAForm() {
     
     // Create 2FA form with 6 input boxes
     const formHTML = `
-        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">vas2154@columbia.edu</div>
+        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">2020barc020@spab.ac.in</div>
         <div class="dropdown-divider"></div>
         <div class="add-account-form">
@@ -1875,8 +1885,8 @@ function resetDropdownToNormal() {
     
     // Build the HTML with original emails plus any added emails
     let emailItemsHTML = `
-        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">vas2154@columbia.edu</div>
+        <div class="dropdown-item account-item">valleyvarun@gmail.com</div>
         <div class="dropdown-item account-item">2020barc020@spab.ac.in</div>`;
     
     // Add any newly added emails at the bottom
@@ -2296,17 +2306,19 @@ function createAppTab(appData) {
         
         // Special handling for Market: treat like Home for headers (no sub-headers)
         const isMarket = (appData.name || '').toLowerCase() === 'market';
+        const isNucleus = (appData.name || '').toLowerCase() === 'nucleus';
+        const hideSubHeaders = isMarket || isNucleus;
         
-        // Place collapse button in parent header when not Home (unless it's Market)
-        try { updateAgentHeaderPlacement(isMarket ? true : false); } catch(_) {}
+        // Place collapse button in parent header when not Home (unless it's Market or Nucleus)
+        try { updateAgentHeaderPlacement(hideSubHeaders ? true : false); } catch(_) {}
         
-        // Show agent sub-header with app name (unless it's Market)
+        // Show agent sub-header with app name (unless it's Market or Nucleus)
         try {
             const appName = newTab.getAttribute('data-app-name');
             const agentWin = document.getElementById('agentFrame')?.contentWindow;
-            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: isMarket ? null : appName }, '*');
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: hideSubHeaders ? null : appName }, '*');
             const pmWin = document.getElementById('pmFrame')?.contentWindow;
-            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: isMarket ? null : appName }, '*');
+            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: hideSubHeaders ? null : appName }, '*');
         } catch(_) {}
     }
 }
@@ -2529,16 +2541,18 @@ function setActiveTab(tabElement) {
         
         // Special handling for Market: treat like Home for headers (no sub-headers)
         const isMarket = (appName || '').toLowerCase() === 'market';
+        const isNucleus = (appName || '').toLowerCase() === 'nucleus';
+        const hideSubHeaders = isMarket || isNucleus;
         
-        // Place collapse button in parent header when not Home (unless it's Market)
-        try { updateAgentHeaderPlacement(isMarket ? true : false); } catch(_) {}
+        // Place collapse button in parent header when not Home (unless it's Market or Nucleus)
+        try { updateAgentHeaderPlacement(hideSubHeaders ? true : false); } catch(_) {}
         
-        // Show agent sub-header with app name (unless it's Market)
+        // Show agent sub-header with app name (unless it's Market or Nucleus)
         try {
             const agentWin = document.getElementById('agentFrame')?.contentWindow;
-            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: isMarket ? null : appName }, '*');
+            if (agentWin) agentWin.postMessage({ type: 'agent:app-changed', appName: hideSubHeaders ? null : appName }, '*');
             const pmWin = document.getElementById('pmFrame')?.contentWindow;
-            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: isMarket ? null : appName }, '*');
+            if (pmWin) pmWin.postMessage({ type: 'pm:app-changed', appName: hideSubHeaders ? null : appName }, '*');
         } catch(_) {}
     }
 }

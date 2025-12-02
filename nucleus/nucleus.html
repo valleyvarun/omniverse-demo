@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nucleus</title>
+    <link rel="stylesheet" href="nucleus.css">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <script src="nucleus.js" defer></script>
+</head>
+<body>
+    <div class="nucleus-root">
+        <!-- HEADER -->
+        <header class="nucleus-header">
+            <div class="nucleus-logo">
+                <img src="../logo/nucleus-logo.png" alt="Nucleus" style="height: 28px; width: auto;">
+                <span>Nucleus</span>
+            </div>
+            <div class="nucleus-header-right">
+                <div class="nucleus-search-container">
+                    <input type="text" class="nucleus-search-input" placeholder="Search in Nucleus">
+                </div>
+                <div class="nucleus-header-actions">
+                    <button class="nucleus-icon-btn"><img src="../logo/user-icon1.png" alt="User" class="nucleus-user-icon"></button>
+                </div>
+            </div>
+        </header>
+
+        <!-- SIDEBAR -->
+        <nav class="nucleus-sidebar">
+            <button class="nucleus-new-btn">
+                <span class="material-icons" style="font-size: 16px; color: inherit;">add</span>
+                <span>New</span>
+            </button>
+
+            <a href="#" class="nucleus-nav-item active">
+                <span class="material-icons">hard_drive</span>
+                <span>My Nucleus</span>
+            </a>
+            
+            <a href="#" class="nucleus-nav-item">
+                <span class="material-icons">group</span>
+                <span>Shared with me</span>
+            </a>
+            <a href="#" class="nucleus-nav-item">
+                <span class="material-icons">schedule</span>
+                <span>Recent</span>
+            </a>
+            <a href="#" class="nucleus-nav-item">
+                <span class="material-icons">star_border</span>
+                <span>Starred</span>
+            </a>
+            <a href="#" class="nucleus-nav-item">
+                <span class="material-icons">delete_outline</span>
+                <span>Trash</span>
+            </a>
+            
+            <a href="#" class="nucleus-nav-item">
+                <span class="material-icons">cloud_queue</span>
+                <span>Storage</span>
+            </a>
+
+            <div style="flex: 1;"></div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <main class="nucleus-main">
+            <div class="nucleus-section-header">
+                <span class="material-icons nucleus-section-arrow">keyboard_arrow_down</span>
+                <span class="nucleus-section-title">Devices and drives</span>
+            </div>
+
+            <div class="nucleus-drives-container">
+                <!-- Windows C: -->
+                <div class="nucleus-drive-item">
+                    <div class="nucleus-drive-icon-container">
+                        <span class="material-icons" style="font-size: 42px; color: #0078d4;">computer</span>
+                    </div>
+                    <div class="nucleus-drive-content">
+                        <div class="nucleus-drive-name">Windows (C:)</div>
+                        <div class="nucleus-drive-progress-track">
+                            <div class="nucleus-drive-progress-fill" style="width: 90%;"></div>
+                        </div>
+                        <div class="nucleus-drive-stats">92.3 GB free of 952 GB</div>
+                    </div>
+                </div>
+
+                <!-- Google Drive G: -->
+                <div class="nucleus-drive-item">
+                    <div class="nucleus-drive-icon-container">
+                        <img src="../logo/nucleus-logo.png" alt="Drive" style="width: 42px; height: auto;">
+                    </div>
+                    <div class="nucleus-drive-content">
+                        <div class="nucleus-drive-name">Company xyz (O:)</div>
+                        <div class="nucleus-drive-progress-track">
+                            <div class="nucleus-drive-progress-fill" style="width: 60%;"></div>
+                        </div>
+                        <div class="nucleus-drive-stats">40.1 GB free of 100 GB</div>
+                    </div>
+                </div>
+
+                <!-- Google Drive I: -->
+                <div class="nucleus-drive-item">
+                    <div class="nucleus-drive-icon-container">
+                        <img src="../logo/nucleus-logo.png" alt="Drive" style="width: 42px; height: auto;">
+                    </div>
+                    <div class="nucleus-drive-content">
+                        <div class="nucleus-drive-name">Studio pqr (P:)</div>
+                        <div class="nucleus-drive-progress-track">
+                            <div class="nucleus-drive-progress-fill" style="width: 85%;"></div>
+                        </div>
+                        <div class="nucleus-drive-stats">15.5 GB free of 100 GB</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FILE LIST SECTION -->
+            <div class="nucleus-section-header" style="margin-top: 24px;">
+                <span class="material-icons nucleus-section-arrow">keyboard_arrow_down</span>
+                <span class="nucleus-section-title">Company xyz (O:)</span>
+            </div>
+
+            <div class="nucleus-list-header">
+                <div class="nucleus-col-header-sort">Name <span class="material-icons" style="font-size: 16px;">arrow_upward</span></div>
+                <div>People</div>
+                <div>Date modified</div>
+                <div>File size</div>
+                <div style="text-align: right;"><span class="material-icons" style="font-size: 18px;">sort</span></div>
+            </div>
+
+            <div class="nucleus-file-list">
+                <!-- Item 1 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Burj Khalifa
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Structural Eng
+                    </div>
+                    <div>Nov 16, 2022</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        McLaren P1
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Vehicle Dynamics
+                    </div>
+                    <div>May 23, 2023</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Central Park NYC
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/user-icon1.png" class="nucleus-owner-avatar"> me
+                    </div>
+                    <div>Apr 28, 2023</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Boston Dynamics Atlas
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Robotics Lab
+                    </div>
+                    <div>Jun 13, 2023</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Sydney Opera House
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Creative Studio
+                    </div>
+                    <div>Sep 30, 2023</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Bugatti Chiron
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Advanced Concepts
+                    </div>
+                    <div>Apr 11, 2022</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 7 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        High Line Manhattan
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Landscape Arch
+                    </div>
+                    <div>Apr 28, 2023</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 8 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Tesla Optimus
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/user-icon1.png" class="nucleus-owner-avatar"> me
+                    </div>
+                    <div>Jun 13, 2022</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 9 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Sagrada Familia
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Heritage Team
+                    </div>
+                    <div>Nov 16, 2022</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+                <!-- Item 10 -->
+                <div class="nucleus-list-item">
+                    <div class="nucleus-file-name">
+                        <span class="material-icons nucleus-file-icon">folder</span>
+                        Lamborghini Revuelto
+                    </div>
+                    <div class="nucleus-owner">
+                        <img src="../logo/people2-icon.png" class="nucleus-owner-avatar"> Automotive Design
+                    </div>
+                    <div>May 1, 2022</div>
+                    <div>--</div>
+                    <div style="text-align: right;"><span class="material-icons" style="font-size: 18px; color: #9aa0a6;">more_vert</span></div>
+                </div>
+
+
+            </div>
+    </div>
+</body>
+</html>

@@ -232,30 +232,63 @@
 	const agentAppView = document.getElementById('agentAppView');
 	const agentAppImage = document.getElementById('agentAppImage');
 	const agentSubHeader = document.getElementById('agentSubHeader');
+	const agentCLayersHeader = document.getElementById('agentCLayersHeader');
+	const agentCLayersContent = document.getElementById('agentCLayersContent');
+    const agentCLayersList = document.getElementById('agentCLayersList');
+    const agentCLayersResizeHandle = document.getElementById('agentCLayersResizeHandle');
+	const agentCLayersArrow = document.getElementById('agentCLayersArrow');
 	const agentAppNameBtn = document.getElementById('agentAppName');
 	const agentAppArrow = document.getElementById('agentAppArrow');
 	const agentStatusBtn = document.getElementById('agentStatus');
 	const agentInput = document.querySelector('.agent-input');
+    const agent3DView = document.getElementById('agent3DView');
+    const agent3DFrame = document.getElementById('agent3DFrame');
 
 	let currentAppName = null;
 
 	function showAgentView() {
 		if (agentAppView) agentAppView.style.display = 'none';
+        if (agent3DView) agent3DView.style.display = 'none';
 		if (chat) chat.style.display = 'flex';
 		if (agentInput) agentInput.style.display = 'block';
 		if (agentAppArrow) agentAppArrow.classList.add('collapsed');
 		if (agentStatusBtn) agentStatusBtn.classList.add('active');
 		if (agentAppNameBtn) agentAppNameBtn.classList.remove('active');
+
+		// Show C Layers header if an app is open (and sidebar is closed/agent view active)
+		if (agentCLayersHeader) {
+			if (currentAppName) {
+				agentCLayersHeader.style.display = 'flex';
+                // Default to open
+                if (agentCLayersContent) {
+                    agentCLayersContent.style.display = 'flex';
+                    if (agentCLayersArrow) agentCLayersArrow.classList.remove('collapsed');
+                    agentCLayersHeader.classList.add('expanded');
+                }
+			} else {
+				agentCLayersHeader.style.display = 'none';
+                if (agentCLayersContent) agentCLayersContent.style.display = 'none';
+                agentCLayersHeader.classList.remove('expanded');
+			}
+		}
 	}
 
 	function showAppView() {
 		if (!currentAppName) return;
 		if (agentAppView) agentAppView.style.display = 'flex';
+        if (agent3DView) agent3DView.style.display = 'none';
 		if (chat) chat.style.display = 'none';
 		if (agentInput) agentInput.style.display = 'none';
 		if (agentAppArrow) agentAppArrow.classList.remove('collapsed');
 		if (agentStatusBtn) agentStatusBtn.classList.remove('active');
 		if (agentAppNameBtn) agentAppNameBtn.classList.add('active');
+
+		// Hide C Layers header when sidebar is open
+		if (agentCLayersHeader) {
+			agentCLayersHeader.style.display = 'none';
+            if (agentCLayersContent) agentCLayersContent.style.display = 'none';
+            agentCLayersHeader.classList.remove('expanded');
+		}
 		
 		// Update image source based on app name
 		if (agentAppImage) {
@@ -277,6 +310,18 @@
             }
 		}
 	}
+
+    function show3DView() {
+        // Send message to parent to load 3D view in main content area
+        try {
+            parent.postMessage({ 
+                type: 'content:load', 
+                src: 'agent/c-layer.html' 
+            }, '*');
+        } catch (e) {
+            console.error('Failed to post message to parent:', e);
+        }
+    }
 
 	if (agentStatusBtn) {
 		agentStatusBtn.addEventListener('click', () => {
@@ -302,6 +347,120 @@
 			}
 		});
 	}
+
+    // Toggle C Layers Content
+    if (agentCLayersHeader && agentCLayersContent && agentCLayersArrow) {
+        agentCLayersHeader.addEventListener('click', () => {
+            if (agentCLayersContent.style.display === 'none') {
+                agentCLayersContent.style.display = 'flex';
+                agentCLayersArrow.classList.remove('collapsed');
+                agentCLayersHeader.classList.add('expanded');
+            } else {
+                agentCLayersContent.style.display = 'none';
+                agentCLayersArrow.classList.add('collapsed');
+                agentCLayersHeader.classList.remove('expanded');
+            }
+        });
+    }
+
+    // Layer Selection Logic
+    if (agentCLayersList) {
+        agentCLayersList.addEventListener('click', (e) => {
+            const row = e.target.closest('.layer-row');
+            if (row) {
+                // Remove selected from all siblings
+                const allRows = agentCLayersList.querySelectorAll('.layer-row');
+                allRows.forEach(r => r.classList.remove('selected'));
+                row.classList.add('selected');
+
+                // Show 3D View
+                show3DView();
+            }
+        });
+    }
+
+    // Add Layer Logic
+    const addLayerBtn = document.getElementById('addLayerBtn');
+    if (addLayerBtn && agentCLayersList) {
+        addLayerBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent header toggle if inside header (it's not, but good practice)
+            
+            // Count existing layers to name the new one
+            const existingLayers = agentCLayersList.querySelectorAll('.layer-row').length;
+            const newLayerName = `Layer ${String(existingLayers + 1).padStart(2, '0')}`;
+
+            // Create new layer row
+            const newRow = document.createElement('div');
+            newRow.className = 'layer-row';
+            newRow.innerHTML = `
+                <span class="layer-name">${newLayerName}</span>
+                <div class="layer-controls">
+                    <span class="icon-check">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </span>
+                    <span class="icon-bulb">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6A4.997 4.997 0 0 1 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z"></path>
+                        </svg>
+                    </span>
+                    <span class="icon-lock">
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                            <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"></path>
+                        </svg>
+                    </span>
+                    <span class="color-box" style="background-color: #${Math.floor(Math.random()*16777215).toString(16)};"></span>
+                </div>
+            `;
+            
+            // Append to content
+            agentCLayersList.appendChild(newRow);
+        });
+    }
+
+    // Delete Layer Logic
+    const deleteLayerBtn = document.getElementById('deleteLayerBtn');
+    if (deleteLayerBtn && agentCLayersList) {
+        deleteLayerBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const selectedRow = agentCLayersList.querySelector('.layer-row.selected');
+            if (selectedRow) {
+                selectedRow.remove();
+            }
+        });
+    }
+
+    // Resize Logic
+    if (agentCLayersResizeHandle && agentCLayersContent) {
+        let isResizing = false;
+        let startY = 0;
+        let startHeight = 0;
+
+        agentCLayersResizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startY = e.clientY;
+            startHeight = agentCLayersContent.offsetHeight;
+            document.body.style.cursor = 'ns-resize';
+            e.preventDefault(); // Prevent text selection
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isResizing) return;
+            const dy = e.clientY - startY;
+            const newHeight = startHeight + dy;
+            if (newHeight > 60) { // Min height check
+                agentCLayersContent.style.height = `${newHeight}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isResizing) {
+                isResizing = false;
+                document.body.style.cursor = '';
+            }
+        });
+    }
 
 	// Communicate focus state to parent if needed (helps route global keyboard events)
 	window.addEventListener('focusin', () => { 

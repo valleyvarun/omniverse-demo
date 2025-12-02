@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C-Layer 3D Environment</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            font-family: sans-serif;
+        }
+        canvas {
+            display: block;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+            color: #888;
+            pointer-events: none;
+            font-size: 12px;
+        }
+    </style>
+    <!-- Import maps polyfill -->
+    <script async src="https://unpkg.com/es-module-shims@1.8.0/dist/es-module-shims.js"></script>
+    
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="info">C-Layer 3D Environment</div>
+    <div id="ui-container" style="position: absolute; top: 40px; left: 10px; z-index: 100; display: flex; flex-direction: column; gap: 10px;">
+        <button id="addPlaneBtn" title="Add Plane" style="width: 40px; height: 40px; background: #333; color: white; border: 1px solid #555; cursor: pointer; border-radius: 4px; font-size: 24px; display: flex; align-items: center; justify-content: center; padding: 0;">+</button>
+        
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <button id="btnTranslate" title="Move" style="width: 40px; height: 40px; background: #444; color: white; border: 1px solid #555; cursor: pointer; border-radius: 4px; font-size: 20px; display: flex; align-items: center; justify-content: center; padding: 0;">✥</button>
+            <button id="btnRotate" title="Rotate" style="width: 40px; height: 40px; background: #444; color: white; border: 1px solid #555; cursor: pointer; border-radius: 4px; font-size: 20px; display: flex; align-items: center; justify-content: center; padding: 0;">↻</button>
+            <button id="btnDraw" title="Draw" style="width: 40px; height: 40px; background: #444; color: white; border: 1px solid #555; cursor: pointer; border-radius: 4px; font-size: 20px; display: flex; align-items: center; justify-content: center; padding: 0;">✎</button>
+        </div>
+    </div>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { TransformControls } from 'three/addons/controls/TransformControls.js';
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x1a1a1a);
+        scene.fog = new THREE.Fog(0x1a1a1a, 10, 50);
+
+        // Camera setup
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(5, 5, 5);
+
+        // Renderer setup
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        document.body.appendChild(renderer.domElement);
+
+        // Controls
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = true;
+        controls.minDistance = 0.1;
+        controls.maxDistance = 500;
+        
+        // Configure Mouse Buttons: Left=Rotate, Middle=Pan, Right=None (WASDQE)
+        controls.mouseButtons = {
+            LEFT: THREE.MOUSE.ROTATE,
+            MIDDLE: THREE.MOUSE.PAN,
+            RIGHT: null
+        };
+
+        // Prevent context menu for Right Click Orbit
+        renderer.domElement.addEventListener('contextmenu', (e) => e.preventDefault());
+
+        // Transform Controls (Gumball)
+        const transformControl = new TransformControls(camera, renderer.domElement);
+        transformControl.addEventListener('dragging-changed', function (event) {
+            controls.enabled = !event.value;
+        });
+        scene.add(transformControl);
+
+        // Raycaster for selection
+        const raycaster = new THREE.Raycaster();
+        const pointer = new THREE.Vector2();
+        const selectableObjects = [];
+
+        // Lights
+        const ambientLight = new THREE.AmbientLight(0x404040); // soft white light
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 7.5);
+        scene.add(directionalLight);
+
+        // Helpers
+        const gridHelper = new THREE.GridHelper(20, 20, 0x444444, 0x222222);
+        scene.add(gridHelper);
+
+        const axesHelper = new THREE.AxesHelper(2);
+        scene.add(axesHelper);
+
+        // Objects
+        // Cube removed as requested
+
+        // Add Plane Logic
+        document.getElementById('addPlaneBtn').addEventListener('click', function() {
+            this.blur();
+            window.focus();
+            const planeGeo = new THREE.PlaneGeometry(10, 10);
+            const planeMat = new THREE.MeshStandardMaterial({ 
+                color: Math.random() * 0xffffff, 
+                side: THREE.DoubleSide,
+                roughness: 0.5,
+                metalness: 0.1,
+                transparent: true,
+                opacity: 0.5
+            });
+            const plane = new THREE.Mesh(planeGeo, planeMat);
+            plane.position.y = 0.01; // Slightly above grid to avoid z-fighting if grid is at 0
+            plane.rotation.x = -Math.PI / 2; // Lay flat
+            scene.add(plane);
+            selectableObjects.push(plane);
+            
+            // Auto-select
+            transformControl.attach(plane);
+        });
+
+        // Drawing State
+        let isDrawingMode = false;
+        let isDrawing = false;
+        let currentLine = null;
+        let drawStartObject = null;
+        let drawingPlane = new THREE.Plane();
+        let planeIntersectPoint = new THREE.Vector3();
+
+        // Mode Switching
+        document.getElementById('btnTranslate').addEventListener('click', function() {
+            this.blur();
+            window.focus();
+            isDrawingMode = false;
+            updateDrawUI();
+            controls.enabled = true;
+            controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
+            controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+            controls.mouseButtons.RIGHT = null;
+            transformControl.setMode('translate');
+        });
+        document.getElementById('btnRotate').addEventListener('click', function() {
+            this.blur();
+            window.focus();
+            isDrawingMode = false;
+            updateDrawUI();
+            controls.enabled = true;
+            controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
+            controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+            controls.mouseButtons.RIGHT = null;
+            transformControl.setMode('rotate');
+        });
+        document.getElementById('btnDraw').addEventListener('click', function() {
+            this.blur();
+            window.focus();
+            isDrawingMode = true;
+            updateDrawUI();
+            controls.enabled = true;
+            controls.mouseButtons.LEFT = null; // Disable Left Orbit to allow drawing
+            controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+            controls.mouseButtons.RIGHT = THREE.MOUSE.ROTATE; // Enable Right Orbit
+            transformControl.detach();
+        });
+
+        function updateDrawUI() {
+            document.getElementById('btnDraw').style.background = isDrawingMode ? '#00aa00' : '#444';
+            document.body.style.cursor = isDrawingMode ? 'crosshair' : 'default';
+        }
+
+        // Selection & Drawing Logic
+        // Use capture phase to ensure we handle events before OrbitControls
+        renderer.domElement.addEventListener('pointerdown', (event) => {
+            // Ensure the window has focus so key events work
+            window.focus();
+
+            // Ignore clicks on UI
+            if (event.target.closest('#ui-container')) return;
+
+            // Drawing Logic
+            if (isDrawingMode) {
+                // Only draw with Left Mouse Button
+                if (event.button !== 0) return;
+
+                pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+                pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                raycaster.setFromCamera(pointer, camera);
+                // Use recursive to ensure we hit the plane even if lines are in the way, 
+                // then filter to find the plane specifically
+                const allIntersects = raycaster.intersectObjects(selectableObjects, true);
+                const planeIntersect = allIntersects.find(hit => selectableObjects.includes(hit.object));
+
+                if (planeIntersect) {
+                    event.stopPropagation(); // Prevent OrbitControls from seeing this
+                    isDrawing = true;
+                    drawStartObject = planeIntersect.object;
+                    
+                    // Define the mathematical plane for smooth intersection
+                    const normalLocal = planeIntersect.face.normal.clone();
+                    const normalWorld = normalLocal.transformDirection(drawStartObject.matrixWorld).normalize();
+                    drawingPlane.setFromNormalAndCoplanarPoint(normalWorld, planeIntersect.point);
+
+                    // Create Line
+                    const material = new THREE.LineBasicMaterial({ 
+                        color: 0xff0000,
+                        depthTest: true,
+                        depthWrite: true,
+                        polygonOffset: true,
+                        polygonOffsetFactor: -2,
+                        polygonOffsetUnits: -2
+                    });
+                    
+                    const MAX_POINTS = 5000;
+                    const geometry = new THREE.BufferGeometry();
+                    const positions = new Float32Array(MAX_POINTS * 3);
+                    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                    
+                    const pLocal = drawStartObject.worldToLocal(planeIntersect.point.clone());
+
+                    positions[0] = pLocal.x;
+                    positions[1] = pLocal.y;
+                    positions[2] = pLocal.z;
+                    
+                    positions[3] = pLocal.x;
+                    positions[4] = pLocal.y;
+                    positions[5] = pLocal.z;
+
+                    geometry.setDrawRange(0, 2);
+
+                    currentLine = new THREE.Line(geometry, material);
+                    currentLine.frustumCulled = false; 
+                    drawStartObject.add(currentLine);
+                    
+                    currentLine.userData.drawCount = 2;
+                    currentLine.userData.positions = positions;
+                }
+                return;
+            }
+
+            // If the transform control is dragging (clicked on gizmo), ignore selection
+            if (transformControl.dragging) return;
+
+            // If hovering over the gizmo handles, ignore selection logic (let the gizmo handle it)
+            if (transformControl.axis) return;
+
+            // Only select with Left Mouse Button
+            if (event.button !== 0) return;
+
+            pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+            pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(pointer, camera);
+            
+            // Explicitly check only the planes in selectableObjects (recursive: false)
+            // This ensures we ignore the lines (children) and hit the plane directly
+            const intersects = raycaster.intersectObjects(selectableObjects, false);
+            
+            // Double check that the object is indeed one of our planes
+            const hit = intersects.find(i => selectableObjects.includes(i.object));
+
+            if (hit) {
+                // Only select if nothing is currently selected
+                if (!transformControl.object) {
+                    transformControl.attach(hit.object);
+                }
+                // If something is already selected, we keep it (lock behavior)
+            } else {
+                transformControl.detach();
+            }
+        }, true); // Use capture phase
+
+        window.addEventListener('pointermove', (event) => {
+            if (isDrawingMode && isDrawing && currentLine && drawStartObject) {
+                pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+                pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                raycaster.setFromCamera(pointer, camera);
+                
+                // Intersect with the mathematical plane instead of the mesh for smoothness
+                if (raycaster.ray.intersectPlane(drawingPlane, planeIntersectPoint)) {
+                    
+                    // Convert world intersection to local space
+                    const pLocal = drawStartObject.worldToLocal(planeIntersectPoint.clone());
+
+                    const positions = currentLine.userData.positions;
+                    let count = currentLine.userData.drawCount;
+                    
+                    // Always update the last point to the current position (rubber banding)
+                    // This ensures the line is visible even for small movements
+                    const lastIndex = (count - 1) * 3;
+                    positions[lastIndex] = pLocal.x;
+                    positions[lastIndex + 1] = pLocal.y;
+                    positions[lastIndex + 2] = pLocal.z;
+                    
+                    // Check distance from the *previous* point (second to last)
+                    // If we have at least 2 points, the previous one is at count-2
+                    if (count >= 2) {
+                        const prevIndex = (count - 2) * 3;
+                        const dx = pLocal.x - positions[prevIndex];
+                        const dy = pLocal.y - positions[prevIndex + 1];
+                        const dz = pLocal.z - positions[prevIndex + 2];
+                        
+                        // If moved enough, commit this point and prepare the next one
+                        if (dx*dx + dy*dy + dz*dz > 0.000001) {
+                            if (count < 5000) {
+                                // Increment count to add a new point
+                                currentLine.userData.drawCount++;
+                                count = currentLine.userData.drawCount;
+                                
+                                // Initialize the new tip point (duplicate of current)
+                                const newIndex = (count - 1) * 3;
+                                positions[newIndex] = pLocal.x;
+                                positions[newIndex + 1] = pLocal.y;
+                                positions[newIndex + 2] = pLocal.z;
+                                
+                                currentLine.geometry.setDrawRange(0, count);
+                            }
+                        }
+                    }
+                    
+                    // Always update geometry
+                    currentLine.geometry.attributes.position.needsUpdate = true;
+                }
+            }
+        });
+
+        window.addEventListener('pointerup', () => {
+            if (isDrawing) {
+                isDrawing = false;
+                currentLine = null;
+                drawStartObject = null;
+            }
+        });
+
+        window.addEventListener('pointerup', () => {
+            if (isDrawing) {
+                isDrawing = false;
+                currentLine = null;
+                drawStartObject = null;
+            }
+        });
+
+        // Key bindings
+        function handleKeydown(event) {
+            if (event.key === 'Escape' || event.key === 'Esc') {
+                if (isDrawingMode) {
+                    isDrawingMode = false;
+                    updateDrawUI();
+                    controls.enabled = true;
+                    controls.mouseButtons.LEFT = THREE.MOUSE.ROTATE;
+                    controls.mouseButtons.MIDDLE = THREE.MOUSE.PAN;
+                    controls.mouseButtons.RIGHT = null;
+                }
+                
+                // Cancel current drawing if active
+                if (isDrawing) {
+                    isDrawing = false;
+                    if (currentLine && drawStartObject) {
+                        drawStartObject.remove(currentLine);
+                    }
+                    currentLine = null;
+                    drawStartObject = null;
+                }
+
+                transformControl.detach(); 
+            }
+        }
+        window.addEventListener('keydown', handleKeydown);
+        document.addEventListener('keydown', handleKeydown);
+
+        // WASDQE Navigation Logic
+        const moveState = {
+            w: false, a: false, s: false, d: false, q: false, e: false,
+            rightMouseDown: false,
+            mouseX: 0, mouseY: 0
+        };
+
+        // Use Pointer Events for better compatibility
+        window.addEventListener('pointerdown', (e) => {
+            if (e.button === 2) { // Right click
+                moveState.rightMouseDown = true;
+                moveState.mouseX = e.clientX;
+                moveState.mouseY = e.clientY;
+                controls.enabled = false; // Disable OrbitControls
+            }
+        });
+
+        window.addEventListener('pointerup', (e) => {
+            if (e.button === 2) {
+                moveState.rightMouseDown = false;
+                controls.enabled = true; // Re-enable OrbitControls
+                
+                // Sync OrbitControls target to be in front of camera
+                const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(camera.quaternion);
+                controls.target.copy(camera.position).add(forward.multiplyScalar(5));
+            }
+        });
+
+        // Mouse Look Logic
+        window.addEventListener('pointermove', (e) => {
+            if (moveState.rightMouseDown) {
+                const sensitivity = 0.002;
+                const deltaX = e.clientX - moveState.mouseX;
+                const deltaY = e.clientY - moveState.mouseY;
+                
+                moveState.mouseX = e.clientX;
+                moveState.mouseY = e.clientY;
+
+                // Yaw (Left/Right) - Rotate around world Y
+                camera.rotateOnWorldAxis(new THREE.Vector3(0, 1, 0), -deltaX * sensitivity);
+                
+                // Pitch (Up/Down) - Rotate around local X
+                camera.rotateX(-deltaY * sensitivity);
+            }
+        });
+
+        // Use capture phase to intercept keys before script.js sees them
+        window.addEventListener('keydown', (e) => {
+            if (moveState.rightMouseDown) {
+                const key = e.key.toLowerCase();
+                if (['w', 'a', 's', 'd', 'q', 'e'].includes(key)) {
+                    moveState[key] = true;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    e.stopImmediatePropagation();
+                }
+            }
+        }, true);
+
+        window.addEventListener('keyup', (e) => {
+            const key = e.key.toLowerCase();
+            if (['w', 'a', 's', 'd', 'q', 'e'].includes(key)) {
+                moveState[key] = false;
+            }
+        }, true);
+
+        function updateCameraMovement() {
+            if (!moveState.rightMouseDown) return;
+
+            const speed = 0.2;
+            const moveVector = new THREE.Vector3();
+
+            if (moveState.w) moveVector.z -= speed;
+            if (moveState.s) moveVector.z += speed;
+            if (moveState.a) moveVector.x -= speed;
+            if (moveState.d) moveVector.x += speed;
+            if (moveState.q) moveVector.y += speed;
+            if (moveState.e) moveVector.y -= speed;
+
+            if (moveVector.lengthSq() > 0) {
+                moveVector.applyQuaternion(camera.quaternion);
+                camera.position.add(moveVector);
+                controls.target.add(moveVector);
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (moveState.rightMouseDown) {
+                updateCameraMovement();
+                // Do NOT call controls.update() here, as it might fight with manual rotation
+            } else {
+                controls.update();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Resize handler
+        window.addEventListener('resize', onWindowResize, false);
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

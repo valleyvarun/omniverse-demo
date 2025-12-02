@@ -1,0 +1,127 @@
+/* C Layers Content */
+.agent-c-layers-content {
+	background: var(--agent-bg);
+	border-bottom: 1px solid var(--agent-border);
+	display: flex;
+	flex-direction: column;
+    padding-bottom: 0;
+    min-height: 60px;
+}
+
+/* List Container */
+.agent-c-layers-list {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    padding-bottom: 4px;
+}
+
+/* Resize Handle */
+.agent-c-layers-resize-handle {
+    height: 8px;
+    cursor: ns-resize;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.agent-c-layers-resize-handle:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.resize-bar {
+    width: 30px;
+    height: 2px;
+    background: #555;
+    border-radius: 1px;
+}
+
+/* Toolbar */
+.agent-c-layers-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 4px 16px;
+    gap: 8px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 4px;
+    flex-shrink: 0; /* Don't shrink toolbar */
+}
+
+.layer-tool-btn {
+    background: none;
+    border: none;
+    color: var(--agent-muted);
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.layer-tool-btn:hover {
+    color: var(--agent-text);
+}
+
+.layer-row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 4px 16px 4px 34px; /* Indent to align with text in header */
+	font-size: 11px;
+	color: var(--agent-text);
+	height: 24px;
+    cursor: pointer;
+}
+
+.layer-row:hover {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+.layer-row.selected {
+	background-color: #2d2d2d;
+}
+
+.layer-name {
+	flex: 1;
+    color: #FFD700; /* Yellow text for layer names */
+}
+
+.layer-controls {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.color-box {
+	width: 12px;
+	height: 12px;
+	border: 1px solid #555;
+	display: inline-block;
+}
+
+.icon-check, .icon-bulb, .icon-lock {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	color: var(--agent-muted);
+}
+
+.icon-bulb {
+    color: #FFD700; /* Gold for active bulb */
+}
+
+.icon-lock {
+    color: #FFD700; /* Gold for active lock */
+}
+
+.icon-check {
+    color: var(--agent-text);
+    display: none; /* Hidden by default */
+}
+
+.layer-row.selected .icon-check {
+    display: flex; /* Show when selected */
+}
