@@ -8,12 +8,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const lowerName = appName.toLowerCase();
 	if (lowerName === 'photoshop') {
 		showDemoImage('../apps/apps-content/photoshop-demo.png');
-	} else if (lowerName === 'd5 render') {
+    } else if (lowerName === 'd5 render') {
         showDemoImage('../apps/apps-content/d5render-demo.png');
     } else if (lowerName === 'rhino 8') {
-        showDemoImage('../apps/apps-content/rhino8-demo.png');
+        showDemoImage('../apps/apps-content/rhino8-demo2.png');
     } else if (lowerName === 'revit') {
         showDemoImage('../apps/apps-content/revit-demo.png');
+    } else if (lowerName === 'autocad') {
+        showDemoImage('../apps/apps-content/autocad-demo.png');
     } else {
         // For all other apps, show a blank black space
         document.body.style.backgroundImage = 'none';

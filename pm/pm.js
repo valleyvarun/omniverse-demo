@@ -254,6 +254,9 @@
             } else if (lowerName === 'revit') {
                 pmAppImage.src = '../apps/apps-content/revit-sidebar.png';
                 pmAppImage.style.display = 'block';
+            } else if (lowerName === 'autocad') {
+                pmAppImage.src = '../apps/apps-content/autocad-sidebar.png';
+                pmAppImage.style.display = 'block';
             } else {
                 // Blank black space for others
                 pmAppImage.src = '';

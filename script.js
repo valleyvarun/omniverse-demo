@@ -1246,10 +1246,10 @@ function executeCommand(command) {
             currentState = 'CONFIRMATION';
         }
     }
-    // Immediate app open commands: open blender/sketchup/photoshop/rhino8
+    // Immediate app open commands: open blender/sketchup/photoshop/rhino8/autocad
     else if ((() => {
         const lc = command.toLowerCase();
-        return lc === 'open blender' || lc === 'open sketchup' || lc === 'open photoshop' || lc === 'open rhino8';
+        return lc === 'open blender' || lc === 'open sketchup' || lc === 'open photoshop' || lc === 'open rhino8' || lc === 'open autocad';
     })()) {
         const lc = command.toLowerCase();
         let appData = null;
@@ -1261,6 +1261,8 @@ function executeCommand(command) {
             appData = { name: 'Photoshop', icon: 'logo/photoshop-logo.png' };
         } else if (lc === 'open rhino8') {
             appData = { name: 'Rhino 8', icon: 'logo/rhino8-logo.png' };
+        } else if (lc === 'open autocad') {
+            appData = { name: 'AutoCAD', icon: 'logo/autocad-logo.png' };
         }
 
         try {
