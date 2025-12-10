@@ -608,7 +608,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const target = data.src || 'omniverse/plexus.html';
                     contentFrame.src = target;
                     // Toggle agent header placement based on whether Home is loaded
-                    const isHome = (target || '').includes('pages/home.html') || (target || '').includes('agent/c-layer.html');
+                    const isHome = (target || '').includes('pages/home.html') || 
+                                   (target || '').includes('agent/c-layer.html') || 
+                                   (target || '').includes('agent/default-3d.html');
                     updateAgentHeaderPlacement(isHome);
                 }
             } catch(_) {}

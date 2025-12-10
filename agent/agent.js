@@ -314,12 +314,12 @@
 		}
 	}
 
-    function show3DView() {
+    function show3DView(src) {
         // Send message to parent to load 3D view in main content area
         try {
             parent.postMessage({ 
                 type: 'content:load', 
-                src: 'agent/c-layer.html' 
+                src: src || 'agent/c-layer.html' 
             }, '*');
         } catch (e) {
             console.error('Failed to post message to parent:', e);
@@ -377,7 +377,12 @@
                 row.classList.add('selected');
 
                 // Show 3D View
-                show3DView();
+                const layerName = row.querySelector('.layer-name')?.textContent.trim();
+                if (layerName === 'Default 3D') {
+                    show3DView('agent/default-3d.html');
+                } else {
+                    show3DView();
+                }
             }
         });
     }
