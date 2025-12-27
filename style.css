@@ -458,8 +458,8 @@ body {
    -----------------------------------------------------------------------------
    Styling for the Omniverse logo image in the header */
 .logo {
-    width: 26px;                     /* Fixed width for consistent logo size */
-    height: 26px;                    /* Fixed height for consistent logo size */
+    width: 24px;                     /* Fixed width for consistent logo size */
+    height: 24px;                    /* Fixed height for consistent logo size */
     margin-right: 10px;              /* Space between logo and brand text */
     object-fit: contain;             /* Scale logo to fit within dimensions while maintaining aspect ratio */
 }
